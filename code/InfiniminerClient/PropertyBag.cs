@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
@@ -429,7 +429,7 @@ namespace Infiniminer
                 textFull = chatString;
 
             ChatMessage chatMsg = new ChatMessage(textFull, chatType, 10,newlines);
-            
+
             chatBuffer.Insert(0, chatMsg);
             chatFullBuffer.Insert(0, chatMsg);
             PlaySound(InfiniminerSound.ClickLow);
@@ -585,7 +585,7 @@ namespace Infiniminer
 
                     case PlayerClass.Engineer:
                         playerTools = new PlayerTools[3] {  PlayerTools.Pickaxe,
-                                                        PlayerTools.ConstructionGun,     
+                                                        PlayerTools.ConstructionGun,
                                                         PlayerTools.DeconstructionGun   };
                         playerBlocks = new BlockType[9] {   playerTeam == PlayerTeam.Red ? BlockType.SolidRed : BlockType.SolidBlue,
                                                         BlockType.TransRed,
