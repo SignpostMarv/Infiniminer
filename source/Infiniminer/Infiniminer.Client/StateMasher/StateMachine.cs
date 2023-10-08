@@ -39,7 +39,7 @@ namespace StateMasher
     public class StateMachine : Microsoft.Xna.Framework.Game
     {
         [DllImport("user32.dll")]
-        public static extern int GetForegroundWindow(); 
+        public static extern int GetForegroundWindow();
 
         public GraphicsDeviceManager graphicsDeviceManager;
         public Infiniminer.PropertyBag propertyBag = null;
@@ -123,7 +123,7 @@ namespace StateMasher
 
         protected override void LoadContent()
         {
-            
+
         }
 
         protected override void UnloadContent()
@@ -184,7 +184,7 @@ namespace StateMasher
                 needToRenderOnEnter = false;
                 currentState.OnRenderAtEnter(GraphicsDevice);
             }
-            
+
             base.Draw(gameTime);
         }
     }

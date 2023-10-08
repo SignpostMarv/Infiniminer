@@ -292,7 +292,7 @@ namespace Infiniminer
 
             // Draw the UI.
             spriteBatch.Begin(blendState: BlendState.AlphaBlend, sortMode: SpriteSortMode.Immediate);
-            
+
             // Draw the crosshair.
             spriteBatch.Draw(texCrosshairs, new Rectangle(graphicsDevice.Viewport.Width / 2 - texCrosshairs.Width / 2,
                                                             graphicsDevice.Viewport.Height / 2 - texCrosshairs.Height / 2,
@@ -377,7 +377,7 @@ namespace Infiniminer
                 {
                     if (p.Team != PlayerTeam.Red)
                         continue;
-                    RenderMessageCenter(spriteBatch, p.Handle + " ( $" + p.Score + " )", new Vector2(graphicsDevice.Viewport.Width/4, drawY), _P.red, new Color(0, 0, 0, 0));//Defines.IM_RED
+                    RenderMessageCenter(spriteBatch, p.Handle + " ( $" + p.Score + " )", new Vector2(graphicsDevice.Viewport.Width / 4, drawY), _P.red, new Color(0, 0, 0, 0));//Defines.IM_RED
                     drawY += 35;
                 }
                 drawY = 200;

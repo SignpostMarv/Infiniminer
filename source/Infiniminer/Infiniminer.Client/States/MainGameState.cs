@@ -586,8 +586,8 @@ namespace Infiniminer.States
                         _P.FireRadar();
                         break;
                 }
-            }     
-       
+            }
+
             // If we"re dead, come back to life.
             if (_P.playerDead && _P.screenEffectCounter > 2)
             {
@@ -618,7 +618,7 @@ namespace Infiniminer.States
                 _P.PlaySound(InfiniminerSound.ClickLow);
                 _P.playerBlockSelected -= 1;
                 if (_P.playerBlockSelected < 0)
-                    _P.playerBlockSelected = _P.playerBlocks.Length-1;
+                    _P.playerBlockSelected = _P.playerBlocks.Length - 1;
             }
         }
     }

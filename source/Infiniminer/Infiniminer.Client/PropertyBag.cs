@@ -516,8 +516,8 @@ namespace Infiniminer
                                                         BlockType.Ladder    };
                         break;
 
-                    case PlayerClass.Engineer:
-                        playerTools = new PlayerTools[3] {  PlayerTools.Pickaxe,
+                case PlayerClass.Engineer:
+                    playerTools = new PlayerTools[3] {  PlayerTools.Pickaxe,
                                                         PlayerTools.ConstructionGun,
                                                         PlayerTools.DeconstructionGun   };
                         playerBlocks = new BlockType[9] {   playerTeam == PlayerTeam.Red ? BlockType.SolidRed : BlockType.SolidBlue,

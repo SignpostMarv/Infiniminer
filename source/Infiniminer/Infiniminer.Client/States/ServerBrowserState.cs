@@ -65,8 +65,8 @@ namespace Infiniminer.States
                                      1024);
 
             uiFont = _SM.Content.Load<SpriteFont>("font_04b08");
-            //keyMap = new KeyMap();
-            
+            keyMap = new KeyMap();
+
             serverList = (_SM as InfiniminerGame).EnumerateServers(0.5f);
         }
 
@@ -98,7 +98,7 @@ namespace Infiniminer.States
                 if (drawY < 660)
                 {
                     int textWidth = (int)(uiFont.MeasureString(server.GetServerDesc()).X);
-                    descWidths.Add(textWidth+30);
+                    descWidths.Add(textWidth + 30);
                     spriteBatch.DrawString(uiFont, server.GetServerDesc(), new Vector2(_SM.GraphicsDevice.Viewport.Width / 2 - textWidth / 2, drawRect.Y + drawY), !server.lanServer && server.numPlayers == server.maxPlayers ? new Color(0.7f, 0.7f, 0.7f) : Color.White);
                     drawY += 25;
                 }
@@ -163,7 +163,7 @@ namespace Infiniminer.States
                             // So, GetHostAddresses() might fail, but we don't really care. Just leave connectIp as null.
                         }
                     }
-                    if (connectIp != null)                   
+                    if (connectIp != null)
                     {
                         (_SM as InfiniminerGame).propertyBag.serverName = directConnectIP;
                         (_SM as InfiniminerGame).JoinGame(new IPEndPoint(connectIp, 5565));

@@ -73,10 +73,10 @@ namespace Infiniminer
         {
             anyPacketsReceived = false;
             // Clear out the map load progress indicator.
-            propertyBag.mapLoadProgress = new bool[64,64];
+            propertyBag.mapLoadProgress = new bool[64, 64];
             for (int i = 0; i < 64; i++)
-                for (int j=0; j<64; j++)
-                    propertyBag.mapLoadProgress[i,j] = false;
+                for (int j = 0; j < 64; j++)
+                    propertyBag.mapLoadProgress[i, j] = false;
 
             // Create our connect message.
             NetBuffer connectBuffer = propertyBag.netClient.CreateBuffer();
@@ -93,7 +93,7 @@ namespace Infiniminer
         public List<ServerInformation> EnumerateServers(float discoveryTime)
         {
             List<ServerInformation> serverList = new List<ServerInformation>();
-            
+
             // Discover local servers.
             propertyBag.netClient.DiscoverLocalServers(5565);
             NetBuffer msgBuffer = propertyBag.netClient.CreateBuffer();
@@ -189,78 +189,65 @@ namespace Infiniminer
 
                     case NetMessageType.Data:
                         {
-                            try
+                            InfiniminerMessage dataType = (InfiniminerMessage)msgBuffer.ReadByte();
+                            switch (dataType)
                             {
-                                InfiniminerMessage dataType = (InfiniminerMessage)msgBuffer.ReadByte();
-                                switch (dataType)
-                                {
-                                    case InfiniminerMessage.BlockBulkTransfer:
+                                case InfiniminerMessage.BlockBulkTransfer:
+                                    {
+                                        anyPacketsReceived = true;
+                                        //This is either the compression flag or the x coordiante
+                                        byte isCompressed = msgBuffer.ReadByte();
+                                        byte x;
+                                        byte y;
+
+                                        //255 was used because it exceeds the map size - of course, bytes won't work anyway if map sizes are allowed to be this big, so this method is a non-issue
+                                        if (isCompressed == 255)
                                         {
-                                            anyPacketsReceived = true;
+                                            var compressed = msgBuffer.ReadBytes(msgBuffer.LengthBytes - msgBuffer.Position / 8);
+                                            var compressedstream = new System.IO.MemoryStream(compressed);
+                                            var decompresser = new System.IO.Compression.GZipStream(compressedstream, System.IO.Compression.CompressionMode.Decompress);
 
-                                            try
+                                            x = (byte)decompresser.ReadByte();
+                                            y = (byte)decompresser.ReadByte();
+                                            propertyBag.mapLoadProgress[x, y] = true;
+                                            for (byte dy = 0; dy < 16; dy++)
+                                                for (byte z = 0; z < 64; z++)
+                                                {
+                                                    BlockType blockType = (BlockType)decompresser.ReadByte();
+                                                    if (blockType != BlockType.None)
+                                                        propertyBag.blockEngine.downloadList[x, y + dy, z] = blockType;
+                                                }
+                                        }
+                                        else
+                                        {
+                                            x = isCompressed;
+                                            y = msgBuffer.ReadByte();
+                                        propertyBag.mapLoadProgress[x, y] = true;
+                                        for (byte dy = 0; dy < 16; dy++)
+                                            for (byte z = 0; z < 64; z++)
                                             {
-                                                //This is either the compression flag or the x coordiante
-                                                byte isCompressed = msgBuffer.ReadByte();
-                                                byte x;
-                                                byte y;
-
-                                                //255 was used because it exceeds the map size - of course, bytes won't work anyway if map sizes are allowed to be this big, so this method is a non-issue
-                                                if (isCompressed == 255)
-                                                {
-                                                    var compressed = msgBuffer.ReadBytes(msgBuffer.LengthBytes - msgBuffer.Position / 8);
-                                                    var compressedstream = new System.IO.MemoryStream(compressed);
-                                                    var decompresser = new System.IO.Compression.GZipStream(compressedstream, System.IO.Compression.CompressionMode.Decompress);
-
-                                                    x = (byte)decompresser.ReadByte();
-                                                    y = (byte)decompresser.ReadByte();
-                                                    propertyBag.mapLoadProgress[x, y] = true;
-                                                    for (byte dy = 0; dy < 16; dy++)
-                                                        for (byte z = 0; z < 64; z++)
-                                                        {
-                                                            BlockType blockType = (BlockType)decompresser.ReadByte();
-                                                            if (blockType != BlockType.None)
-                                                                propertyBag.blockEngine.downloadList[x, y + dy, z] = blockType;
-                                                        }
-                                                }
-                                                else
-                                                {
-                                                    x = isCompressed;
-                                                    y = msgBuffer.ReadByte();
-                                                    propertyBag.mapLoadProgress[x, y] = true;
-                                                    for (byte dy = 0; dy < 16; dy++)
-                                                        for (byte z = 0; z < 64; z++)
-                                                        {
-                                                            BlockType blockType = (BlockType)msgBuffer.ReadByte();
-                                                            if (blockType != BlockType.None)
-                                                                propertyBag.blockEngine.downloadList[x, y + dy, z] = blockType;
-                                                        }
-                                                }
-                                                bool downloadComplete = true;
-                                                for (x = 0; x < 64; x++)
-                                                    for (y = 0; y < 64; y += 16)
-                                                        if (propertyBag.mapLoadProgress[x, y] == false)
-                                                        {
-                                                            downloadComplete = false;
-                                                            break;
-                                                        }
-                                                if (downloadComplete)
-                                                {
-                                                    ChangeState("Infiniminer.States.TeamSelectionState");
-                                                    if (!NoSound)
-                                                        MediaPlayer.Stop();
-                                                    propertyBag.blockEngine.DownloadComplete();
-                                                }
-                                            }
-                                            catch (Exception e)
-                                            {
-                                                Console.OpenStandardError();
-                                                Console.Error.WriteLine(e.Message);
-                                                Console.Error.WriteLine(e.StackTrace);
-                                                Console.Error.Close();
+                                                BlockType blockType = (BlockType)msgBuffer.ReadByte();
+                                                if (blockType != BlockType.None)
+                                                    propertyBag.blockEngine.downloadList[x, y + dy, z] = blockType;
                                             }
                                         }
-                                        break;
+                                        bool downloadComplete = true;
+                                        for (x = 0; x < 64; x++)
+                                            for (y = 0; y < 64; y += 16)
+                                                if (propertyBag.mapLoadProgress[x, y] == false)
+                                                {
+                                                    downloadComplete = false;
+                                                    break;
+                                                }
+                                        if (downloadComplete)
+                                        {
+                                            ChangeState("Infiniminer.States.TeamSelectionState");
+                                            if (!NoSound)
+                                                MediaPlayer.Stop();
+                                            propertyBag.blockEngine.DownloadComplete();
+                                        }
+                                    }
+                                    break;
 
                                     case InfiniminerMessage.SetBeacon:
                                         {
@@ -305,34 +292,34 @@ namespace Infiniminer
                                         }
                                         break;
 
-                                    case InfiniminerMessage.BlockSet:
+                                case InfiniminerMessage.BlockSet:
+                                    {
+                                        // x, y, z, type, all bytes
+                                        byte x = msgBuffer.ReadByte();
+                                        byte y = msgBuffer.ReadByte();
+                                        byte z = msgBuffer.ReadByte();
+                                        BlockType blockType = (BlockType)msgBuffer.ReadByte();
+                                        if (blockType == BlockType.None)
                                         {
-                                            // x, y, z, type, all bytes
-                                            byte x = msgBuffer.ReadByte();
-                                            byte y = msgBuffer.ReadByte();
-                                            byte z = msgBuffer.ReadByte();
-                                            BlockType blockType = (BlockType)msgBuffer.ReadByte();
-                                            if (blockType == BlockType.None)
-                                            {
-                                                if (propertyBag.blockEngine.BlockAtPoint(new Vector3(x, y, z)) != BlockType.None)
-                                                    propertyBag.blockEngine.RemoveBlock(x, y, z);
-                                            }
-                                            else
-                                            {
-                                                if (propertyBag.blockEngine.BlockAtPoint(new Vector3(x, y, z)) != BlockType.None)
-                                                    propertyBag.blockEngine.RemoveBlock(x, y, z);
-                                                propertyBag.blockEngine.AddBlock(x, y, z, blockType);
-                                                CheckForStandingInLava();
-                                            }
+                                            if (propertyBag.blockEngine.BlockAtPoint(new Vector3(x, y, z)) != BlockType.None)
+                                                propertyBag.blockEngine.RemoveBlock(x, y, z);
                                         }
-                                        break;
-
-                                    case InfiniminerMessage.TriggerExplosion:
+                                        else
                                         {
-                                            Vector3 blockPos = msgBuffer.ReadVector3();
+                                            if (propertyBag.blockEngine.BlockAtPoint(new Vector3(x, y, z)) != BlockType.None)
+                                                propertyBag.blockEngine.RemoveBlock(x, y, z);
+                                            propertyBag.blockEngine.AddBlock(x, y, z, blockType);
+                                            CheckForStandingInLava();
+                                        }
+                                    }
+                                    break;
 
-                                            // Play the explosion sound.
-                                            propertyBag.PlaySound(InfiniminerSound.Explosion, blockPos);
+                                case InfiniminerMessage.TriggerExplosion:
+                                    {
+                                        Vector3 blockPos = msgBuffer.ReadVector3();
+
+                                        // Play the explosion sound.
+                                        propertyBag.PlaySound(InfiniminerSound.Explosion, blockPos);
 
                                             // Create some particles.
                                             propertyBag.particleEngine.CreateExplosionDebris(blockPos);
@@ -528,7 +515,7 @@ namespace Infiniminer
             if (dataFile.Data.ContainsKey("pretty"))
                 RenderPretty = bool.Parse(dataFile.Data["pretty"]);
             if (dataFile.Data.ContainsKey("volume"))
-                volumeLevel = Math.Max(0,Math.Min(1,float.Parse(dataFile.Data["volume"], System.Globalization.CultureInfo.InvariantCulture)));
+                volumeLevel = Math.Max(0, Math.Min(1, float.Parse(dataFile.Data["volume"], System.Globalization.CultureInfo.InvariantCulture)));
             if (dataFile.Data.ContainsKey("sensitivity"))
                 mouseSensitivity=Math.Max(0.001f,Math.Min(0.05f,float.Parse(dataFile.Data["sensitivity"], System.Globalization.CultureInfo.InvariantCulture)/1000f));
             if (dataFile.Data.ContainsKey("red_name"))
@@ -626,7 +613,7 @@ namespace Infiniminer
         protected override void OnExiting(object sender, EventArgs args)
         {
             propertyBag.netClient.Shutdown("Client exiting.");
-            
+
             base.OnExiting(sender, args);
         }
 
