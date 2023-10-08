@@ -40,6 +40,8 @@ namespace Infiniminer
 
         public bool anyPacketsReceived = false;
 
+        public const int GROUND_LEVEL = 8;
+
         public InfiniminerGame(string[] args)
         {
         }
@@ -152,16 +154,11 @@ namespace Infiniminer
                         break;
                     case NetMessageType.ConnectionRejected:
                         {
-                            anyPacketsReceived = false;
-                            try
-                            {
-                                string[] reason = msgBuffer.ReadString().Split(";".ToCharArray());
-                                if (reason.Length < 2 || reason[0] == "VER")
-                                    System.Windows.Forms.MessageBox.Show("Error: client/server version incompability!\r\nServer: " + msgBuffer.ReadString() + "\r\nClient: " + Defines.INFINIMINER_VERSION);
-                                else
-                                    System.Windows.Forms.MessageBox.Show("Error: you are banned from this server!");
-                            }
-                            catch { }
+                            string[] reason = msgBuffer.ReadString().Split(";".ToCharArray());
+                            if (reason.Length < 2 || reason[0] == "VER")
+                                MessageBox.Show("Error: client/server version incompability!\r\nServer: " + msgBuffer.ReadString() + "\r\nClient: " + Defines.INFINIMINER_VERSION);
+                            else
+                                MessageBox.Show("Error: you are banned from this server!");
                             ChangeState("Infiniminer.States.ServerBrowserState");
                         }
                         break;
