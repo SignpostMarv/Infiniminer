@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -436,13 +436,8 @@ namespace Infiniminer
             }
             return "";
         }
-
-        public InfiniminerServer()
-        {
-            Console.SetWindowSize(1, 1);
-            Console.SetBufferSize(80, CONSOLE_SIZE + 4);
-            Console.SetWindowSize(80, CONSOLE_SIZE + 4);
-        }
+        
+        public InfiniminerServer() { }
 
         public string GetExtraInfo()
         {
