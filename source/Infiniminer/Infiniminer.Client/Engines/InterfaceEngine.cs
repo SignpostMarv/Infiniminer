@@ -1,16 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
-using Microsoft.Xna.Framework.Net;
-using Microsoft.Xna.Framework.Storage;
 
 namespace Infiniminer
 {
@@ -188,7 +185,7 @@ namespace Infiniminer
         {
             int screenWidth = graphicsDevice.Viewport.Width;
             int screenHeight = graphicsDevice.Viewport.Height;
-            graphicsDevice.SamplerStates[0].MagFilter = TextureFilter.Point;
+            graphicsDevice.SamplerStates[0] = new SamplerState() { Filter = TextureFilter.Point };
 
             Texture2D textureToUse;
             if (Mouse.GetState().LeftButton == ButtonState.Pressed || Mouse.GetState().MiddleButton == ButtonState.Pressed || Mouse.GetState().RightButton == ButtonState.Pressed)
@@ -203,7 +200,7 @@ namespace Infiniminer
         {
             int screenWidth = graphicsDevice.Viewport.Width;
             int screenHeight = graphicsDevice.Viewport.Height;
-            graphicsDevice.SamplerStates[0].MagFilter = TextureFilter.Point;
+            graphicsDevice.SamplerStates[0] = new SamplerState() { Filter = TextureFilter.Point };
 
             int drawX = screenWidth / 2 - 32 * 3;
             int drawY = screenHeight - 102 * 3;
@@ -229,7 +226,7 @@ namespace Infiniminer
         {
             int screenWidth = graphicsDevice.Viewport.Width;
             int screenHeight = graphicsDevice.Viewport.Height;
-            graphicsDevice.SamplerStates[0].MagFilter = TextureFilter.Point;
+            graphicsDevice.SamplerStates[0] = new SamplerState() { Filter = TextureFilter.Point };
 
             int drawX = screenWidth / 2 - 60 * 3;
             int drawY = screenHeight - 91 * 3;
@@ -274,8 +271,8 @@ namespace Infiniminer
                 _P = gameInstance.propertyBag;
 
             // Draw the UI.
-            spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Immediate, SaveStateMode.SaveState);
-
+            spriteBatch.Begin(blendState: BlendState.AlphaBlend, sortMode: SpriteSortMode.Immediate);
+            
             // Draw the crosshair.
             spriteBatch.Draw(texCrosshairs, new Rectangle(graphicsDevice.Viewport.Width / 2 - texCrosshairs.Width / 2,
                                                             graphicsDevice.Viewport.Height / 2 - texCrosshairs.Height / 2,
@@ -326,8 +323,8 @@ namespace Infiniminer
                 RenderMessageCenter(spriteBatch, "8: DEPOSIT 50 ORE  9: WITHDRAW 50 ORE", new Vector2(graphicsDevice.Viewport.Width / 2, graphicsDevice.Viewport.Height / 2 + 60), Color.White, Color.Black);
 
             // Are they trying to change class when they cannot?
-            //if (Keyboard.GetState().IsKeyDown(Keys.M) && _P.playerPosition.Y <= 64 - Defines.GROUND_LEVEL && _P.chatMode == ChatMessageType.None)
-            //    RenderMessageCenter(spriteBatch, "YOU CANNOT CHANGE YOUR CLASS BELOW THE SURFACE", new Vector2(graphicsDevice.Viewport.Width / 2, graphicsDevice.Viewport.Height / 2 + 90), Color.White, Color.Black);
+            if (Keyboard.GetState().IsKeyDown(Keys.M) && _P.playerPosition.Y <= 64 - Defines.GROUND_LEVEL && _P.chatMode == ChatMessageType.None)
+                RenderMessageCenter(spriteBatch, "YOU CANNOT CHANGE YOUR CLASS BELOW THE SURFACE", new Vector2(graphicsDevice.Viewport.Width / 2, graphicsDevice.Viewport.Height / 2 + 90), Color.White, Color.Black);
 
             // Draw the text-based information panel.
             int textStart = (graphicsDevice.Viewport.Width - 1024) / 2;
@@ -360,7 +357,7 @@ namespace Infiniminer
                 {
                     if (p.Team != PlayerTeam.Red)
                         continue;
-                    RenderMessageCenter(spriteBatch, p.Handle + " ( $" + p.Score + " )", new Vector2(graphicsDevice.Viewport.Width / 4, drawY), _P.red, new Color(0, 0, 0, 0));//Defines.IM_RED
+                    RenderMessageCenter(spriteBatch, p.Handle + " ( $" + p.Score + " )", new Vector2(graphicsDevice.Viewport.Width/4, drawY), _P.red, new Color(0, 0, 0, 0));//Defines.IM_RED
                     drawY += 35;
                 }
                 drawY = 200;
@@ -387,14 +384,6 @@ namespace Infiniminer
             if (_P.chatMode != ChatMessageType.None)
             {
                 drawChat(_P.chatFullBuffer,graphicsDevice);
-                /*for (int i = 0; i < _P.chatFullBuffer.Count; i++)
-                {
-                    Color chatColor = Color.White;
-                    chatColor = _P.chatFullBuffer[i].type == ChatMessageType.SayAll ? Color.White : _P.chatFullBuffer[i].type == ChatMessageType.SayRedTeam ? Defines.IM_RED : Defines.IM_BLUE;
-                    
-                    spriteBatch.DrawString(uiFont, _P.chatFullBuffer[i].message, new Vector2(22, graphicsDevice.Viewport.Height - 114 - 16 * i), Color.Black);
-                    spriteBatch.DrawString(uiFont, _P.chatFullBuffer[i].message, new Vector2(20, graphicsDevice.Viewport.Height - 116 - 16 * i), chatColor);
-                }*/
             }
             else
             {
