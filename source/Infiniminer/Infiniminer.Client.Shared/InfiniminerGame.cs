@@ -255,20 +255,18 @@ namespace Infiniminer
                                             string text = msgBuffer.ReadString();
                                             PlayerTeam team = (PlayerTeam)msgBuffer.ReadByte();
 
-                                            if (text == "")
-                                            {
-                                                if (propertyBag.beaconList.ContainsKey(position))
-                                                    propertyBag.beaconList.Remove(position);
-                                            }
-                                            else
-                                            {
-                                                Beacon newBeacon = new Beacon();
-                                                newBeacon.ID = text;
-                                                newBeacon.Team = team;
-                                                propertyBag.beaconList.Add(position, newBeacon);
-                                            }
+                                        if (text == "")
+                                        {
+                                            if (propertyBag.beaconList.ContainsKey(position))
+                                                propertyBag.beaconList.Remove(position);
                                         }
-                                        break;
+                                        else
+                                        {
+                                            Beacon newBeacon = new Beacon(text, team);
+                                            propertyBag.beaconList.Add(position, newBeacon);
+                                        }
+                                    }
+                                    break;
 
                                     case InfiniminerMessage.TriggerConstructionGunAnimation:
                                         {

@@ -67,8 +67,8 @@ namespace Infiniminer
         public bool QueueAnimationBreak = false;
 
         // Things that affect animation.
-        public SpriteModel SpriteModel;
-        private Game gameInstance;
+        public SpriteModel? SpriteModel;
+        private Game? gameInstance;
 
         private bool idleAnimation = false;
         public bool IdleAnimation
@@ -82,9 +82,9 @@ namespace Infiniminer
                     if (gameInstance != null)
                     {
                         if (idleAnimation)
-                            SpriteModel.SetPassiveAnimation("1,0.2");
+                            SpriteModel?.SetPassiveAnimation("1,0.2");
                         else
-                            SpriteModel.SetPassiveAnimation("0,0.2;1,0.2;2,0.2;1,0.2");
+                            SpriteModel?.SetPassiveAnimation("0,0.2;1,0.2;2,0.2;1,0.2");
                     }
                 }
             }
@@ -182,7 +182,7 @@ namespace Infiniminer
                 {
                     usingTool = value;
                     if (usingTool == true && gameInstance != null)
-                        SpriteModel.StartActiveAnimation("3,0.15");
+                        SpriteModel?.StartActiveAnimation("3,0.15");
                 }
             }
         }
@@ -198,10 +198,50 @@ namespace Infiniminer
 
             if (gameInstance != null)
             {
-                this.SpriteModel = new SpriteModel(gameInstance, 4);
-                UpdateSpriteTexture();
+                Texture2D tex = gameInstance.Content.Load<Texture2D>(GenerateTextureName());
+                this.SpriteModel = new SpriteModel(gameInstance, 4, tex);
                 this.IdleAnimation = true;
             }
+        }
+
+        private string GenerateTextureName()
+        {
+            string name = "sprites/tex_sprite_";
+
+            /*
+            if (team == PlayerTeam.Red & &(!AltColours||redTeam==Defines.IM_RED))
+            {
+                name += "red_";
+            }
+            else
+            {
+            */
+                name += "blue_";
+            /*
+            }
+            */
+
+            switch (tool)
+            {
+                case PlayerTools.ConstructionGun:
+                case PlayerTools.DeconstructionGun:
+                    name += "construction";
+                    break;
+                case PlayerTools.Detonator:
+                    name += "detonator";
+                    break;
+                case PlayerTools.Pickaxe:
+                    name += "pickaxe";
+                    break;
+                case PlayerTools.ProspectingRadar:
+                    name += "radar";
+                    break;
+                default:
+                    name += "pickaxe";
+                    break;
+            }
+
+            return name;
         }
 
         private void UpdateSpriteTexture()
@@ -209,30 +249,7 @@ namespace Infiniminer
             if (gameInstance == null)
                 return;
 
-            string textureName = "sprites/tex_sprite_";
-            /*if (team == PlayerTeam.Red&&(!AltColours||redTeam==Defines.IM_RED))
-                textureName += "red_";
-            else*/
-                textureName += "blue_";
-            switch (tool)
-            {
-                case PlayerTools.ConstructionGun:
-                case PlayerTools.DeconstructionGun:
-                    textureName += "construction";
-                    break;
-                case PlayerTools.Detonator:
-                    textureName += "detonator";
-                    break;
-                case PlayerTools.Pickaxe:
-                    textureName += "pickaxe";
-                    break;
-                case PlayerTools.ProspectingRadar:
-                    textureName += "radar";
-                    break;
-                default:
-                    textureName += "pickaxe";
-                    break;
-            }
+            string contentPath = GenerateTextureName();
             Texture2D orig = gameInstance.Content.Load<Texture2D>(textureName);
             if (AltColours)// && ((team == PlayerTeam.Blue && blueTeam != Defines.IM_BLUE) || (team == PlayerTeam.Red && redTeam != Defines.IM_RED)))
             {
@@ -242,10 +259,10 @@ namespace Infiniminer
                 temp.SetData<Color>(data);
                 CustomTeamColor.generateShadedTexture(team == PlayerTeam.Blue ? blueTeam : redTeam, orig, ref temp);
                 Console.WriteLine("Team: " + team.ToString() + "; Red col: " + redTeam.ToString() + "; Blue col: " + blueTeam.ToString());
-                this.SpriteModel.SetSpriteTexture(temp);
+                SpriteModel?.SetSpriteTexture(temp);
             }
             else
-                this.SpriteModel.SetSpriteTexture(orig);
+                SpriteModel?.SetSpriteTexture(orig);
         }
 
         static uint uniqueId = 0;
