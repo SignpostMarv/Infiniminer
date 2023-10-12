@@ -32,9 +32,9 @@ namespace Infiniminer
 {
     public class InfiniminerServer
     {
-        InfiniminerNetServer netServer = null;
-        public BlockType[, ,] blockList = null;    // In game coordinates, where Y points up.
-        PlayerTeam[, ,] blockCreatorTeam = null;
+        InfiniminerNetServer? netServer;
+        public BlockType[,,] blockList;    // In game coordinates, where Y points up.
+        PlayerTeam[,,] blockCreatorTeam;
         const int MAPSIZE = 64;
         Dictionary<NetConnection, Player> playerList = new Dictionary<NetConnection, Player>();
         int lavaBlockCount = 0;
@@ -51,7 +51,7 @@ namespace Infiniminer
 
         DateTime lastServerListUpdate = DateTime.Now;
         DateTime lastMapBackup = DateTime.Now;
-        List<string> banList = null;
+        List<string>? banList;
 
         const int CONSOLE_SIZE = 30;
         List<string> consoleText = new List<string>();
@@ -70,6 +70,8 @@ namespace Infiniminer
         // Server restarting variables.
         DateTime restartTime = DateTime.Now;
         bool restartTriggered = false;
+
+        uint duplicateNameCount = 0;
 
         //Variable handling
         Dictionary<string,bool> varBoolBindings = new Dictionary<string, bool>();
@@ -458,7 +460,11 @@ namespace Infiniminer
             return "";
         }
         
-        public InfiniminerServer() { }
+        public InfiniminerServer()
+        {
+            blockList = new BlockType[0,0,0];
+            blockCreatorTeam = new PlayerTeam[0,0,0];
+        }
 
         public string GetExtraInfo()
         {
@@ -868,7 +874,7 @@ namespace Infiniminer
             {
                 FileStream file = new FileStream("banlist.txt", FileMode.Open, FileAccess.Read);
                 StreamReader sr = new StreamReader(file);
-                string line = sr.ReadLine();
+                string? line = sr.ReadLine();
                 while (line != null)
                 {
                     retList.Add(line.Trim());
@@ -918,6 +924,7 @@ namespace Infiniminer
 
         public void BanPlayer(string ip)
         {
+            if (banList is null) { return; }
             BanPlayer(ip, false);
         }
 
@@ -982,10 +989,11 @@ namespace Infiniminer
 
         public void ConsoleProcessInput()
         {
+            string[] args = consoleInput.Split(" ".ToCharArray());
+
             ConsoleWrite("> " + consoleInput);
 
             ProcessCommand(consoleInput, (short)2, null);
-            /*string[] args = consoleInput.Split(" ".ToCharArray(),2);
 
 
             switch (args[0].ToLower().Trim())
@@ -1185,7 +1193,7 @@ namespace Infiniminer
                         }
                     }
                     break;
-            }*/
+            }
 
             consoleInput = "";
             ConsoleRedraw();
@@ -1221,9 +1229,9 @@ namespace Infiniminer
                     for (int y = 0; y < 64; y++)
                         for (int z = 0; z < 64; z++)
                         {
-                            string line = sr.ReadLine();
-                            string[] fileArgs = line.Split(",".ToCharArray());
-                            if (fileArgs.Length == 2)
+                            string? line = sr.ReadLine();
+                            string[]? fileArgs = line?.Split(",".ToCharArray());
+                            if (fileArgs?.Length == 2)
                             {
                                 blockList[x, y, z] = (BlockType)int.Parse(fileArgs[0], System.Globalization.CultureInfo.InvariantCulture);
                                 blockCreatorTeam[x, y, z] = (PlayerTeam)int.Parse(fileArgs[1], System.Globalization.CultureInfo.InvariantCulture);
@@ -1234,7 +1242,10 @@ namespace Infiniminer
                 ConsoleWrite("Level loaded successfully - now playing " + filename + "!");
                 return true;
             }
-            catch { }
+            catch (FileNotFoundException e)
+            {
+                ConsoleWrite("ERROR: File not found!");
+            }
             return false;
         }
 
@@ -1305,29 +1316,29 @@ namespace Infiniminer
                 PlayerTeam beaconTeam = blockType == BlockType.BeaconRed ? PlayerTeam.Red : PlayerTeam.Blue;
                 Beacon newBeacon = new Beacon(id, beaconTeam);
                 beaconList[new Vector3(x, y, z)] = newBeacon;
-                SendSetBeacon(new Vector3(x, y+1, z), newBeacon.ID, newBeacon.Team);
+                SendSetBeacon(new Vector3(x, y + 1, z), newBeacon.ID, newBeacon.Team);
             }
 
             if (blockType == BlockType.None && (blockList[x, y, z] == BlockType.BeaconRed || blockList[x, y, z] == BlockType.BeaconBlue))
             {
-                if (beaconList.ContainsKey(new Vector3(x,y,z)))
-                    beaconList.Remove(new Vector3(x,y,z));
-                SendSetBeacon(new Vector3(x, y+1, z), "", PlayerTeam.None);
+                if (beaconList.ContainsKey(new Vector3(x, y, z)))
+                    beaconList.Remove(new Vector3(x, y, z));
+                SendSetBeacon(new Vector3(x, y + 1, z), "", PlayerTeam.None);
             }
 
             blockList[x, y, z] = blockType;
             blockCreatorTeam[x, y, z] = team;
 
             // x, y, z, type, all bytes
-            NetBuffer msgBuffer = netServer.CreateBuffer();
-            msgBuffer.Write((byte)InfiniminerMessage.BlockSet);
-            msgBuffer.Write((byte)x);
-            msgBuffer.Write((byte)y);
-            msgBuffer.Write((byte)z);
-            msgBuffer.Write((byte)blockType);
+            NetBuffer? msgBuffer = netServer?.CreateBuffer();
+            msgBuffer?.Write((byte)InfiniminerMessage.BlockSet);
+            msgBuffer?.Write((byte)x);
+            msgBuffer?.Write((byte)y);
+            msgBuffer?.Write((byte)z);
+            msgBuffer?.Write((byte)blockType);
             foreach (NetConnection netConn in playerList.Keys)
                 if (netConn.Status == NetConnectionStatus.Connected)
-                    netServer.SendMessage(msgBuffer, netConn, NetChannel.ReliableUnordered);
+                    netServer?.SendMessage(msgBuffer, netConn, NetChannel.ReliableUnordered);
 
             if (blockType == BlockType.Lava)
                 lavaBlockCount += 1;
@@ -1607,12 +1618,12 @@ namespace Infiniminer
                                 }
                                 break;
 
-                            case NetMessageType.Data:
+                        case NetMessageType.Data:
+                            {
+                                if (!this.playerList.ContainsKey(msgSender))
                                 {
-                                    if (!this.playerList.ContainsKey(msgSender))
-                                    {
-                                        break;
-                                    }
+                                    break;
+                                }
 
                                 Player player = playerList[msgSender];
                                 InfiniminerMessage dataType = (InfiniminerMessage)msgBuffer.ReadByte();
@@ -1900,7 +1911,7 @@ namespace Infiniminer
 
         public void DoLavaStuff()
         {
-            bool[, ,] flowSleep = new bool[MAPSIZE, MAPSIZE, MAPSIZE]; //if true, do not calculate this turn
+            bool[,,] flowSleep = new bool[MAPSIZE, MAPSIZE, MAPSIZE]; //if true, do not calculate this turn
 
             for (ushort i = 0; i < MAPSIZE; i++)
                 for (ushort j = 0; j < MAPSIZE; j++)
@@ -1968,12 +1979,12 @@ namespace Infiniminer
                             }
                             else if (typeBelow != BlockType.Lava || varGetB("insanelava"))
                             {
-                                if (i > 0 && blockList[i-1, j, k] == BlockType.None)
+                                if (i > 0 && blockList[i - 1, j, k] == BlockType.None)
                                 {
                                     SetBlock((ushort)(i - 1), j, k, BlockType.Lava, PlayerTeam.None);
                                     flowSleep[i - 1, j, k] = true;
                                 }
-                                if (k > 0 && blockList[i, j, k-1] == BlockType.None)
+                                if (k > 0 && blockList[i, j, k - 1] == BlockType.None)
                                 {
                                     SetBlock(i, j, (ushort)(k - 1), BlockType.Lava, PlayerTeam.None);
                                     flowSleep[i, j, k - 1] = true;
@@ -1992,7 +2003,7 @@ namespace Infiniminer
                         }
         }
 
-        public BlockType BlockAtPoint(Vector3 point)
+        public BlockType? BlockAtPoint(Vector3 point)
         {
             ushort x = (ushort)point.X;
             ushort y = (ushort)point.Y;
@@ -2009,7 +2020,7 @@ namespace Infiniminer
             for (int i = 0; i < searchGranularity; i++)
             {
                 testPos += rayDirection * distance / searchGranularity;
-                BlockType testBlock = BlockAtPoint(testPos);
+                BlockType? testBlock = BlockAtPoint(testPos);
                 if (testBlock != BlockType.None)
                 {
                     hitPoint = testPos;
@@ -2199,7 +2210,7 @@ namespace Infiniminer
             if (blockCreatorTeam[x, y, z] != player.Team)
                 actionFailed = true;
 
-            BlockType blockType = blockList[x, y, z];
+            BlockType? blockType = blockList[x, y, z];
             if (!(blockType == BlockType.SolidBlue ||
                 blockType == BlockType.SolidRed ||
                 blockType == BlockType.BankBlue ||
@@ -2236,10 +2247,10 @@ namespace Infiniminer
                 return;
 
             // ore, cash, weight, max ore, max weight, team ore, red cash, blue cash, all uint
-            NetBuffer msgBuffer = netServer.CreateBuffer();
-            msgBuffer.Write((byte)InfiniminerMessage.TriggerConstructionGunAnimation);
-            msgBuffer.Write(animationValue);
-            netServer.SendMessage(msgBuffer, player.NetConn, NetChannel.ReliableInOrder1);
+            NetBuffer? msgBuffer = netServer?.CreateBuffer();
+            msgBuffer?.Write((byte)InfiniminerMessage.TriggerConstructionGunAnimation);
+            msgBuffer?.Write(animationValue);
+            netServer?.SendMessage(msgBuffer, player.NetConn, NetChannel.ReliableInOrder1);
         }
 
         public void UseSignPainter(Player player, Vector3 playerPosition, Vector3 playerHeading)
@@ -2478,14 +2489,14 @@ namespace Infiniminer
 
         public void SendServerMessage(string message)
         {
-            NetBuffer msgBuffer = netServer.CreateBuffer();
-            msgBuffer = netServer.CreateBuffer();
-            msgBuffer.Write((byte)InfiniminerMessage.ChatMessage);
-            msgBuffer.Write((byte)ChatMessageType.SayAll);
-            msgBuffer.Write(message.Sanitize());
+            NetBuffer? msgBuffer = netServer?.CreateBuffer();
+            msgBuffer = netServer?.CreateBuffer();
+            msgBuffer?.Write((byte)InfiniminerMessage.ChatMessage);
+            msgBuffer?.Write((byte)ChatMessageType.SayAll);
+            msgBuffer?.Write(message.Sanitize());
             foreach (NetConnection netConn in playerList.Keys)
                 if (netConn.Status == NetConnectionStatus.Connected)
-                    netServer.SendMessage(msgBuffer, netConn, NetChannel.ReliableInOrder3);
+                    netServer?.SendMessage(msgBuffer, netConn, NetChannel.ReliableInOrder3);
         }
 
         // Lets a player know about their resources.
@@ -2495,17 +2506,17 @@ namespace Infiniminer
                 return;
 
             // ore, cash, weight, max ore, max weight, team ore, red cash, blue cash, all uint
-            NetBuffer msgBuffer = netServer.CreateBuffer();
-            msgBuffer.Write((byte)InfiniminerMessage.ResourceUpdate);
-            msgBuffer.Write((uint)player.Ore);
-            msgBuffer.Write((uint)player.Cash);
-            msgBuffer.Write((uint)player.Weight);
-            msgBuffer.Write((uint)player.OreMax);
-            msgBuffer.Write((uint)player.WeightMax);
-            msgBuffer.Write((uint)(player.Team == PlayerTeam.Red ? teamOreRed : teamOreBlue));
-            msgBuffer.Write((uint)teamCashRed);
-            msgBuffer.Write((uint)teamCashBlue);
-            netServer.SendMessage(msgBuffer, player.NetConn, NetChannel.ReliableInOrder1);
+            NetBuffer? msgBuffer = netServer?.CreateBuffer();
+            msgBuffer?.Write((byte)InfiniminerMessage.ResourceUpdate);
+            msgBuffer?.Write((uint)player.Ore);
+            msgBuffer?.Write((uint)player.Cash);
+            msgBuffer?.Write((uint)player.Weight);
+            msgBuffer?.Write((uint)player.OreMax);
+            msgBuffer?.Write((uint)player.WeightMax);
+            msgBuffer?.Write((uint)(player.Team == PlayerTeam.Red ? teamOreRed : teamOreBlue));
+            msgBuffer?.Write((uint)teamCashRed);
+            msgBuffer?.Write((uint)teamCashBlue);
+            netServer?.SendMessage(msgBuffer, player.NetConn, NetChannel.ReliableInOrder1);
         }
 
         List<MapSender> mapSendingProgress = new List<MapSender>();
@@ -2538,89 +2549,89 @@ namespace Infiniminer
             Debug.Assert(MAPSIZE == 64, "The BlockBulkTransfer message requires a map size of 64.");
 
             for (byte x = 0; x < MAPSIZE; x++)
-                for (byte y=0; y<MAPSIZE; y+=16)
+                for (byte y = 0; y < MAPSIZE; y += 16)
                 {
-                    NetBuffer msgBuffer = netServer.CreateBuffer();
-                    msgBuffer.Write((byte)InfiniminerMessage.BlockBulkTransfer);
-                    msgBuffer.Write(x);
-                    msgBuffer.Write(y);
-                    for (byte dy=0; dy<16; dy++)
+                    NetBuffer? msgBuffer = netServer?.CreateBuffer();
+                    msgBuffer?.Write((byte)InfiniminerMessage.BlockBulkTransfer);
+                    msgBuffer?.Write(x);
+                    msgBuffer?.Write(y);
+                    for (byte dy = 0; dy < 16; dy++)
                         for (byte z = 0; z < MAPSIZE; z++)
-                            msgBuffer.Write((byte)(blockList[x, y+dy, z]));
+                            msgBuffer?.Write((byte)(blockList[x, y + dy, z]));
                     if (client.Status == NetConnectionStatus.Connected)
-                        netServer.SendMessage(msgBuffer, client, NetChannel.ReliableUnordered);
+                        netServer?.SendMessage(msgBuffer, client, NetChannel.ReliableUnordered);
                 }
         }*/
 
         public void SendPlayerPing(uint playerId)
         {
-            NetBuffer msgBuffer = netServer.CreateBuffer();
-            msgBuffer.Write((byte)InfiniminerMessage.PlayerPing);
-            msgBuffer.Write(playerId);
+            NetBuffer? msgBuffer = netServer?.CreateBuffer();
+            msgBuffer?.Write((byte)InfiniminerMessage.PlayerPing);
+            msgBuffer?.Write(playerId);
 
             foreach (NetConnection netConn in playerList.Keys)
                 if (netConn.Status == NetConnectionStatus.Connected)
-                    netServer.SendMessage(msgBuffer, netConn, NetChannel.ReliableUnordered);
+                    netServer?.SendMessage(msgBuffer, netConn, NetChannel.ReliableUnordered);
         }
 
         public void SendPlayerUpdate(Player player)
         {
-            NetBuffer msgBuffer = netServer.CreateBuffer();
-            msgBuffer.Write((byte)InfiniminerMessage.PlayerUpdate);
-            msgBuffer.Write((uint)player.ID);
-            msgBuffer.Write(player.Position);
-            msgBuffer.Write(player.Heading);
-            msgBuffer.Write((byte)player.Tool);
+            NetBuffer? msgBuffer = netServer?.CreateBuffer();
+            msgBuffer?.Write((byte)InfiniminerMessage.PlayerUpdate);
+            msgBuffer?.Write((uint)player.ID);
+            msgBuffer?.Write(player.Position);
+            msgBuffer?.Write(player.Heading);
+            msgBuffer?.Write((byte)player.Tool);
 
             if (player.QueueAnimationBreak)
             {
                 player.QueueAnimationBreak = false;
-                msgBuffer.Write(false);
+                msgBuffer?.Write(false);
             }
             else
-                msgBuffer.Write(player.UsingTool);
+                msgBuffer?.Write(player.UsingTool);
 
-            msgBuffer.Write((ushort)player.Score / 100);
+            msgBuffer?.Write((ushort)player.Score / 100);
 
             foreach (NetConnection netConn in playerList.Keys)
                 if (netConn.Status == NetConnectionStatus.Connected)
-                    netServer.SendMessage(msgBuffer, netConn, NetChannel.UnreliableInOrder1);
+                    netServer?.SendMessage(msgBuffer, netConn, NetChannel.UnreliableInOrder1);
         }
 
         public void SendSetBeacon(Vector3 position, string text, PlayerTeam team)
         {
-            NetBuffer msgBuffer = netServer.CreateBuffer();
-            msgBuffer.Write((byte)InfiniminerMessage.SetBeacon);
-            msgBuffer.Write(position);
-            msgBuffer.Write(text);
-            msgBuffer.Write((byte)team);
+            NetBuffer? msgBuffer = netServer?.CreateBuffer();
+            msgBuffer?.Write((byte)InfiniminerMessage.SetBeacon);
+            msgBuffer?.Write(position);
+            msgBuffer?.Write(text);
+            msgBuffer?.Write((byte)team);
             foreach (NetConnection netConn in playerList.Keys)
                 if (netConn.Status == NetConnectionStatus.Connected)
-                    netServer.SendMessage(msgBuffer, netConn, NetChannel.ReliableInOrder2);
+                    netServer?.SendMessage(msgBuffer, netConn, NetChannel.ReliableInOrder2);
         }
 
         public void SendPlayerJoined(Player player)
         {
-            NetBuffer msgBuffer;
+            NetBuffer? msgBuffer;
 
             // Let this player know about other players.
             foreach (Player p in playerList.Values)
             {
-                msgBuffer = netServer.CreateBuffer();
-                msgBuffer.Write((byte)InfiniminerMessage.PlayerJoined);
-                msgBuffer.Write((uint)p.ID);
-                msgBuffer.Write(p.Handle);
-                msgBuffer.Write(p == player);
-                msgBuffer.Write(p.Alive);
+                msgBuffer = netServer?.CreateBuffer();
+                msgBuffer?.Write((byte)InfiniminerMessage.PlayerJoined);
+                msgBuffer?.Write((uint)p.ID);
+                msgBuffer?.Write(p.Handle);
+                msgBuffer?.Write(p == player);
+                msgBuffer?.Write(p.Alive);
                 if (player.NetConn.Status == NetConnectionStatus.Connected)
-                    netServer.SendMessage(msgBuffer, player.NetConn, NetChannel.ReliableInOrder2);
+                    netServer?.SendMessage(msgBuffer, player.NetConn, NetChannel.ReliableInOrder2);
 
-                msgBuffer = netServer.CreateBuffer();
-                msgBuffer.Write((byte)InfiniminerMessage.PlayerSetTeam);
-                msgBuffer.Write((uint)p.ID);
-                msgBuffer.Write((byte)p.Team);
+                msgBuffer = netServer?.CreateBuffer();
+                msgBuffer?.Write((byte)InfiniminerMessage.PlayerSetTeam);
+                msgBuffer?.Write((uint)p.ID);
+                msgBuffer?.Write((byte)p.Team);
                 if (player.NetConn.Status == NetConnectionStatus.Connected)
-                    netServer.SendMessage(msgBuffer, player.NetConn, NetChannel.ReliableInOrder2);
+                    netServer?.SendMessage(msgBuffer, player.NetConn, NetChannel.ReliableInOrder2);
             }
 
             // Let this player know about all placed beacons.
@@ -2633,106 +2644,105 @@ namespace Infiniminer
                 msgBuffer.Write(position);
                 msgBuffer.Write(bPair.Value.ID);
                 msgBuffer.Write((byte)bPair.Value.Team);
-                if (player.NetConn.Status == NetConnectionStatus.Connected)
-                    netServer.SendMessage(msgBuffer, player.NetConn, NetChannel.ReliableInOrder2);
+                netServer.SendMessage(msgBuffer, player.NetConn, NetChannel.ReliableInOrder2);
             }
 
             // Let other players know about this player.
-            msgBuffer = netServer.CreateBuffer();
-            msgBuffer.Write((byte)InfiniminerMessage.PlayerJoined);
-            msgBuffer.Write((uint)player.ID);
-            msgBuffer.Write(player.Handle);
-            msgBuffer.Write(false);
-            msgBuffer.Write(player.Alive);
+            msgBuffer = netServer?.CreateBuffer();
+            msgBuffer?.Write((byte)InfiniminerMessage.PlayerJoined);
+            msgBuffer?.Write((uint)player.ID);
+            msgBuffer?.Write(player.Handle);
+            msgBuffer?.Write(false);
+            msgBuffer?.Write(player.Alive);
 
             foreach (NetConnection netConn in playerList.Keys)
                 if (netConn != player.NetConn && netConn.Status == NetConnectionStatus.Connected)
-                    netServer.SendMessage(msgBuffer, netConn, NetChannel.ReliableInOrder2);
+                    netServer?.SendMessage(msgBuffer, netConn, NetChannel.ReliableInOrder2);
 
             // Send this out just incase someone is joining at the last minute.
             if (winningTeam != PlayerTeam.None)
                 BroadcastGameOver();
 
             // Send out a chat message.
-            msgBuffer = netServer.CreateBuffer();
-            msgBuffer.Write((byte)InfiniminerMessage.ChatMessage);
-            msgBuffer.Write((byte)ChatMessageType.SayAll);
-            msgBuffer.Write(player.Handle + " HAS JOINED THE ADVENTURE!");
+            msgBuffer = netServer?.CreateBuffer();
+            msgBuffer?.Write((byte)InfiniminerMessage.ChatMessage);
+            msgBuffer?.Write((byte)ChatMessageType.SayAll);
+            msgBuffer?.Write(player.Handle + " HAS JOINED THE ADVENTURE!");
             foreach (NetConnection netConn in playerList.Keys)
                 if (netConn.Status == NetConnectionStatus.Connected)
-                    netServer.SendMessage(msgBuffer, netConn, NetChannel.ReliableInOrder3);
+                    netServer?.SendMessage(msgBuffer, netConn, NetChannel.ReliableInOrder3);
         }
 
         public void BroadcastGameOver()
         {
-            NetBuffer msgBuffer = netServer.CreateBuffer();
-            msgBuffer.Write((byte)InfiniminerMessage.GameOver);
-            msgBuffer.Write((byte)winningTeam);
+            NetBuffer? msgBuffer = netServer?.CreateBuffer();
+            msgBuffer?.Write((byte)InfiniminerMessage.GameOver);
+            msgBuffer?.Write((byte)winningTeam);
             foreach (NetConnection netConn in playerList.Keys)
                 if (netConn.Status == NetConnectionStatus.Connected)
-                    netServer.SendMessage(msgBuffer, netConn, NetChannel.ReliableUnordered);
+                    netServer.SendMessage(msgBuffer, netConn, NetChannel.ReliableUnordered);     
         }
 
         public void SendPlayerLeft(Player player, string reason)
         {
-            NetBuffer msgBuffer = netServer.CreateBuffer();
-            msgBuffer.Write((byte)InfiniminerMessage.PlayerLeft);
-            msgBuffer.Write((uint)player.ID);
+            NetBuffer? msgBuffer = netServer?.CreateBuffer();
+            msgBuffer?.Write((byte)InfiniminerMessage.PlayerLeft);
+            msgBuffer?.Write((uint)player.ID);
             foreach (NetConnection netConn in playerList.Keys)
                 if (netConn != player.NetConn && netConn.Status == NetConnectionStatus.Connected)
-                    netServer.SendMessage(msgBuffer, netConn, NetChannel.ReliableInOrder2);
+                    netServer?.SendMessage(msgBuffer, netConn, NetChannel.ReliableInOrder2);
 
             // Send out a chat message.
-            msgBuffer = netServer.CreateBuffer();
-            msgBuffer.Write((byte)InfiniminerMessage.ChatMessage);
-            msgBuffer.Write((byte)ChatMessageType.SayAll);
-            msgBuffer.Write(player.Handle + " " + reason);
+            msgBuffer = netServer?.CreateBuffer();
+            msgBuffer?.Write((byte)InfiniminerMessage.ChatMessage);
+            msgBuffer?.Write((byte)ChatMessageType.SayAll);
+            msgBuffer?.Write(player.Handle + " " + reason);
             foreach (NetConnection netConn in playerList.Keys)
                 if (netConn.Status == NetConnectionStatus.Connected)
-                    netServer.SendMessage(msgBuffer, netConn, NetChannel.ReliableInOrder3);
+                    netServer?.SendMessage(msgBuffer, netConn, NetChannel.ReliableInOrder3);
         }
 
         public void SendPlayerSetTeam(Player player)
         {
-            NetBuffer msgBuffer = netServer.CreateBuffer();
-            msgBuffer.Write((byte)InfiniminerMessage.PlayerSetTeam);
-            msgBuffer.Write((uint)player.ID);
-            msgBuffer.Write((byte)player.Team);
+            NetBuffer? msgBuffer = netServer?.CreateBuffer();
+            msgBuffer?.Write((byte)InfiniminerMessage.PlayerSetTeam);
+            msgBuffer?.Write((uint)player.ID);
+            msgBuffer?.Write((byte)player.Team);
             foreach (NetConnection netConn in playerList.Keys)
                 if (netConn.Status == NetConnectionStatus.Connected)
-                    netServer.SendMessage(msgBuffer, netConn, NetChannel.ReliableInOrder2);
+                    netServer?.SendMessage(msgBuffer, netConn, NetChannel.ReliableInOrder2);
         }
 
         public void SendPlayerDead(Player player)
         {
-            NetBuffer msgBuffer = netServer.CreateBuffer();
-            msgBuffer.Write((byte)InfiniminerMessage.PlayerDead);
-            msgBuffer.Write((uint)player.ID);
+            NetBuffer? msgBuffer = netServer?.CreateBuffer();
+            msgBuffer?.Write((byte)InfiniminerMessage.PlayerDead);
+            msgBuffer?.Write((uint)player.ID);
             foreach (NetConnection netConn in playerList.Keys)
                 if (netConn.Status == NetConnectionStatus.Connected)
-                    netServer.SendMessage(msgBuffer, netConn, NetChannel.ReliableInOrder2);
+                    netServer?.SendMessage(msgBuffer, netConn, NetChannel.ReliableInOrder2);
         }
 
         public void SendPlayerAlive(Player player)
         {
-            NetBuffer msgBuffer = netServer.CreateBuffer();
-            msgBuffer.Write((byte)InfiniminerMessage.PlayerAlive);
-            msgBuffer.Write((uint)player.ID);
+            NetBuffer? msgBuffer = netServer?.CreateBuffer();
+            msgBuffer?.Write((byte)InfiniminerMessage.PlayerAlive);
+            msgBuffer?.Write((uint)player.ID);
             foreach (NetConnection netConn in playerList.Keys)
                 if (netConn.Status == NetConnectionStatus.Connected)
-                    netServer.SendMessage(msgBuffer, netConn, NetChannel.ReliableInOrder2);
+                    netServer?.SendMessage(msgBuffer, netConn, NetChannel.ReliableInOrder2);
         }
 
         public void PlaySound(InfiniminerSound sound, Vector3 position)
         {
-            NetBuffer msgBuffer = netServer.CreateBuffer();
-            msgBuffer.Write((byte)InfiniminerMessage.PlaySound);
-            msgBuffer.Write((byte)sound);
-            msgBuffer.Write(true);
-            msgBuffer.Write(position);
+            NetBuffer? msgBuffer = netServer?.CreateBuffer();
+            msgBuffer?.Write((byte)InfiniminerMessage.PlaySound);
+            msgBuffer?.Write((byte)sound);
+            msgBuffer?.Write(true);
+            msgBuffer?.Write(position);
             foreach (NetConnection netConn in playerList.Keys)
                 if (netConn.Status == NetConnectionStatus.Connected)
-                    netServer.SendMessage(msgBuffer, netConn, NetChannel.ReliableUnordered);
+                    netServer?.SendMessage(msgBuffer, netConn, NetChannel.ReliableUnordered);
         }
 
         Thread updater;
