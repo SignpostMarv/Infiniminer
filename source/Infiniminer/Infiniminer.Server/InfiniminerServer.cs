@@ -1611,7 +1611,7 @@ namespace Infiniminer
                 }
 
                 // Pass control over to waiting threads.
-                Thread.Sleep(1);
+                Thread.Sleep(0);
             }
 
             MessageAll("Server going down NOW!");
