@@ -32,6 +32,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using Lidgren.Network;
 using Lidgren.Network.Xna;
+using Infiniminer.IO;
 
 namespace Infiniminer
 {
@@ -494,73 +495,105 @@ namespace Infiniminer
             graphicsDeviceManager.PreferredBackBufferHeight = 768;
             graphicsDeviceManager.PreferredDepthStencilFormat = DepthFormat.Depth24Stencil8;
 
-            //Now moving to DatafileWriter only since it can read and write
-            DatafileWriter dataFile = new DatafileWriter("client.config.txt");
-            if (dataFile.Data.ContainsKey("width"))
-                graphicsDeviceManager.PreferredBackBufferWidth = int.Parse(dataFile.Data["width"], System.Globalization.CultureInfo.InvariantCulture);
-            if (dataFile.Data.ContainsKey("height"))
-                graphicsDeviceManager.PreferredBackBufferHeight = int.Parse(dataFile.Data["height"], System.Globalization.CultureInfo.InvariantCulture);
-            if (dataFile.Data.ContainsKey("fullscreen"))
-                graphicsDeviceManager.IsFullScreen = bool.Parse(dataFile.Data["fullscreen"]);
-            if (dataFile.Data.ContainsKey("handle"))
-                playerHandle = dataFile.Data["handle"];
-            if (dataFile.Data.ContainsKey("showfps"))
-                DrawFrameRate = bool.Parse(dataFile.Data["showfps"]);
-            if (dataFile.Data.ContainsKey("yinvert"))
-                InvertMouseYAxis = bool.Parse(dataFile.Data["yinvert"]);
-            if (dataFile.Data.ContainsKey("nosound"))
-                NoSound = bool.Parse(dataFile.Data["nosound"]);
-            if (dataFile.Data.ContainsKey("pretty"))
-                RenderPretty = bool.Parse(dataFile.Data["pretty"]);
-            if (dataFile.Data.ContainsKey("volume"))
-                volumeLevel = Math.Max(0, Math.Min(1, float.Parse(dataFile.Data["volume"], System.Globalization.CultureInfo.InvariantCulture)));
-            if (dataFile.Data.ContainsKey("sensitivity"))
-                mouseSensitivity=Math.Max(0.001f,Math.Min(0.05f,float.Parse(dataFile.Data["sensitivity"], System.Globalization.CultureInfo.InvariantCulture)/1000f));
-            if (dataFile.Data.ContainsKey("red_name"))
-                redName = dataFile.Data["red_name"].Trim();
-            if (dataFile.Data.ContainsKey("blue_name"))
-                blueName = dataFile.Data["blue_name"].Trim();
-
-
-            if (dataFile.Data.ContainsKey("red"))
+            using(ConfigurationFileReader reader = new ConfigurationFileReader(TitleContainer.OpenStream("client.config.txt")))
             {
-                Color temp = new Color();
-                string[] data = dataFile.Data["red"].Split(',');
-                try
-                {
-                    temp.R = byte.Parse(data[0].Trim());
-                    temp.G = byte.Parse(data[1].Trim());
-                    temp.B = byte.Parse(data[2].Trim());
-                    temp.A = (byte)255;
-                }
-                catch {
-                    Console.WriteLine("Invalid colour values for red");
-                }
-                if (temp.A != 0)
-                {
-                    red = temp;
-                    customColours = true;
-                }
-            }
+                ConfigurationItem? item = null;
 
-            if (dataFile.Data.ContainsKey("blue"))
-            {
-                Color temp = new Color();
-                string[] data = dataFile.Data["blue"].Split(',');
-                try
+                while((item = reader.ReadLine()) is not null)
                 {
-                    temp.R = byte.Parse(data[0].Trim());
-                    temp.G = byte.Parse(data[1].Trim());
-                    temp.B = byte.Parse(data[2].Trim());
-                    temp.A = (byte)255;
-                }
-                catch {
-                    Console.WriteLine("Invalid colour values for blue");
-                }
-                if (temp.A != 0)
-                {
-                    blue = temp;
-                    customColours = true;
+                    switch(item.Key)
+                    {
+                        case "width":
+                            graphicsDeviceManager.PreferredBackBufferWidth = int.Parse(item.Value, System.Globalization.CultureInfo.InvariantCulture);
+                            break;
+
+                        case "height":
+                            graphicsDeviceManager.PreferredBackBufferHeight = int.Parse(item.Value, System.Globalization.CultureInfo.InvariantCulture);
+                            break;
+
+                        case "fullscreen":
+                            graphicsDeviceManager.IsFullScreen = bool.Parse(item.Value);
+                            break;
+
+                        case "handle":
+                            playerHandle = item.Value;
+                            break;
+
+                        case "shofps":
+                        case "showfps":
+                            DrawFrameRate = bool.Parse(item.Value);
+                            break;
+
+                        case "yinvert":
+                            InvertMouseYAxis = bool.Parse(item.Value);
+                            break;
+                        
+                        case "nosound":
+                            NoSound = bool.Parse(item.Value);
+                            break;
+
+                        case "pretty":
+                            RenderPretty = bool.Parse(item.Value);
+                            break;
+
+                        case "volume":
+                            volumeLevel = Math.Max(0, Math.Min(1, float.Parse(item.Value, System.Globalization.CultureInfo.InvariantCulture)));
+                            break;
+
+                        case "sensitivity":
+                            mouseSensitivity = Math.Max(0.001f, Math.Min(0.05f, float.Parse(item.Value, System.Globalization.CultureInfo.InvariantCulture) / 1000f));
+                            break;
+
+                        case "red_name":
+                            redName = item.Value.Trim();
+                            break;
+
+                        case "blue_name":
+                            blueName = item.Value.Trim();
+                            break;
+
+                        case "red":
+                            Color temp = new Color();
+                            string[] data = item.Value.Split(',');
+                            try
+                            {
+                                temp.R = byte.Parse(data[0].Trim());
+                                temp.G = byte.Parse(data[1].Trim());
+                                temp.B = byte.Parse(data[2].Trim());
+                                temp.A = (byte)255;
+                            }
+                            catch {
+                                Console.WriteLine("Invalid colour values for red");
+                            }
+                            if (temp.A != 0)
+                            {
+                                red = temp;
+                                customColours = true;
+                            }
+                            break;
+
+                        case "blue":
+                            Color temp = new Color();
+                            string[] data = item.Value.Split(',');
+                            try
+                            {
+                                temp.R = byte.Parse(data[0].Trim());
+                                temp.G = byte.Parse(data[1].Trim());
+                                temp.B = byte.Parse(data[2].Trim());
+                                temp.A = (byte)255;
+                            }
+                            catch {
+                                Console.WriteLine("Invalid colour values for blue");
+                            }
+                            if (temp.A != 0)
+                            {
+                                blue = temp;
+                                customColours = true;
+                            }
+                            break;
+
+                        default: continue;
+                    }
                 }
             }
 
@@ -599,6 +632,7 @@ namespace Infiniminer
                 keyBinds.SaveBinds(dataFile, "keymap.txt");
                 Console.WriteLine("Creating default keymap...");
             }
+
             graphicsDeviceManager.ApplyChanges();
             base.Initialize();
         }

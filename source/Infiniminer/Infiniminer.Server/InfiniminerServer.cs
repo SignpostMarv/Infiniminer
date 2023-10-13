@@ -24,6 +24,8 @@ SOFTWARE.
 ---------------------------------------------------------------------------- */
 
 using System.Diagnostics;
+using System.Linq.Expressions;
+using Infiniminer.IO;
 using Lidgren.Network;
 using Lidgren.Network.Xna;
 using Microsoft.Xna.Framework;
@@ -35,20 +37,16 @@ namespace Infiniminer
         InfiniminerNetServer? netServer;
         public BlockType[,,] blockList;    // In game coordinates, where Y points up.
         PlayerTeam[,,] blockCreatorTeam;
-        const int MAPSIZE = 64;
         Dictionary<NetConnection, Player> playerList = new Dictionary<NetConnection, Player>();
+        ServerConfig config;
         int lavaBlockCount = 0;
-        uint oreFactor = 10;
         uint prevMaxPlayers = 16;
-        bool includeLava = true;
         string levelToLoad = "";
-        string greeter = "";
         List<NetConnection> toGreet = new List<NetConnection>();
         Dictionary<string, short> admins = new Dictionary<string, short>(); //Short represents power - 1 for mod, 2 for full admin
 
         bool[,,] tntExplosionPattern = new bool[0,0,0];
         bool announceChanges = true;
-
         DateTime lastServerListUpdate = DateTime.Now;
         DateTime lastMapBackup = DateTime.Now;
         List<string>? banList;
@@ -58,6 +56,8 @@ namespace Infiniminer
         string consoleInput = "";
 
         bool keepRunning = true;
+
+        bool autoannounce = false;
 
         uint teamCashRed = 0;
         uint teamCashBlue = 0;
@@ -80,411 +80,49 @@ namespace Infiniminer
         Dictionary<string,string> varDescriptions = new Dictionary<string,string>();
         Dictionary<string, bool> varAreMessage = new Dictionary<string, bool>();
 
-        public void varBindingsInitialize()
+        public uint MaxPlayers
         {
-            //Bool bindings
-            varBind("tnt", "TNT explosions", false, true);
-            varBind("stnt", "Spherical TNT explosions", true, true);
-            varBind("sspreads", "Lava spreading via shock blocks", true, false);
-            varBind("roadabsorbs", "Letting road blocks above lava absorb it", true, false);
-            varBind("insanelava", "Insane lava spreading, so as to fill any hole", false, false);
-            varBind("minelava", "Lava pickaxe mining", true, false);
-            //***New***
-            varBind("public", "Server publicity", true, false);
-            varBind("sandbox", "Sandbox mode", true, false);
-            //Announcing is a special case, as it will never announce for key name announcechanges
-            varBind("announcechanges", "Toggles variable changes being announced to clients", true, false);
-
-            //String bindings
-            varBind("name", "Server name as it appears on the server browser", "Unnamed Server");
-            varBind("greeter", "The message sent to new players", "");
-
-            //Int bindings
-            varBind("maxplayers", "Maximum player count", 16);
-            varBind("explosionradius", "The radius of spherical tnt explosions", 3);
-        }
-
-        public void varBind(string name, string desc, bool initVal, bool useAre)
-        {
-            varBoolBindings[name] = initVal;
-            varDescriptions[name] = desc;
-            /*if (varBoolBindings.ContainsKey(name))
-                varBoolBindings[name] = initVal;
-            else
-                varBoolBindings.Add(name, initVal);
-
-            if (varDescriptions.ContainsKey(name))
-                varDescriptions[name] = desc;
-            else
-                varDescriptions.Add(name, desc);*/
-
-            varAreMessage[name] = useAre;
-        }
-
-        public void varBind(string name, string desc, string initVal)
-        {
-            varStringBindings[name] = initVal;
-            varDescriptions[name] = desc;
-            /*
-            if (varStringBindings.ContainsKey(name))
-                varStringBindings[name] = initVal;
-            else
-                varStringBindings.Add(name, initVal);
-
-            if (varDescriptions.ContainsKey(name))
-                varDescriptions[name] = desc;
-            else
-                varDescriptions.Add(name, desc);*/
-        }
-
-        public void varBind(string name, string desc, int initVal)
-        {
-            varIntBindings[name] = initVal;
-            varDescriptions[name] = desc;
-            /*if (varDescriptions.ContainsKey(name))
-                varDescriptions[name] = desc;
-            else
-                varDescriptions.Add(name, desc);*/
-        }
-
-        public bool varChangeCheckSpecial(string name)
-        {
-            switch (name)
+            set
             {
-                case "maxplayers":
-                    //Check if smaller than player count
-                    if (varGetI(name) < playerList.Count)
-                    {
-                        //Bail, set to previous value
-                        varSet(name, (int)prevMaxPlayers,true);
-                        return false;
-                    }
-                    else
-                    {
-                        prevMaxPlayers = (uint)varGetI(name);
-                        netServer.Configuration.MaxConnections = varGetI(name);
-                    }
-                    break;
-                case "explosionradius":
-                    CalculateExplosionPattern();
-                    break;
-                case "greeter":
-                    /*PropertyBag _P = new PropertyBag(new InfiniminerGame(new string[]{}));
-                    string[] format = _P.ApplyWordrwap(varGetS("greeter"));
-                    */
-                    greeter = varGetS("greeter");
-                    break;
-            }
-            return true;
-        }
-
-        public bool varGetB(string name)
-        {
-            if (varBoolBindings.ContainsKey(name) && varDescriptions.ContainsKey(name))
-                return varBoolBindings[name];
-            else
-                return false;
-        }
-
-        public string varGetS(string name)
-        {
-            if (varStringBindings.ContainsKey(name) && varDescriptions.ContainsKey(name))
-                return varStringBindings[name];
-            else
-                return "";
-        }
-
-        public int varGetI(string name)
-        {
-            if (varIntBindings.ContainsKey(name) && varDescriptions.ContainsKey(name))
-                return varIntBindings[name];
-            else
-                return -1;
-        }
-
-        public int varExists(string name)
-        {
-            if (varDescriptions.ContainsKey(name))
-                if (varBoolBindings.ContainsKey(name))
-                    return 1;
-                else if (varStringBindings.ContainsKey(name))
-                    return 2;
-                else if (varIntBindings.ContainsKey(name))
-                    return 3;
-            return 0;
-        }
-
-        public void varSet(string name, bool val)
-        {
-            varSet(name, val, false);
-        }
-
-        public void varSet(string name, bool val, bool silent)
-        {
-            if (varBoolBindings.ContainsKey(name) && varDescriptions.ContainsKey(name))
-            {
-                varBoolBindings[name] = val;
-                string enabled = val ? "enabled!" : "disabled.";
-                if (name!="announcechanges"&&!silent)
-                    MessageAll(varDescriptions[name] + (varAreMessage[name] ? " are " + enabled : " is " + enabled));
-                if (!silent)
+                if (value < playerList.Count)
                 {
-                    varReportStatus(name, false);
-                    varChangeCheckSpecial(name);
+                    config.MaxPlayers = prevMaxPlayers;
                 }
-            }
-            else
-                ConsoleWrite("Variable \"" + name + "\" does not exist!");
-        }
-
-        public void varSet(string name, string val)
-        {
-            varSet(name, val, false);
-        }
-
-        public void varSet(string name, string val, bool silent)
-        {
-            if (varStringBindings.ContainsKey(name) && varDescriptions.ContainsKey(name))
-            {
-                varStringBindings[name] = val;
-                if (!silent)
+                else
                 {
-                    varReportStatus(name);
-                    varChangeCheckSpecial(name);
+                    prevMaxPlayers = config.MaxPlayers;
+                    netServer.Configuration.MaxConnections = value;
                 }
-            }
-            else
-                ConsoleWrite("Variable \"" + name + "\" does not exist!");
-        }
-
-        public void varSet(string name, int val)
-        {
-            varSet(name, val, false);
-        }
-
-        public void varSet(string name, int val, bool silent)
-        {
-            if (varIntBindings.ContainsKey(name) && varDescriptions.ContainsKey(name))
-            {
-                varIntBindings[name] = val;
-                if (!silent)
-                {
-                    MessageAll(name + " = " + val.ToString());
-                    varChangeCheckSpecial(name);
-                }
-            }
-            else
-                ConsoleWrite("Variable \"" + name + "\" does not exist!");
-        }
-
-        public string varList()
-        {
-            return varList(false);
-        }
-
-        private void varListType(ICollection<string> keys, string naming)
-        {
-
-            const int lineLength = 3;
-            if (keys.Count > 0)
-            {
-                ConsoleWrite(naming);
-                int i = 1;
-                string output = "";
-                foreach (string key in keys)
-                {
-                    if (i == 1)
-                    {
-                        output += "\t" + key;
-                    }
-                    else if (i >= lineLength)
-                    {
-                        output += ", " + key;
-                        ConsoleWrite(output);
-                        output = "";
-                        i = 0;
-                    }
-                    else
-                    {
-                        output += ", " + key;
-                    }
-                    i++;
-                }
-                if (i > 1)
-                    ConsoleWrite(output);
             }
         }
 
-        public string varList(bool autoOut)
-        {
-            if (!autoOut)
-            {
-                string output = "";
-                int i = 0;
-                foreach (string key in varBoolBindings.Keys)
-                {
-                    if (i == 0)
-                        output += key;
-                    else
-                        output += "," + key;
-                    i++;
-                }
-                foreach (string key in varStringBindings.Keys)
-                {
-                    if (i == 0)
-                        output += "s " + key;
-                    else
-                        output += ",s " + key;
-                    i++;
-                }
-                return output;
-            }
-            else
-            {
-                varListType((ICollection<string>)varBoolBindings.Keys, "Boolean Vars:");
-                varListType((ICollection<string>)varStringBindings.Keys, "String Vars:");
-                varListType((ICollection<string>)varIntBindings.Keys, "Int Vars:");
-
-                /*ConsoleWrite("String count: " + varStringBindings.Keys.Count);
-                outt = new string[varStringBindings.Keys.Count];
-                varStringBindings.Keys.CopyTo(outt, 0);
-                varListType(outt, "String Vars:");
-
-                ConsoleWrite("Int count: " + varIntBindings.Keys.Count);
-                outt = new string[varIntBindings.Keys.Count];
-                varIntBindings.Keys.CopyTo(outt, 0);
-                varListType(outt, "Integer Vars:");*/
-                /*if (varStringBindings.Count > 0)
-                {
-                    ConsoleWrite("String Vars:");
-                    int i = 1;
-                    string output = "";
-                    foreach (string key in varStringBindings.Keys)
-                    {
-                        if (i == 1)
-                        {
-                            output += key;
-                        }
-                        else if (i >= lineLength)
-                        {
-                            output += "," + key;
-                            ConsoleWrite(output);
-                            output = "";
-                        }
-                        else
-                        {
-                            output += "," + key;
-                        }
-                        i++;
-                    }
-                }
-                if (varIntBindings.Count > 0)
-                {
-                    ConsoleWrite("Integer Vars:");
-                    int i = 1;
-                    string output = "";
-                    foreach (string key in varIntBindings.Keys)
-                    {
-                        if (i == 1)
-                        {
-                            output += "\t"+key;
-                        }
-                        else if (i >= lineLength)
-                        {
-                            output += "," + key;
-                            ConsoleWrite(output);
-                            output = "";
-                        }
-                        else
-                        {
-                            output += "," + key;
-                        }
-                        i++;
-                    }
-                }*/
-                return "";
-            }
-        }
-
-        public void varReportStatus(string name)
-        {
-            varReportStatus(name, true);
-        }
-
-        public void varReportStatus(string name, bool full)
-        {
-            if (varDescriptions.ContainsKey(name))
-            {
-                if (varBoolBindings.ContainsKey(name))
-                {
-                    ConsoleWrite(name + " = " + varBoolBindings[name].ToString());
-                    if (full)
-                        ConsoleWrite(varDescriptions[name]);
-                    return;
-                }
-                else if (varStringBindings.ContainsKey(name))
-                {
-                    ConsoleWrite(name + " = " + varStringBindings[name]);
-                    if (full)
-                        ConsoleWrite(varDescriptions[name]);
-                    return;
-                }
-                else if (varIntBindings.ContainsKey(name))
-                {
-                    ConsoleWrite(name + " = " + varIntBindings[name]);
-                    if (full)
-                        ConsoleWrite(varDescriptions[name]);
-                    return;
-                }
-            }
-            ConsoleWrite("Variable \"" + name + "\" does not exist!");
-        }
-
-        public string varReportStatusString(string name, bool full)
-        {
-            if (varDescriptions.ContainsKey(name))
-            {
-                if (varBoolBindings.ContainsKey(name))
-                {
-                    return name + " = " + varBoolBindings[name].ToString();
-                }
-                else if (varStringBindings.ContainsKey(name))
-                {
-                    return name + " = " + varStringBindings[name];
-                }
-                else if (varIntBindings.ContainsKey(name))
-                {
-                    return name + " = " + varIntBindings[name];
-                }
-            }
-            return "";
-        }
-        
         public InfiniminerServer()
         {
-            blockList = new BlockType[0,0,0];
-            blockCreatorTeam = new PlayerTeam[0,0,0];
+            blockList = new BlockType[0, 0, 0];
+            blockCreatorTeam = new PlayerTeam[0, 0, 0];
         }
 
         public string GetExtraInfo()
         {
             string extraInfo = "";
-            if (varGetB("sandbox"))
+            if (config.SandboxMode)
                 extraInfo += "sandbox";
             else
                 extraInfo += string.Format("{0:#.##k}", winningCashAmount / 1000);
-            if (!includeLava)
+            if (!config.IncludeLava)
                 extraInfo += ", !lava";
-            if (!varGetB("tnt"))
+            if (!config.TntExplodes)
                 extraInfo += ", !tnt";
-            if (varGetB("insanelava") || varGetB("sspreads") || varGetB("stnt"))
+            if (config.LavaSpreadsAggressively || config.LavaSpreadsViaShockBlocks || config.TntSpherical)
                 extraInfo += ", MetMod";
-/*            if (varGetB("insanelava"))//insaneLava)
+            /*
+            if (config.LavaSpreadsAggressively)
                 extraInfo += ", ~lava";
-            if (varGetB("sspreads"))
+            if (config.LavaSpreadsViaShockBlocks)
                 extraInfo += ", shock->lava";
-            if (varGetB("stnt"))//sphericalTnt && false)
-                extraInfo += ", stnt";*/
+            if (config.TntSpherical)
+                extraInfo += ", stnt";
+            */
             return extraInfo;
         }
 
@@ -495,7 +133,7 @@ namespace Infiniminer
 
         public void PublicServerListUpdate(bool doIt)
         {
-            if (!varGetB("public"))
+            if (!config.IsPublic)
                 return;
 
             TimeSpan updateTimeSpan = DateTime.Now - lastServerListUpdate;
@@ -551,7 +189,7 @@ namespace Infiniminer
                     {
                         if (sender == null)
                         {
-                            ConsoleWrite("( " + playerList.Count + " / " + varGetI("maxplayers") + " )");
+                            ConsoleWrite("( " + playerList.Count + " / " + config.MaxPlayers + " )");
                             foreach (Player p in playerList.Values)
                             {
                                 string teamIdent = "";
@@ -598,6 +236,7 @@ namespace Infiniminer
                         }
                     }
                     break;
+                /* @TODO restore support
                 case "listvars":
                     if (sender==null)
                         varList(true);
@@ -605,6 +244,7 @@ namespace Infiniminer
                         SendServerMessageToPlayer(sender.Handle + ", the " + args[0].ToLower() + " command is only for use in the server console.", sender.NetConn);
                     }
                     break;
+                */
                 case "status":
                     if (sender == null)
                         status();
@@ -661,6 +301,7 @@ namespace Infiniminer
                     }
                     break;
 
+                /* @TODO restore support
                 case "toggle":
                     if (authority >= 1 && args.Length == 2)
                     {
@@ -678,6 +319,7 @@ namespace Infiniminer
                     else
                         ConsoleWrite("Need variable name to toggle!");
                     break;
+                */
                 case "quit":
                     {
                         if (authority >= 2){
@@ -741,6 +383,7 @@ namespace Infiniminer
                     break;
                 default: //Check / set var
                     {
+                        /* @TODO restore support
                         string name = args[0];
                         int exists = varExists(name);
                         if (exists > 0)
@@ -788,10 +431,13 @@ namespace Infiniminer
                             else
                             {
                                 if (sender == null)
+                        */
                                     ConsoleWrite("Unknown command/var.");
+                        /*
                                 return false;
                             }
                         }
+                        */
                     }
                     break;
             }
@@ -1010,10 +656,17 @@ namespace Infiniminer
                         ConsoleWrite(" say <message>");
                         ConsoleWrite(" save <mapfile>");
                         ConsoleWrite(" load <mapfile>");
-                        ConsoleWrite(" toggle <var>");//ConsoleWrite(" toggle [" + varList() + "]");//[tnt,stnt,sspreads,insanelava,minelava,announcechanges]");
+                        /* @TODO restore support
+                        ConsoleWrite(" toggle <var>");
+                        */
+                        /*
+                        ConsoleWrite(" toggle [" + varList() + "]");
+                        */
+                        /* @TODO restore support
                         ConsoleWrite(" <var> <value>");
                         ConsoleWrite(" <var>");
                         ConsoleWrite(" listvars");
+                        */
                         ConsoleWrite(" status");
                         ConsoleWrite(" restart");
                         //ConsoleWrite(" reload");
@@ -1022,7 +675,7 @@ namespace Infiniminer
                     break;
                 case "players":
                     {
-                        ConsoleWrite("( " + playerList.Count + " / " + varGetI("maxplayers") + " )");//maxPlayers + " )");
+                        ConsoleWrite("( " + playerList.Count + " / " + config.MaxPlayers + " )");
                         foreach (Player p in playerList.Values)
                         {
                             string teamIdent = "";
@@ -1035,9 +688,11 @@ namespace Infiniminer
                         }
                     }
                     break;
+                /* @TODO restore support
                 case "listvars":
                     varList(true);
                     break;
+                */
                 case "announce":
                     {
                         PublicServerListUpdate(true);
@@ -1080,6 +735,7 @@ namespace Infiniminer
                     }
                     break;
 
+                /* @TODO restore support
                 case "toggle":
                     if (args.Length == 2)
                     {
@@ -1097,6 +753,7 @@ namespace Infiniminer
                     else
                         ConsoleWrite("Need variable name to toggle!");
                     break;
+                */
                 case "quit":
                     {
                         keepRunning = false;
@@ -1147,6 +804,7 @@ namespace Infiniminer
                     break;
                 default: //Check / set var
                     {
+                        /* @TODO restore support
                         string name = args[0];
                         int exists = varExists(name);
                         if (exists > 0)
@@ -1189,8 +847,11 @@ namespace Infiniminer
                                 SendServerMessage(message);
                             }
                             else
+                        */
                                 ConsoleWrite("Unknown command/var.");
+                        /*
                         }
+                        */
                     }
                     break;
             }
@@ -1307,7 +968,7 @@ namespace Infiniminer
 
         public void SetBlock(ushort x, ushort y, ushort z, BlockType blockType, PlayerTeam team)
         {
-            if (x <= 0 || y <= 0 || z <= 0 || (int)x >= MAPSIZE - 1 || (int)y >= MAPSIZE - 1 || (int)z >= MAPSIZE - 1)
+            if (x <= 0 || y <= 0 || z <= 0 || (int)x >= config.MapSize - 1 || (int)y >= config.MapSize - 1 || (int)z >= config.MapSize - 1)
                 return;
 
             if (blockType == BlockType.BeaconRed || blockType == BlockType.BeaconBlue)
@@ -1346,20 +1007,72 @@ namespace Infiniminer
             //ConsoleWrite("BLOCKSET: " + x + " " + y + " " + z + " " + blockType.ToString());
         }
 
+        private void LoadServerConfig()
+        {
+            config = new ServerConfig();
+            using ConfigurationFileReader reader = new ConfigurationFileReader("server.config.txt");
+
+            ConfigurationItem? item = null;
+            while((item = reader.ReadLine()) is not null)
+            {
+                switch(item.Key)
+                {
+                    case nameof(ServerConfig.ServerName):
+                        config.ServerName = item.Value;
+                        break;
+
+                    case nameof(ServerConfig.MaxPlayers):
+                        MaxPlayers = uint.Parse(item.Value, System.Globalization.CultureInfo.InvariantCulture);
+                        break;
+
+                    case nameof(ServerConfig.Port):
+                        config.Port = int.Parse(item.Value, System.Globalization.CultureInfo.InvariantCulture);
+                        break;
+
+                    case nameof(ServerConfig.IsPublic):
+                        config.IsPublic = bool.Parse(item.Value);
+                        break;
+
+                    case nameof(ServerConfig.PublicHost):
+                        config.PublicHost = item.Value;
+                        break;
+
+                    case nameof(ServerConfig.MapSize):
+                        config.MapSize = int.Parse(item.Value, System.Globalization.CultureInfo.InvariantCulture);
+                        break;
+
+                    case nameof(ServerConfig.OreFactor):
+                        config.OreFactor = uint.Parse(item.Value, System.Globalization.CultureInfo.InvariantCulture);
+                        break;
+
+                    case nameof(ServerConfig.IncludeLava):
+                        config.IncludeLava = bool.Parse(item.Value);
+                        break;
+
+                    case nameof(ServerConfig.SandboxMode):
+                        config.SandboxMode = bool.Parse(item.Value);
+                        break;
+
+                    default: continue;
+                }
+            }
+        }
+
         public int newMap()
         {
+
             // Create our block world, translating the coordinates out of the cave generator (where Z points down)
-            BlockType[, ,] worldData = CaveGenerator.GenerateCaveSystem(MAPSIZE, includeLava, oreFactor);
-            blockList = new BlockType[MAPSIZE, MAPSIZE, MAPSIZE];
-            blockCreatorTeam = new PlayerTeam[MAPSIZE, MAPSIZE, MAPSIZE];
-            for (ushort i = 0; i < MAPSIZE; i++)
-                for (ushort j = 0; j < MAPSIZE; j++)
-                    for (ushort k = 0; k < MAPSIZE; k++)
+            BlockType[,,] worldData = CaveGenerator.GenerateCaveSystem(config.MapSize, config.IncludeLava, config.OreFactor);
+            blockList = new BlockType[config.MapSize, config.MapSize, config.MapSize];
+            blockCreatorTeam = new PlayerTeam[config.MapSize, config.MapSize, config.MapSize];
+            for (ushort i = 0; i < config.MapSize; i++)
+                for (ushort j = 0; j < config.MapSize; j++)
+                    for (ushort k = 0; k < config.MapSize; k++)
                     {
-                        blockList[i, (ushort)(MAPSIZE - 1 - k), j] = worldData[i, j, k];
+                        blockList[i, (ushort)(config.MapSize - 1 - k), j] = worldData[i, j, k];
                         blockCreatorTeam[i, j, k] = PlayerTeam.None;
                     }
-            for (int i = 0; i < MAPSIZE * 2; i++)
+            for (int i = 0; i < config.MapSize * 2; i++)
                 DoLavaStuff();
             return lavaBlockCount;
         }
@@ -1376,7 +1089,7 @@ namespace Infiniminer
         public string GetExplosionPattern(int n)
         {
             string output="";
-            int radius = (int)Math.Ceiling((double)varGetI("explosionradius"));
+            int radius = (int)Math.Ceiling((double)config.TntExplosionRadius);
             int size = radius * 2 + 1;
             int center = radius; //Not adding one because arrays start from 0
             for (int z = n; z==n&&z<size; z++)
@@ -1399,7 +1112,7 @@ namespace Infiniminer
 
         public void CalculateExplosionPattern()
         {
-            int radius = (int)Math.Ceiling((double)varGetI("explosionradius"));
+            int radius = (int)Math.Ceiling((double)config.TntExplosionRadius);
             int size = radius * 2 + 1;
             tntExplosionPattern = new bool[size, size, size];
             int center = radius; //Not adding one because arrays start from 0
@@ -1412,7 +1125,7 @@ namespace Infiniminer
                         else
                         {
                             double distance = Get3DDistance(center, center, center, x, y, z);//Use center of blocks
-                            if (distance <= (double)varGetI("explosionradius"))
+                            if (distance <= (double)config.TntExplosionRadius)
                                 tntExplosionPattern[x, y, z] = true;
                             else
                                 tntExplosionPattern[x, y, z] = false;
@@ -1422,8 +1135,8 @@ namespace Infiniminer
 
         public void status()
         {
-            ConsoleWrite(varGetS("name"));//serverName);
-            ConsoleWrite(playerList.Count + " / " + varGetI("maxplayers") + " players");
+            ConsoleWrite(config.ServerName);
+            ConsoleWrite(playerList.Count + " / " + config.MaxPlayers + " players");
             foreach (string name in varBoolBindings.Keys)
             {
                 ConsoleWrite(name + " = " + varBoolBindings[name]);
@@ -1432,60 +1145,15 @@ namespace Infiniminer
 
         public bool Start()
         {
-            //Setup the variable toggles
-            varBindingsInitialize();
-
-            int tmpMaxPlayers = 16;
-
-            // Read in from the config file.
-            DatafileWriter dataFile = new DatafileWriter("server.config.txt");
-            if (dataFile.Data.ContainsKey("winningcash"))
-                winningCashAmount = uint.Parse(dataFile.Data["winningcash"], System.Globalization.CultureInfo.InvariantCulture);
-            if (dataFile.Data.ContainsKey("includelava"))
-                includeLava = bool.Parse(dataFile.Data["includelava"]);
-            if (dataFile.Data.ContainsKey("orefactor"))
-                oreFactor = uint.Parse(dataFile.Data["orefactor"], System.Globalization.CultureInfo.InvariantCulture);
-            if (dataFile.Data.ContainsKey("maxplayers"))
-                tmpMaxPlayers = (int)Math.Min(32, uint.Parse(dataFile.Data["maxplayers"], System.Globalization.CultureInfo.InvariantCulture));
-            if (dataFile.Data.ContainsKey("public"))
-                varSet("public", bool.Parse(dataFile.Data["public"]), true);
-            if (dataFile.Data.ContainsKey("servername"))
-                varSet("name", dataFile.Data["servername"], true);
-            if (dataFile.Data.ContainsKey("sandbox"))
-                varSet("sandbox", bool.Parse(dataFile.Data["sandbox"]), true);
-            if (dataFile.Data.ContainsKey("notnt"))
-                varSet("tnt", !bool.Parse(dataFile.Data["notnt"]), true);
-            if (dataFile.Data.ContainsKey("sphericaltnt"))
-                varSet("stnt", bool.Parse(dataFile.Data["sphericaltnt"]), true);
-            if (dataFile.Data.ContainsKey("insanelava"))
-                varSet("insanelava", bool.Parse(dataFile.Data["insanelava"]), true);
-            if (dataFile.Data.ContainsKey("shockspreadslava"))
-                varSet("sspreads", bool.Parse(dataFile.Data["shockspreadslava"]), true);
-            if (dataFile.Data.ContainsKey("roadabsorbs"))
-                varSet("roadabsorbs", bool.Parse(dataFile.Data["roadabsorbs"]), true);
-            if (dataFile.Data.ContainsKey("minelava"))
-                varSet("minelava", bool.Parse(dataFile.Data["minelava"]), true);
-            if (dataFile.Data.ContainsKey("levelname"))
-                levelToLoad = dataFile.Data["levelname"];
-            if (dataFile.Data.ContainsKey("greeter"))
-                varSet("greeter", dataFile.Data["greeter"],true);
-
-            bool autoannounce = true;
-            if (dataFile.Data.ContainsKey("autoannounce"))
-                autoannounce = bool.Parse(dataFile.Data["autoannounce"]);
+            LoadServerConfig();
 
             // Load the ban-list.
             banList = LoadBanList();
 
-            // Load the admin-list
-            admins = LoadAdminList();
-
-            if (tmpMaxPlayers>=0)
-                varSet("maxplayers", tmpMaxPlayers, true);
 
             // Initialize the server.
             NetConfiguration netConfig = new NetConfiguration("InfiniminerPlus");
-            netConfig.MaxConnections = (int)varGetI("maxplayers");
+            netConfig.MaxConnections = (int)config.MaxPlayers;
             netConfig.Port = 5565;
             netServer = new InfiniminerNetServer(netConfig);
             netServer.SetMessageTypeEnabled(NetMessageType.ConnectionApproval, true);
@@ -1504,16 +1172,18 @@ namespace Infiniminer
             DateTime lastFlowCalc = DateTime.Now;
 
             //Check if we should autoload a level
-            if (dataFile.Data.ContainsKey("autoload") && bool.Parse(dataFile.Data["autoload"]))
+            if (config.AutoLoad)
             {
-                blockList = new BlockType[MAPSIZE, MAPSIZE, MAPSIZE];
-                blockCreatorTeam = new PlayerTeam[MAPSIZE, MAPSIZE, MAPSIZE];
+                blockList = new BlockType[config.MapSize, config.MapSize, config.MapSize];
+                blockCreatorTeam = new PlayerTeam[config.MapSize, config.MapSize, config.MapSize];
                 LoadLevel(levelToLoad);
             }
             else
             {
                 // Calculate initial lava flows.
                 ConsoleWrite("CALCULATING INITIAL LAVA FLOWS");
+                for (int i = 0; i < config.MapSize * 2; i++)
+                    DoLavaStuff();
                 ConsoleWrite("TOTAL LAVA BLOCKS = " + newMap());
             }
 
@@ -1565,7 +1235,7 @@ namespace Infiniminer
                                     msgSender.Disapprove("BAN;");
                                 }
                                 /*
-                                else if (playerList.Count == maxPlayers)
+                                else if (playerList.Count == config.MaxPlayers)
                                 {
                                     msgSender.Disapprove("FULL;");
                                 }
@@ -1757,7 +1427,7 @@ namespace Infiniminer
                                         {
                                             if (toGreet.Contains(msgSender))
                                             {
-                                                string greeting = varGetS("greeter");
+                                                string greeting = config.GreetingMessage;
                                                 greeting = greeting.Replace("[name]", playerList[msgSender].Handle);
                                                 if (greeting != "")
                                                 {
@@ -1901,7 +1571,7 @@ namespace Infiniminer
                     DepositCash(p);
             }
 
-            if (varGetB("sandbox"))
+            if (config.SandboxMode)
                 return;
             if (teamCashBlue >= winningCashAmount && winningTeam == PlayerTeam.None)
                 winningTeam = PlayerTeam.Blue;
@@ -1911,16 +1581,16 @@ namespace Infiniminer
 
         public void DoLavaStuff()
         {
-            bool[,,] flowSleep = new bool[MAPSIZE, MAPSIZE, MAPSIZE]; //if true, do not calculate this turn
+            bool[,,] flowSleep = new bool[config.MapSize, config.MapSize, config.MapSize]; //if true, do not calculate this turn
 
-            for (ushort i = 0; i < MAPSIZE; i++)
-                for (ushort j = 0; j < MAPSIZE; j++)
-                    for (ushort k = 0; k < MAPSIZE; k++)
+            for (ushort i = 0; i < config.MapSize; i++)
+                for (ushort j = 0; j < config.MapSize; j++)
+                    for (ushort k = 0; k < config.MapSize; k++)
                         flowSleep[i, j, k] = false;
 
-            for (ushort i = 0; i < MAPSIZE; i++)
-                for (ushort j = 0; j < MAPSIZE; j++)
-                    for (ushort k = 0; k < MAPSIZE; k++)
+            for (ushort i = 0; i < config.MapSize; i++)
+                for (ushort j = 0; j < config.MapSize; j++)
+                    for (ushort k = 0; k < config.MapSize; k++)
                         if (blockList[i, j, k] == BlockType.Lava && !flowSleep[i, j, k])
                         {
                             // RULES FOR LAVA EXPANSION:
@@ -1929,9 +1599,9 @@ namespace Infiniminer
                             // if the block below is something solid (or insane lava is on), add lava to the sides
                             // if shock block spreading is enabled and there is a schock block in any direction...
                             // if road block above and roadabsorbs is enabled then contract
-                            if (varGetB("sspreads"))
+                            if (config.LavaSpreadsViaShockBlocks)
                             {
-                                BlockType typeAbove = ((int)j == MAPSIZE - 1) ? BlockType.None : blockList[i, j + 1, k];
+                                BlockType typeAbove = ((int)j == config.MapSize - 1) ? BlockType.None : blockList[i, j + 1, k];
                                 if (i > 0 && blockList[i - 1, j, k] == BlockType.Shock)
                                 {
                                     SetBlock((ushort)(i - 1), j, k, BlockType.Lava, PlayerTeam.None);
@@ -1942,12 +1612,12 @@ namespace Infiniminer
                                     SetBlock(i, j, (ushort)(k - 1), BlockType.Lava, PlayerTeam.None);
                                     flowSleep[i, j, k - 1] = true;
                                 }
-                                if ((int)i < MAPSIZE - 1 && blockList[i + 1, j, k] == BlockType.Shock)
+                                if ((int)i < config.MapSize - 1 && blockList[i + 1, j, k] == BlockType.Shock)
                                 {
                                     SetBlock((ushort)(i + 1), j, k, BlockType.Lava, PlayerTeam.None);
                                     flowSleep[i + 1, j, k] = true;
                                 }
-                                if ((int)k < MAPSIZE - 1 && blockList[i, j, k + 1] == BlockType.Shock)
+                                if ((int)k < config.MapSize - 1 && blockList[i, j, k + 1] == BlockType.Shock)
                                 {
                                     SetBlock(i, j, (ushort)(k + 1), BlockType.Lava, PlayerTeam.None);
                                     flowSleep[i, j, k + 1] = true;
@@ -1959,9 +1629,9 @@ namespace Infiniminer
                                 }
                                 //Don't spread down...
                             }
-                            if (varGetB("roadabsorbs"))
+                            if (config.LavaAbsorbedByRoads)
                             {
-                                BlockType typeAbove = ((int)j == MAPSIZE - 1) ? BlockType.None : blockList[i, j + 1, k];
+                                BlockType typeAbove = ((int)j == config.MapSize - 1) ? BlockType.None : blockList[i, j + 1, k];
                                 if (typeAbove == BlockType.Road)
                                 {
                                     SetBlock(i, j, k, BlockType.Road, PlayerTeam.None);
@@ -1977,7 +1647,7 @@ namespace Infiniminer
                                     flowSleep[i, j - 1, k] = true;
                                 }
                             }
-                            else if (typeBelow != BlockType.Lava || varGetB("insanelava"))
+                            else if (typeBelow != BlockType.Lava || config.LavaSpreadsAggressively)
                             {
                                 if (i > 0 && blockList[i - 1, j, k] == BlockType.None)
                                 {
@@ -1989,12 +1659,12 @@ namespace Infiniminer
                                     SetBlock(i, j, (ushort)(k - 1), BlockType.Lava, PlayerTeam.None);
                                     flowSleep[i, j, k - 1] = true;
                                 }
-                                if ((int)i < MAPSIZE - 1 && blockList[i + 1, j, k] == BlockType.None)
+                                if ((int)i < config.MapSize - 1 && blockList[i + 1, j, k] == BlockType.None)
                                 {
                                     SetBlock((ushort)(i + 1), j, k, BlockType.Lava, PlayerTeam.None);
                                     flowSleep[i + 1, j, k] = true;
                                 }
-                                if ((int)k < MAPSIZE - 1 && blockList[i, j, k + 1] == BlockType.None)
+                                if ((int)k < config.MapSize - 1 && blockList[i, j, k + 1] == BlockType.None)
                                 {
                                     SetBlock(i, j, (ushort)(k + 1), BlockType.Lava, PlayerTeam.None);
                                     flowSleep[i, j, k + 1] = true;
@@ -2008,7 +1678,7 @@ namespace Infiniminer
             ushort x = (ushort)point.X;
             ushort y = (ushort)point.Y;
             ushort z = (ushort)point.Z;
-            if (x <= 0 || y <= 0 || z <= 0 || (int)x >= MAPSIZE - 1 || (int)y >= MAPSIZE - 1 || (int)z >= MAPSIZE - 1)
+            if (x <= 0 || y <= 0 || z <= 0 || (int)x >= config.MapSize - 1 || (int)y >= config.MapSize - 1 || (int)z >= config.MapSize - 1)
                 return BlockType.None;
             return blockList[x, y, z];
         }
@@ -2055,7 +1725,7 @@ namespace Infiniminer
             switch (BlockAtPoint(hitPoint))
             {
                 case BlockType.Lava:
-                    if (varGetB("minelava"))
+                    if (config.LavaIsMineable)
                     {
                         removeBlock = true;
                         sound = InfiniminerSound.DigDirt;
@@ -2118,9 +1788,9 @@ namespace Infiniminer
 
         //private bool LocationNearBase(ushort x, ushort y, ushort z)
         //{
-        //    for (int i=0; i<MAPSIZE; i++)
-        //        for (int j=0; j<MAPSIZE; j++)
-        //            for (int k = 0; k < MAPSIZE; k++)
+        //    for (int i=0; i<config.MapSize; i++)
+        //        for (int j=0; j<config.MapSize; j++)
+        //            for (int k = 0; k < config.MapSize; k++)
         //                if (blockList[i, j, k] == BlockType.HomeBlue || blockList[i, j, k] == BlockType.HomeRed)
         //                {
         //                    double dist = Math.Sqrt(Math.Pow(x - i, 2) + Math.Pow(y - j, 2) + Math.Pow(z - k, 2));
@@ -2142,7 +1812,7 @@ namespace Infiniminer
 
             // If the block is too expensive, bail.
             uint blockCost = BlockInformation.GetCost(blockType);
-            if (varGetB("sandbox") && blockCost <= player.OreMax)
+            if (config.SandboxMode && blockCost <= player.OreMax)
                 blockCost = 0;
             if (blockCost > player.Ore)
                 actionFailed = true;
@@ -2158,7 +1828,7 @@ namespace Infiniminer
             }
 
             // If it's out of bounds, bail.
-            if (x <= 0 || y <= 0 || z <= 0 || (int)x >= MAPSIZE - 1 || (int)y >= MAPSIZE - 1 || (int)z >= MAPSIZE - 1)
+            if (x <= 0 || y <= 0 || z <= 0 || (int)x >= config.MapSize - 1 || (int)y >= config.MapSize - 1 || (int)z >= config.MapSize - 1)
                 actionFailed = true;
 
             // If it's near a base, bail.
@@ -2298,14 +1968,14 @@ namespace Infiniminer
                 p.ExplosiveList.Remove(new Vector3(x, y, z));
 
             // Detonate the block.
-            if (!varGetB("stnt"))
+            if (!config.TntSpherical)
             {
                 for (int dx = -2; dx <= 2; dx++)
                     for (int dy = -2; dy <= 2; dy++)
                         for (int dz = -2; dz <= 2; dz++)
                         {
                             // Check that this is a sane block position.
-                            if (x + dx <= 0 || y + dy <= 0 || z + dz <= 0 || x + dx >= MAPSIZE - 1 || y + dy >= MAPSIZE - 1 || z + dz >= MAPSIZE - 1)
+                            if (x + dx <= 0 || y + dy <= 0 || z + dz <= 0 || x + dx >= config.MapSize - 1 || y + dy >= config.MapSize - 1 || z + dz >= config.MapSize - 1)
                                 continue;
 
                             // Chain reactions!
@@ -2339,7 +2009,7 @@ namespace Infiniminer
             }
             else
             {
-                int radius = (int)Math.Ceiling((double)varGetI("explosionradius"));
+                int radius = (int)Math.Ceiling((double)config.TntExplosionRadius);
                 int size = radius * 2 + 1;
                 int center = radius+1;
                 //ConsoleWrite("Radius: " + radius + ", Size: " + size + ", Center: " + center);
@@ -2350,7 +2020,7 @@ namespace Infiniminer
                             if (tntExplosionPattern[dx+center-1, dy+center-1, dz+center-1]) //Warning, code duplication ahead!
                             {
                                 // Check that this is a sane block position.
-                                if (x + dx <= 0 || y + dy <= 0 || z + dz <= 0 || x + dx >= MAPSIZE - 1 || y + dy >= MAPSIZE - 1 || z + dz >= MAPSIZE - 1)
+                                if (x + dx <= 0 || y + dy <= 0 || z + dz <= 0 || x + dx >= config.MapSize - 1 || y + dy >= config.MapSize - 1 || z + dz >= config.MapSize - 1)
                                     continue;
 
                                 // Chain reactions!
@@ -2397,7 +2067,7 @@ namespace Infiniminer
 
                 if (blockList[x, y, z] != BlockType.Explosive)
                     player.ExplosiveList.RemoveAt(0);
-                else if (!varGetB("tnt"))
+                else if (!config.TntExplodes)
                 {
                     player.ExplosiveList.RemoveAt(0);
                     ExplosionEffectAtPoint(x,y,z);
@@ -2442,7 +2112,7 @@ namespace Infiniminer
 
             player.Score += player.Cash;
 
-            if (!varGetB("sandbox"))
+            if (!config.SandboxMode)
             {
                 if (player.Team == PlayerTeam.Red)
                     teamCashRed += player.Cash;
@@ -2540,28 +2210,9 @@ namespace Infiniminer
 
         public void SendCurrentMap(NetConnection client)
         {
-            MapSender ms = new MapSender(client, this, netServer, MAPSIZE,playerList[client].compression);
+            MapSender ms = new MapSender(client, this, netServer, config.MapSize, playerList[client].compression);
             mapSendingProgress.Add(ms);
         }
-
-        /*public void SendCurrentMapB(NetConnection client)
-        {
-            Debug.Assert(MAPSIZE == 64, "The BlockBulkTransfer message requires a map size of 64.");
-
-            for (byte x = 0; x < MAPSIZE; x++)
-                for (byte y = 0; y < MAPSIZE; y += 16)
-                {
-                    NetBuffer? msgBuffer = netServer?.CreateBuffer();
-                    msgBuffer?.Write((byte)InfiniminerMessage.BlockBulkTransfer);
-                    msgBuffer?.Write(x);
-                    msgBuffer?.Write(y);
-                    for (byte dy = 0; dy < 16; dy++)
-                        for (byte z = 0; z < MAPSIZE; z++)
-                            msgBuffer?.Write((byte)(blockList[x, y + dy, z]));
-                    if (client.Status == NetConnectionStatus.Connected)
-                        netServer?.SendMessage(msgBuffer, client, NetChannel.ReliableUnordered);
-                }
-        }*/
 
         public void SendPlayerPing(uint playerId)
         {
@@ -2680,7 +2331,7 @@ namespace Infiniminer
             msgBuffer?.Write((byte)winningTeam);
             foreach (NetConnection netConn in playerList.Keys)
                 if (netConn.Status == NetConnectionStatus.Connected)
-                    netServer.SendMessage(msgBuffer, netConn, NetChannel.ReliableUnordered);     
+                    netServer.SendMessage(msgBuffer, netConn, NetChannel.ReliableUnordered);
         }
 
         public void SendPlayerLeft(Player player, string reason)
@@ -2772,13 +2423,11 @@ namespace Infiniminer
             if (!updated)
             {
                 Dictionary<string, string> postDict = new Dictionary<string, string>();
-                postDict["name"] = varGetS("name");
+                postDict["name"] = config.ServerName;
                 postDict["game"] = "INFINIMINER";
                 postDict["player_count"] = "" + playerList.Keys.Count;
-                postDict["player_capacity"] = "" + varGetI("maxplayers");
+                postDict["player_capacity"] = "" + config.MaxPlayers;
                 postDict["extra"] = GetExtraInfo();
-
-                lastServerListUpdate = DateTime.Now;
 
                 try
                 {
@@ -2790,6 +2439,7 @@ namespace Infiniminer
                     ConsoleWrite("PUBLICLIST: ERROR CONTACTING SERVER");
                 }
 
+                lastServerListUpdate = DateTime.Now;
                 updated = true;
             }
         }

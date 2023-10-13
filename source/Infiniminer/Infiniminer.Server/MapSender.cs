@@ -48,15 +48,15 @@ namespace Infiniminer
             for (byte x = 0; x < MAPSIZE; x++)
                 for (byte y = 0; y < MAPSIZE; y += 16)
                 {
-                    NetBuffer msgBuffer = infsN.CreateBuffer();
-                    msgBuffer.Write((byte)Infiniminer.InfiniminerMessage.BlockBulkTransfer);
+                    NetBuffer? msgBuffer = infsN?.CreateBuffer();
+                    msgBuffer?.Write((byte)Infiniminer.InfiniminerMessage.BlockBulkTransfer);
                     if (!compression)
                     {
-                        msgBuffer.Write(x);
-                        msgBuffer.Write(y);
+                        msgBuffer?.Write(x);
+                        msgBuffer?.Write(y);
                         for (byte dy = 0; dy < 16; dy++)
                             for (byte z = 0; z < MAPSIZE; z++)
-                                msgBuffer.Write((byte)(infs.blockList[x, y + dy, z]));
+                                msgBuffer?.Write((byte)(infs.blockList[x, y + dy, z]));
                         if (client.Status == NetConnectionStatus.Connected)
                             infsN.SendMessage(msgBuffer, client, NetChannel.ReliableUnordered);
                     }
@@ -68,7 +68,7 @@ namespace Infiniminer
                         var compresser = new System.IO.Compression.GZipStream(compressedstream, System.IO.Compression.CompressionMode.Compress);
 
                         //Send a byte indicating that yes, this is compressed
-                        msgBuffer.Write((byte)255);
+                        msgBuffer?.Write((byte)255);
 
                         //Write everything we want to compress to the uncompressed stream
                         uncompressed.WriteByte(x);
@@ -84,7 +84,7 @@ namespace Infiniminer
                         compresser.Close();
 
                         //Send the compressed data
-                        msgBuffer.Write(compressedstream.ToArray());
+                        msgBuffer?.Write(compressedstream.ToArray());
                         if (client.Status == NetConnectionStatus.Connected)
                             infsN.SendMessage(msgBuffer, client, NetChannel.ReliableUnordered);
                     }
