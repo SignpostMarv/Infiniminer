@@ -517,7 +517,6 @@ namespace Infiniminer
                             playerHandle = item.Value;
                             break;
 
-                        case "shofps":
                         case "showfps":
                             DrawFrameRate = bool.Parse(item.Value);
                             break;
