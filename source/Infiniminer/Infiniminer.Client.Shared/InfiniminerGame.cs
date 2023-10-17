@@ -65,6 +65,7 @@ namespace Infiniminer
 
         public InfiniminerGame(string[] args)
         {
+            this.Exiting += Game_OnExiting;
         }
 
         public void setServername(string newName)
@@ -655,11 +656,9 @@ namespace Infiniminer
             base.Update(gameTime);
         }
 
-        protected override void OnExiting(object sender, EventArgs args)
+        protected void Game_OnExiting(object sender, EventArgs args)
         {
             propertyBag.netClient.Shutdown("Client exiting.");
-
-            base.OnExiting(sender, args);
         }
 
         public void ResetPropertyBag()
