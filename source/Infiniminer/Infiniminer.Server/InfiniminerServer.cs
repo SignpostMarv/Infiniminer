@@ -1013,9 +1013,9 @@ namespace Infiniminer
             using ConfigurationFileReader reader = new ConfigurationFileReader("server.config.txt");
 
             ConfigurationItem? item = null;
-            while((item = reader.ReadLine()) is not null)
+            while ((item = reader.ReadLine()) is not null)
             {
-                switch(item.Key)
+                switch (item.Key)
                 {
                     case nameof(ServerConfig.ServerName):
                         config.ServerName = item.Value;
@@ -1840,6 +1840,7 @@ namespace Infiniminer
             {
                 SetBlock(x, y, z, BlockType.None, PlayerTeam.None);
                 PlaySound(sound, player.Position);
+                VibrateGamePad(player, 1.0f, 50);
             }
         }
 
@@ -1913,6 +1914,7 @@ namespace Infiniminer
 
                 // Play the sound.
                 PlaySound(InfiniminerSound.ConstructionGun, player.Position);
+                VibrateGamePad(player, 1.0f, 50);
 
                 // If it's an explosive block, add it to our list.
                 if (blockType == BlockType.Explosive)
@@ -1965,6 +1967,7 @@ namespace Infiniminer
                 // Remove the block.
                 SetBlock(x, y, z, BlockType.None, PlayerTeam.None);
                 PlaySound(InfiniminerSound.ConstructionGun, player.Position);
+                VibrateGamePad(player, 1.0f, 50);
             }
         }
 
@@ -1995,11 +1998,13 @@ namespace Infiniminer
             {
                 SetBlock(x, y, z, BlockType.DirtSign, PlayerTeam.None);
                 PlaySound(InfiniminerSound.ConstructionGun, player.Position);
+                VibrateGamePad(player, 1.0f, 50);
             }
             else if (blockList[x, y, z] == BlockType.DirtSign)
             {
                 SetBlock(x, y, z, BlockType.Dirt, PlayerTeam.None);
                 PlaySound(InfiniminerSound.ConstructionGun, player.Position);
+                VibrateGamePad(player, 1.0f, 50);
             }
         }
 
@@ -2451,6 +2456,15 @@ namespace Infiniminer
             foreach (NetConnection netConn in playerList.Keys)
                 if (netConn.Status == NetConnectionStatus.Connected)
                     netServer?.SendMessage(msgBuffer, netConn, NetChannel.ReliableUnordered);
+        }
+
+        public void VibrateGamePad(Player player, float strength, uint ms)
+        {
+            NetBuffer? msgBuffer = netServer?.CreateBuffer();
+            msgBuffer?.Write((byte)InfiniminerMessage.VibrateGamepad);
+            msgBuffer?.Write(strength);
+            msgBuffer?.Write(ms);
+            netServer?.SendMessage(msgBuffer, player.NetConn, NetChannel.ReliableInOrder1);
         }
 
         Thread updater;
