@@ -325,23 +325,28 @@ namespace Infiniminer
                                             // Create some particles.
                                             propertyBag.particleEngine.CreateExplosionDebris(blockPos);
 
-                                            // Figure out what the effect is.
-                                            float distFromExplosive = (blockPos + 0.5f * Vector3.One - propertyBag.playerPosition).Length();
-                                            if (distFromExplosive < 3)
-                                                propertyBag.KillPlayer(Defines.DEATH_BY_EXPL);//"WAS KILLED IN AN EXPLOSION!");
-                                            else if (distFromExplosive < 8)
+                                        // Figure out what the effect is.
+                                        float distFromExplosive = (blockPos + 0.5f * Vector3.One - propertyBag.playerPosition).Length();
+                                        if (distFromExplosive < 3)
+                                            propertyBag.KillPlayer(Defines.DEATH_BY_EXPL);//"WAS KILLED IN AN EXPLOSION!");
+                                        else if (distFromExplosive < 8)
+                                        {
+                                            // If we're not in explosion mode, turn it on with the minimum ammount of shakiness.
+                                            if (propertyBag.screenEffect != ScreenEffect.Explosion)
                                             {
-                                                // If we're not in explosion mode, turn it on with the minimum ammount of shakiness.
-                                                if (propertyBag.screenEffect != ScreenEffect.Explosion)
-                                                {
-                                                    propertyBag.screenEffect = ScreenEffect.Explosion;
-                                                    propertyBag.screenEffectCounter = 2;
-                                                }
-                                                // If this bomb would result in a bigger shake, use its value.
-                                                propertyBag.screenEffectCounter = Math.Min(propertyBag.screenEffectCounter, (distFromExplosive - 2) / 5);
+                                                propertyBag.screenEffect = ScreenEffect.Explosion;
+                                                propertyBag.screenEffectCounter = 2;
                                             }
+                                            // If this bomb would result in a bigger shake, use its value.
+                                            double effectValue = Math.Min(propertyBag.screenEffectCounter, (distFromExplosive - 2) / 5);
+                                            propertyBag.screenEffectCounter = effectValue;
+
+                                            //  TODO: Move this to server message being sent, but need to calcualte
+                                            //  the same distance/effect value on server to do that.
+                                            propertyBag.inputEngine.VibrateGamepad((float)effectValue, TimeSpan.FromSeconds(effectValue));
                                         }
-                                        break;
+                                    }
+                                    break;
 
                                     case InfiniminerMessage.PlayerSetTeam:
                                         {
