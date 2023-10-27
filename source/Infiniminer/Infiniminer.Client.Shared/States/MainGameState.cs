@@ -257,6 +257,14 @@ namespace Infiniminer.States
                 }
 
                 ///////////////////////////////////////////////////////////////////
+                /// Check if player wants to change team
+                ///////////////////////////////////////////////////////////////////
+                if (_P.inputEngine.ChangeTeam.Pressed())
+                {
+                    nextState = "Infiniminer.States.TeamSelectionState";
+                }
+
+                ///////////////////////////////////////////////////////////////////
                 /// Update the players position
                 ///////////////////////////////////////////////////////////////////
                 UpdatePlayerPosition(gameTime, keyState);
@@ -588,10 +596,6 @@ namespace Infiniminer.States
                         _P.PlaySound(InfiniminerSound.ClickHigh);
                     }
                 }
-
-                // Change team.
-                if (key == Keys.N)
-                    nextState = "Infiniminer.States.TeamSelectionState";
             }
         }
 
