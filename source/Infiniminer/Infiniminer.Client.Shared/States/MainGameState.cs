@@ -360,15 +360,16 @@ namespace Infiniminer.States
 
             if (_P.chatMode == ChatMessageType.None)
             {
-                /* @TODO update to work with controller support
-                if ((_SM as InfiniminerGame).keyBinds.IsPressed(Buttons.Forward))//keyState.IsKeyDown(Keys.W))
+                Vector2 direction = _P.inputEngine.Move.Value;
+                if (direction.Y < 0)
                     moveVector += _P.playerCamera.GetLookVector();
-                if ((_SM as InfiniminerGame).keyBinds.IsPressed(Buttons.Backward))//keyState.IsKeyDown(Keys.S))
+                if (direction.Y > 0)
                     moveVector -= _P.playerCamera.GetLookVector();
-                if ((_SM as InfiniminerGame).keyBinds.IsPressed(Buttons.Right))//keyState.IsKeyDown(Keys.D))
+                if (direction.X > 0)
                     moveVector += _P.playerCamera.GetRightVector();
-                if ((_SM as InfiniminerGame).keyBinds.IsPressed(Buttons.Left))//keyState.IsKeyDown(Keys.A))
+                if (direction.X < 0)
                     moveVector -= _P.playerCamera.GetRightVector();
+                /* @TODO update to work with controller support
                 //Sprinting
                 if ((_SM as InfiniminerGame).keyBinds.IsPressed(Buttons.Sprint))//keyState.IsKeyDown(Keys.LeftShift) || keyState.IsKeyDown(Keys.RightShift))
                     sprinting = true;
