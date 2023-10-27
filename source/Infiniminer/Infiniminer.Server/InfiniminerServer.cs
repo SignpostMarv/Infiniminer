@@ -2461,7 +2461,7 @@ namespace Infiniminer
         public void VibrateGamePad(Player player, float strength, uint ms)
         {
             NetBuffer? msgBuffer = netServer?.CreateBuffer();
-            msgBuffer?.Write((byte)InfiniminerMessage.VibrateGamepad);
+            msgBuffer?.Write((byte)InfiniminerMessage.VibrateGamePad);
             msgBuffer?.Write(strength);
             msgBuffer?.Write(ms);
             netServer?.SendMessage(msgBuffer, player.NetConn, NetChannel.ReliableInOrder1);
