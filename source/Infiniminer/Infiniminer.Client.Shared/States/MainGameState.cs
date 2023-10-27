@@ -249,6 +249,14 @@ namespace Infiniminer.States
                 }
 
                 ///////////////////////////////////////////////////////////////////
+                /// Check if player wants to change class
+                ///////////////////////////////////////////////////////////////////
+                if (_P.inputEngine.ChangeClass.Pressed())
+                {
+                    nextState = "Infiniminer.States.ClassSelectionState";
+                }
+
+                ///////////////////////////////////////////////////////////////////
                 /// Update the players position
                 ///////////////////////////////////////////////////////////////////
                 UpdatePlayerPosition(gameTime, keyState);
@@ -580,10 +588,6 @@ namespace Infiniminer.States
                         _P.PlaySound(InfiniminerSound.ClickHigh);
                     }
                 }
-
-                // Change class.
-                if (key == Keys.M && _P.playerPosition.Y > 64 - Defines.GROUND_LEVEL)
-                    nextState = "Infiniminer.States.ClassSelectionState";
 
                 // Change team.
                 if (key == Keys.N)
