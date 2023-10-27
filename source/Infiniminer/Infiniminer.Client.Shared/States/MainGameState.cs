@@ -191,6 +191,38 @@ namespace Infiniminer.States
                     }
                 }
 
+                ///////////////////////////////////////////////////////////////////
+                /// Check if tool should change
+                ///////////////////////////////////////////////////////////////////
+                int changeTo = -1;
+                if (_P.inputEngine.ToolHotkey1.Pressed() && _P.playerTools.Length > 0)
+                {
+                    changeTo = 0;
+                }
+                else if (_P.inputEngine.ToolHotkey2.Pressed() && _P.playerTools.Length > 1)
+                {
+                    changeTo = 1;
+                }
+                else if (_P.inputEngine.ToolHotkey3.Pressed() && _P.playerTools.Length > 2)
+                {
+                    changeTo = 2;
+                }
+                else if (_P.inputEngine.ChangeTool.Pressed())
+                {
+                    changeTo = _P.playerToolSelected + 1;
+                }
+
+                if (changeTo >= 0 && changeTo != _P.playerToolSelected)
+                {
+                    _P.playerToolSelected = changeTo;
+
+                    _P.PlaySound(InfiniminerSound.ClickLow);
+                    if (_P.playerToolSelected >= _P.playerTools.Length)
+                    {
+                        _P.playerToolSelected = 0;
+                    }
+                }
+
                 // Update the player's position.
                 UpdatePlayerPosition(gameTime, keyState);
                 
@@ -503,58 +535,6 @@ namespace Infiniminer.States
 
             if (!_P.playerDead)
             {
-                // Change weapon!
-                if (key == Keys.E)
-                {
-                    _P.PlaySound(InfiniminerSound.ClickLow);
-                    _P.playerToolSelected += 1;
-                    if (_P.playerToolSelected >= _P.playerTools.Length)
-                        _P.playerToolSelected = 0;
-                }
-                /* Ported from HandleInput but not in use here
-                else if (false)
-                {
-                    _P.PlaySound(InfiniminerSound.ClickLow);
-                    _P.playerToolSelected -= 1;
-                    if (_P.playerToolSelected < 0)
-                        _P.playerToolSelected = _P.playerTools.Length;
-                }
-                
-                switch (input)
-                {
-                    case Buttons.Tool1:
-                        _P.playerToolSelected = 0;
-                        _P.PlaySound(InfiniminerSound.ClickLow);
-                        if (_P.playerToolSelected >= _P.playerTools.Length)
-                            _P.playerToolSelected = _P.playerTools.Length - 1;
-                        break;
-                    case Buttons.Tool2:
-                        _P.playerToolSelected = 1;
-                        _P.PlaySound(InfiniminerSound.ClickLow);
-                        if (_P.playerToolSelected >= _P.playerTools.Length)
-                            _P.playerToolSelected = _P.playerTools.Length - 1;
-                        break;
-                    case Buttons.Tool3:
-                        _P.playerToolSelected = 2;
-                        _P.PlaySound(InfiniminerSound.ClickLow);
-                        if (_P.playerToolSelected >= _P.playerTools.Length)
-                            _P.playerToolSelected = _P.playerTools.Length - 1;
-                        break;
-                    case Buttons.Tool4:
-                        _P.playerToolSelected = 3;
-                        _P.PlaySound(InfiniminerSound.ClickLow);
-                        if (_P.playerToolSelected >= _P.playerTools.Length)
-                            _P.playerToolSelected = _P.playerTools.Length - 1;
-                        break;
-                    case Buttons.Tool5:
-                        _P.playerToolSelected = 4;
-                        _P.PlaySound(InfiniminerSound.ClickLow);
-                        if (_P.playerToolSelected >= _P.playerTools.Length)
-                            _P.playerToolSelected = _P.playerTools.Length - 1;
-                        break;
-                }
-                */
-
                 // Change block type!
                 if (key == Keys.R && _P.playerTools[_P.playerToolSelected] == PlayerTools.ConstructionGun)
                 {
