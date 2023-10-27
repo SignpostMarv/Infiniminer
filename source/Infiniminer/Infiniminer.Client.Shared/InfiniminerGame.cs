@@ -449,20 +449,27 @@ namespace Infiniminer
                                         }
                                         break;
 
-                                    case InfiniminerMessage.PlaySound:
+                                case InfiniminerMessage.PlaySound:
+                                    {
+                                        InfiniminerSound sound = (InfiniminerSound)msgBuffer.ReadByte();
+                                        bool hasPosition = msgBuffer.ReadBoolean();
+                                        if (hasPosition)
                                         {
-                                            InfiniminerSound sound = (InfiniminerSound)msgBuffer.ReadByte();
-                                            bool hasPosition = msgBuffer.ReadBoolean();
-                                            if (hasPosition)
-                                            {
-                                                Vector3 soundPosition = msgBuffer.ReadVector3();
-                                                propertyBag.PlaySound(sound, soundPosition);
-                                            }
-                                            else
-                                                propertyBag.PlaySound(sound);
+                                            Vector3 soundPosition = msgBuffer.ReadVector3();
+                                            propertyBag.PlaySound(sound, soundPosition);
                                         }
-                                        break;
-                                }
+                                        else
+                                            propertyBag.PlaySound(sound);
+                                    }
+                                    break;
+                                case InfiniminerMessage.VibrateGamePad:
+                                    {
+                                        float strength = msgBuffer.ReadSingle();
+                                        uint ms = msgBuffer.ReadUInt32();
+                                        propertyBag.inputEngine.VibrateGamepad(strength, TimeSpan.FromMilliseconds(ms));
+                                    }
+                                    break;
+                            }
                         }
                         break;
                 }
