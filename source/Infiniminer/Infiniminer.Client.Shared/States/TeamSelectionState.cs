@@ -93,6 +93,8 @@ namespace Infiniminer.States
 
         public override void OnRenderAtUpdate(GraphicsDevice graphicsDevice, GameTime gameTime)
         {
+            UpdateUIViewport(graphicsDevice.Viewport);
+
             int redTeamCount = 0, blueTeamCount = 0;
             foreach (ClientPlayer p in _P.playerList.Values)
             {
