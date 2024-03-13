@@ -24,7 +24,6 @@ SOFTWARE.
 ---------------------------------------------------------------------------- */
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace Infiniminer
 {
@@ -63,28 +62,11 @@ namespace Infiniminer
         // in their tool usage animation.
         public bool QueueAnimationBreak = false;
 
-        // Things that affect animation.
-        public SpriteModel? SpriteModel;
-        private Game? gameInstance;
-
         private bool idleAnimation = false;
-        public bool IdleAnimation
+        public virtual bool IdleAnimation
         {
             get { return idleAnimation; }
-            set
-            {
-                if (idleAnimation != value)
-                {
-                    idleAnimation = value;
-                    if (gameInstance != null)
-                    {
-                        if (idleAnimation)
-                            SpriteModel?.SetPassiveAnimation("1,0.2");
-                        else
-                            SpriteModel?.SetPassiveAnimation("0,0.2;1,0.2;2,0.2;1,0.2");
-                    }
-                }
-            }
+            set { idleAnimation = value; }
         }
 
         private Vector3 position = Vector3.Zero;
@@ -143,121 +125,28 @@ namespace Infiniminer
             }
         }
 
-        private PlayerTeam team = PlayerTeam.None;
-        public PlayerTeam Team
+        protected PlayerTeam team = PlayerTeam.None;
+        public virtual PlayerTeam Team
         {
             get { return team; }
-            set
-            {
-                if (value != team)
-                {
-                    team = value;
-                    UpdateSpriteTexture();
-                }
-            }
+            set { team = value; }
         }
-        private PlayerTools tool = PlayerTools.Pickaxe;
-        public PlayerTools Tool
+        protected PlayerTools tool = PlayerTools.Pickaxe;
+        public virtual PlayerTools Tool
         {
             get { return tool; }
-            set
-            {
-                if (value != tool)
-                {
-                    tool = value;
-                    UpdateSpriteTexture();
-                }
-            }
+            set { tool = value; }
         }
         private bool usingTool = false;
-        public bool UsingTool
+        public virtual bool UsingTool
         {
             get { return usingTool; }
-            set
-            {
-                if (value != usingTool)
-                {
-                    usingTool = value;
-                    if (usingTool == true && gameInstance != null)
-                        SpriteModel?.StartActiveAnimation("3,0.15");
-                }
-            }
-        }
-
-        public Player(Game gameInstance) : this()
-        {
-            System.Diagnostics.Debug.Assert(gameInstance != null);
-            this.gameInstance = gameInstance;
-
-            Texture2D tex = gameInstance.Content.Load<Texture2D>(GenerateTextureName());
-            this.SpriteModel = new SpriteModel(gameInstance, 4, tex);
-            this.IdleAnimation = true;
+            set { usingTool = value; }
         }
 
         public Player()
         {
             this.ID = Player.GetUniqueId();
-        }
-
-        private string GenerateTextureName()
-        {
-            string name = "sprites/tex_sprite_";
-
-            /*
-            if (team == PlayerTeam.Red & &(!AltColours||redTeam==Defines.IM_RED))
-            {
-                name += "red_";
-            }
-            else
-            {
-            */
-                name += "blue_";
-            /*
-            }
-            */
-
-            switch (tool)
-            {
-                case PlayerTools.ConstructionGun:
-                case PlayerTools.DeconstructionGun:
-                    name += "construction";
-                    break;
-                case PlayerTools.Detonator:
-                    name += "detonator";
-                    break;
-                case PlayerTools.Pickaxe:
-                    name += "pickaxe";
-                    break;
-                case PlayerTools.ProspectingRadar:
-                    name += "radar";
-                    break;
-                default:
-                    name += "pickaxe";
-                    break;
-            }
-
-            return name;
-        }
-
-        private void UpdateSpriteTexture()
-        {
-            if (gameInstance == null)
-                return;
-
-            string contentPath = GenerateTextureName();
-            Texture2D orig = gameInstance.Content.Load<Texture2D>(textureName);
-            if (AltColours)// && ((team == PlayerTeam.Blue && blueTeam != Defines.IM_BLUE) || (team == PlayerTeam.Red && redTeam != Defines.IM_RED)))
-            {
-                Color[] data = new Color[orig.Width * orig.Height];
-                orig.GetData<Color>(data);
-                Texture2D temp = new Texture2D(orig.GraphicsDevice,orig.Width,orig.Height);
-                temp.SetData<Color>(data);
-                CustomTeamColor.generateShadedTexture(team == PlayerTeam.Blue ? blueTeam : redTeam, orig, ref temp);
-                Console.WriteLine("Team: " + team.ToString() + "; Red col: " + redTeam.ToString() + "; Blue col: " + blueTeam.ToString());
-                SpriteModel?.SetSpriteTexture(temp);
-            }
-            else
-                SpriteModel?.SetSpriteTexture(orig);
         }
 
         static uint uniqueId = 0;

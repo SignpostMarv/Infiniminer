@@ -378,7 +378,7 @@ namespace Infiniminer
                 }
 
                 int drawY = 200;
-                foreach (Player p in _P.playerList.Values)
+                foreach (ClientPlayer p in _P.playerList.Values)
                 {
                     if (p.Team != PlayerTeam.Red)
                         continue;
@@ -386,7 +386,7 @@ namespace Infiniminer
                     drawY += 35;
                 }
                 drawY = 200;
-                foreach (Player p in _P.playerList.Values)
+                foreach (ClientPlayer p in _P.playerList.Values)
                 {
                     if (p.Team != PlayerTeam.Blue)
                         continue;
@@ -417,7 +417,7 @@ namespace Infiniminer
 
             // Draw the player radar.
             spriteBatch.Draw(texRadarBackground, new Vector2(10, 30), Color.White);
-            foreach (Player p in _P.playerList.Values)
+            foreach (ClientPlayer p in _P.playerList.Values)
                 if (p.Team == _P.playerTeam && p.Alive)
                     RenderRadarBlip(spriteBatch, p.ID == _P.playerMyId ? _P.playerPosition : p.Position, p.Team == PlayerTeam.Red ? _P.red : _P.blue, p.Ping > 0, ""); //Defines.IM_RED : Defines.IM_BLUE, p.Ping > 0, "");
             foreach (KeyValuePair<Vector3, Beacon> bPair in _P.beaconList)

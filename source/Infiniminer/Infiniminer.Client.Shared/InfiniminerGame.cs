@@ -354,7 +354,7 @@ namespace Infiniminer
                                             uint playerId = msgBuffer.ReadUInt32();
                                             if (propertyBag.playerList.ContainsKey(playerId))
                                             {
-                                                Player player = propertyBag.playerList[playerId];
+                                                ClientPlayer player = propertyBag.playerList[playerId];
                                                 player.Team = (PlayerTeam)msgBuffer.ReadByte();
                                             }
                                         }
@@ -366,7 +366,7 @@ namespace Infiniminer
                                             string playerName = msgBuffer.ReadString();
                                             bool thisIsMe = msgBuffer.ReadBoolean();
                                             bool playerAlive = msgBuffer.ReadBoolean();
-                                            propertyBag.playerList[playerId] = new Player(this);
+                                            propertyBag.playerList[playerId] = new ClientPlayer(this);
                                             propertyBag.playerList[playerId].Handle = playerName;
                                             propertyBag.playerList[playerId].ID = playerId;
                                             propertyBag.playerList[playerId].Alive = playerAlive;
@@ -391,7 +391,7 @@ namespace Infiniminer
                                             uint playerId = msgBuffer.ReadUInt32();
                                             if (propertyBag.playerList.ContainsKey(playerId))
                                             {
-                                                Player player = propertyBag.playerList[playerId];
+                                                ClientPlayer player = propertyBag.playerList[playerId];
                                                 player.Alive = false;
                                                 propertyBag.particleEngine.CreateBloodSplatter(player.Position, player.Team == PlayerTeam.Red ? Color.Red : Color.Blue);
                                                 if (playerId != propertyBag.playerMyId)
@@ -405,7 +405,7 @@ namespace Infiniminer
                                             uint playerId = msgBuffer.ReadUInt32();
                                             if (propertyBag.playerList.ContainsKey(playerId))
                                             {
-                                                Player player = propertyBag.playerList[playerId];
+                                                ClientPlayer player = propertyBag.playerList[playerId];
                                                 player.Alive = true;
                                             }
                                         }
@@ -416,7 +416,7 @@ namespace Infiniminer
                                             uint playerId = msgBuffer.ReadUInt32();
                                             if (propertyBag.playerList.ContainsKey(playerId))
                                             {
-                                                Player player = propertyBag.playerList[playerId];
+                                                ClientPlayer player = propertyBag.playerList[playerId];
                                                 player.UpdatePosition(msgBuffer.ReadVector3(), gameTime.TotalGameTime.TotalSeconds);
                                                 player.Heading = msgBuffer.ReadVector3();
                                                 player.Tool = (PlayerTools)msgBuffer.ReadByte();
