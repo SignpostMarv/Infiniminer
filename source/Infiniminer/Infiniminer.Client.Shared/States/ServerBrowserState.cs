@@ -41,7 +41,9 @@ namespace Infiniminer.States
         Rectangle drawRect;
         string nextState = null;
         List<ServerInformation> serverList = new List<ServerInformation>();
-        List<int> descWidths;
+        ClickRegion[] clkServers;
+        const int TxtPanningX = 15;
+        const int TxtPanningY =  3;
         SpriteFont uiFont;
         bool directConnectIPEnter = false;
         string directConnectIP = "";
@@ -80,6 +82,29 @@ namespace Infiniminer.States
             keyMap = new KeyMap();
 
             serverList = (_SM as InfiniminerGame).EnumerateServers(0.5f);
+            RefreshClkServers();
+        }
+
+        private void RefreshClkServers()
+        {
+            clkServers = new ClickRegion[serverList.Count];
+
+            for (int i = 0; i < serverList.Count; i++)
+            {
+                if (i >= 23)
+                    break;
+
+                string serverDesc = serverList[i].GetServerDesc();
+
+                Vector2 txtSize = uiFont.MeasureString(serverDesc);
+                Rectangle rect = default;
+                rect.Width  = (int)txtSize.X + TxtPanningX * 2;
+                rect.Height = (int)txtSize.Y + TxtPanningY * 2;
+                rect.X = (VWidth / 2) - (rect.Width / 2);
+                rect.Y = 80 + i * 25;
+
+                clkServers[i] = new ClickRegion(rect, i.ToString());
+            }
         }
 
         const int VWidth = 1024;
@@ -191,21 +216,19 @@ namespace Infiniminer.States
         {
             UpdateUIViewport(graphicsDevice.Viewport);
 
-            descWidths = new List<int>();
             spriteBatch.Begin(sortMode: SpriteSortMode.Deferred, blendState: BlendState.AlphaBlend, effect: uiEffect);
             spriteBatch.Draw(texMenu, drawRect, Color.White);
             DrawSelection(spriteBatch, gameTime);
 
-            int drawY = 80;
-            foreach (ServerInformation server in serverList)
+            for (int i = 0; i < serverList.Count; i++)
             {
-                if (drawY < 660)
-                {
-                    int textWidth = (int)(uiFont.MeasureString(server.GetServerDesc()).X);
-                    descWidths.Add(textWidth + 30);
-                    spriteBatch.DrawString(uiFont, server.GetServerDesc(), new Vector2(drawRect.X + VWidth / 2 - textWidth / 2, drawRect.Y + drawY), !server.lanServer && server.numPlayers == server.maxPlayers ? new Color(0.7f, 0.7f, 0.7f) : Color.White);
-                    drawY += 25;
-                }
+                if (i >= 23)
+                    break;
+
+                string serverDesc = serverList[i].GetServerDesc();
+                Rectangle rect = clkServers[i].Rectangle;
+
+                spriteBatch.DrawString(uiFont, serverDesc, new Vector2(drawRect.X + rect.X + TxtPanningX, drawRect.Y + rect.Y + TxtPanningY), !server.lanServer && server.numPlayers == server.maxPlayers ? new Color(0.7f, 0.7f, 0.7f) : Color.White);
             }
 
             spriteBatch.DrawString(uiFont, Defines.INFINIMINER_VERSION, new Vector2(10, drawRect.Y * 2 + VHeight - 20), Color.White);
@@ -312,17 +335,15 @@ namespace Infiniminer.States
 
             if (directConnectIPEnter == false)
             {
-                int serverIndex = (y - 75) / 25;
-                if (serverIndex >= 0 && serverIndex < serverList.Count)
+                ClickRegion clkServer = ClickRegion.HitTest(clkServers, new Point(x, y));
+                if (clkServer != null)
                 {
-                    int distanceFromCenter = Math.Abs(VWidth / 2 - x);
-                    if (distanceFromCenter < descWidths[serverIndex] / 2)
-                    {
+                    int serverIndex = int.Parse(clkServer.Tag);
+                    
                         (_SM as InfiniminerGame).propertyBag.serverName = serverList[serverIndex].serverName;
-                        (_SM as InfiniminerGame).JoinGame(serverList[serverIndex].ipEndPoint);
-                        nextState = "Infiniminer.States.LoadingState";
-                        _P.PlaySound(InfiniminerSound.ClickHigh);
-                    }
+                    (_SM as InfiniminerGame).JoinGame(serverList[serverIndex].ipEndPoint);
+                    nextState = "Infiniminer.States.LoadingState";
+                    _P.PlaySound(InfiniminerSound.ClickHigh);
                 }
 
                 ClickRegion selectedRegion = ClickRegion.HitTest(clkMenuServer, new Point(x, y));
@@ -341,6 +362,7 @@ namespace Infiniminer.States
                 case "refresh":
                     _P.PlaySound(InfiniminerSound.ClickHigh);
                     serverList = (_SM as InfiniminerGame).EnumerateServers(0.5f);
+                    RefreshClkServers();
                     break;
 
                 case "direct":
@@ -387,6 +409,14 @@ namespace Infiniminer.States
             hoverRegion = ClickRegion.HitTest(clkMenuServer, new Point(x, y));
             if (hoverRegion != null)
             {
+                selectionIndex = -1;
+                selectionAlpha = 0;
+            }
+
+            ClickRegion selectedServerRegion = ClickRegion.HitTest(clkServers, new Point(x, y));
+            if (selectedServerRegion != null)
+            {
+                hoverRegion = selectedServerRegion;
                 selectionIndex = -1;
                 selectionAlpha = 0;
             }
