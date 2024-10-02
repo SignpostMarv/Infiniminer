@@ -55,7 +55,7 @@ namespace Infiniminer.States
 	        new ClickRegion(new Rectangle(763,713,243,42), "refresh")
         };
 
-        int SelectionsCount { get { return clkMenuServer.Length; } }
+        int SelectionsCount { get { return clkServers.Length + clkMenuServer.Length; } }
         int selectionIndex = -1;
         float selectionAlpha = 0;
         Texture2D texMenuDot;
@@ -162,13 +162,13 @@ namespace Infiniminer.States
 
             _P.inputEngine.Update(gameTime);
 
-            if (_P.inputEngine.MenuRight.Released())
+            if (_P.inputEngine.MenuDown.Released())
             {
                 selectionIndex = (selectionIndex + 1) % SelectionsCount;
                 selectionAlpha = 0;
                 _P.PlaySound(InfiniminerSound.ClickLow);
             }
-            if (_P.inputEngine.MenuLeft.Released())
+            if (_P.inputEngine.MenuUp.Released())
             {
                 selectionIndex = (selectionIndex - 1 + SelectionsCount) % SelectionsCount;
                 selectionAlpha = 0;
@@ -176,9 +176,17 @@ namespace Infiniminer.States
             }
             if (_SM.WindowHasFocus() && _P.inputEngine.MenuConfirm.Released())
             {
-                if (selectionIndex != -1)
+                if (selectionIndex >= 0 && selectionIndex < clkServers.Length)
                 {
-                    ClickRegion selectedRegion = clkMenuServer[selectionIndex];
+                    int serverIndex = selectionIndex;
+
+                    (_SM as InfiniminerGame).JoinGame(serverList[selectionIndex].ipEndPoint);
+                    nextState = "Infiniminer.States.LoadingState";
+                    _P.PlaySound(InfiniminerSound.ClickHigh);
+                }
+                if (selectionIndex >= clkServers.Length)
+                {
+                    ClickRegion selectedRegion = clkMenuServer[selectionIndex- clkServers.Length];
                     SelectNextState(selectedRegion);
                 }
             }
@@ -196,8 +204,10 @@ namespace Infiniminer.States
             ClickRegion menuRegion = null;
             if (hoverRegion != null)
                 menuRegion = hoverRegion;
-            else if (selectionIndex != -1)
-                menuRegion = clkMenuServer[selectionIndex];
+            else if (selectionIndex >= 0 && selectionIndex < clkServers.Length)
+                menuRegion = clkServers[selectionIndex];
+            else if (selectionIndex >= clkServers.Length)
+                menuRegion = clkMenuServer[selectionIndex- clkServers.Length];
             else
                 return;
 
@@ -406,17 +416,18 @@ namespace Infiniminer.States
             x -= drawRect.X;
             y -= drawRect.Y;
 
-            hoverRegion = ClickRegion.HitTest(clkMenuServer, new Point(x, y));
-            if (hoverRegion != null)
-            {
-                selectionIndex = -1;
-                selectionAlpha = 0;
-            }
-
             ClickRegion selectedServerRegion = ClickRegion.HitTest(clkServers, new Point(x, y));
             if (selectedServerRegion != null)
             {
                 hoverRegion = selectedServerRegion;
+                selectionIndex = -1;
+                selectionAlpha = 0;
+                return;
+            }
+
+            hoverRegion = ClickRegion.HitTest(clkMenuServer, new Point(x, y));
+            if (hoverRegion != null)
+            {
                 selectionIndex = -1;
                 selectionAlpha = 0;
             }
