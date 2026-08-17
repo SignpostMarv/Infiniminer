@@ -1,6 +1,8 @@
-FROM mcr.microsoft.com/devcontainers/base:alpine
+FROM mcr.microsoft.com/devcontainers/base:ubuntu
 
-RUN apk update --no-cache && apk add \
+RUN apt-get update && apt-get install -y --no-install-recommends \
 	subversion \
 	git-svn \
-	--no-cache
+	# cleaning up
+	&& \
+	rm -rf /var/lib/apt/lists/*

@@ -13,6 +13,10 @@
 
 1. Perform the steps referenced in [setup](#Setup)
 2. run `make svn2git`
-3. run `cd /archive/infiniminer/git/`
 
-You should now be able to set the remote of your git host of choice & push the repository up.
+## end result
+
+- `/archive/infiniminer/git/`
+- `/archive/infiniminer/wiki-git/`
+
+You should now be able to set the remote of your git host of choice & push the repositories up.

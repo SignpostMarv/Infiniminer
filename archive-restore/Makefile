@@ -14,7 +14,9 @@ svn2git--prep: fetch
 	@cat /app/archive-restore/users.txt /archive/infiniminer/authors2.tmp.txt > /archive/infiniminer/users.txt
 	@rm /archive/infiniminer/authors*.txt
 
-svn2git: svn2git--prep
+svn2git: svn2git--repo svn2git--wiki
+
+svn2git--repo: svn2git--prep
 	@rm -fr /archive/infiniminer/git/
 	@git -c init.defaultBranch=${git_init_defaultbranch} svn clone file:///archive/infiniminer/svn-dump/ /archive/infiniminer/git/ \
 		--authors-file=/archive/infiniminer/users.txt \
@@ -25,3 +27,21 @@ svn2git: svn2git--prep
 		git branch -a | grep remotes/svn | grep -v trunk | sed -E 's/^.*remotes\/svn\///' | while read line; do git branch "svn/$$line" "remotes/svn/$$line"; done && \
 		git branch -m svn/Marvulous%20Mod svn/Marvulous_Mod && \
 		git branch -m svn/trunk
+
+svn2git--wiki:
+	@rm -fr /archive/infiniminer/wiki-git/
+	@git -c init.defaultBranch=${git_init_defaultbranch} svn clone file:///archive/infiniminer/svn-dump/wiki/ /archive/infiniminer/wiki-git/ \
+		--authors-file=/archive/infiniminer/users.txt \
+		--no-metadata \
+		--prefix "svn/"
+	@if [ ! -d "/archive/infiniminer/google-support-tools/" ]; then git clone https://github.com/google/support-tools.git /archive/infiniminer/google-support-tools/ ; fi
+	@cd /archive/infiniminer/wiki-git/ && \
+		for file in $$(find . -name "*.wiki"); do \
+			docker run -it --rm \
+				-v "/archive/infiniminer/google-support-tools/:/google-support-tools/" \
+				-v "/archive/infiniminer/wiki-git/:/directory" \
+				-w /directory python:2.7.17-alpine \
+				python2 ../google-support-tools/wiki_to_md/wiki2gfm.py --input_file "$$file" --output_file="$${file%.*}.md" && \
+				git rm "$$file" && git add "$${file%.*}.md" ; \
+		done && \
+		git commit -m 'converted to markdown'
