@@ -1,0 +1,16 @@
+services:
+    archive-restore:
+        build:
+            dockerfile: archive-restore.DockerFile
+        restart: always
+        command: sleep infinity
+        user: vscode
+        volumes:
+            - ../:/app/:cached
+            - infiniminer-archive:/archive/infiniminer/
+        environment:
+            git_init_defaultbranch: "${git_init_defaultbranch:-main}"
+
+volumes:
+    infiniminer-archive:
+        external: true

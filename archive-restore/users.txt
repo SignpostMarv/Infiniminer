@@ -1,0 +1,4 @@
+(no author) = Google Code Platform <google-code@localhost>
+SignpostMarv = SignpostMarv <me@signpostmarv.name>
+Xeio87 = Joshua Shaffer <xeio@live.com>
+mariomister541 = GreyMaria <mariomister541@gmail.com>
