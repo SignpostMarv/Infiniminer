@@ -1,8 +1,12 @@
-FROM mcr.microsoft.com/devcontainers/base:ubuntu
+FROM alpine:3.15
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apk update && apk add --no-cache \
 	subversion \
 	git-svn \
-	# cleaning up
-	&& \
-	rm -rf /var/lib/apt/lists/*
+	make \
+	perl-utils \
+	python2
+
+RUN addgroup -g 1000 vscode && adduser -u 1000 -G vscode -D vscode
+
+USER vscode

@@ -1,7 +1,7 @@
 services:
-    archive-restore:
+    devcontainer:
         build:
-            dockerfile: archive-restore.DockerFile
+            dockerfile: devcontainer.DockerFile
         restart: always
         command: sleep infinity
         user: vscode

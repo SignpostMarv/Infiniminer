@@ -1,5 +1,4 @@
 fetch:
-	@sudo chown -R vscode:vscode /archive/infiniminer/
 	@if [ ! -f "/archive/infiniminer/repo.svndump.gz" ]; then wget -P /archive/infiniminer/ https://storage.googleapis.com/google-code-archive-source/v2/code.google.com/infiniminer/repo.svndump.gz ; else echo "already fetched" ; fi
 	@echo "5e164fbf7ffc1b92eff89dd9c010130c1c7fcea060dc769f0d2a83c5ca48b2e6f026dab7824b0caa7de3a86371c53a380b3ab663794939612c2de647eb0e23f0 */archive/infiniminer/repo.svndump.gz" | shasum -a 512 -b -c -
 	@rm -fr /archive/infiniminer/svn/ /archive/infiniminer/svn-dump/
@@ -37,10 +36,6 @@ svn2git--wiki:
 	@if [ ! -d "/archive/infiniminer/google-support-tools/" ]; then git clone https://github.com/google/support-tools.git /archive/infiniminer/google-support-tools/ ; fi
 	@cd /archive/infiniminer/wiki-git/ && \
 		for file in $$(find . -name "*.wiki"); do \
-			docker run -it --rm \
-				-v "/archive/infiniminer/google-support-tools/:/google-support-tools/" \
-				-v "/archive/infiniminer/wiki-git/:/directory" \
-				-w /directory python:2.7.17-alpine \
 				python2 ../google-support-tools/wiki_to_md/wiki2gfm.py --input_file "$$file" --output_file="$${file%.*}.md" && \
 				git rm "$$file" && git add "$${file%.*}.md" ; \
 		done && \
