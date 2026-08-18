@@ -11,7 +11,7 @@
 
 ## svn2git
 
-1. Perform the steps referenced in [setup](#Setup)
+1. Perform the steps referenced in [setup](#setup)
 2. run `make svn2git`
 
 ## end result
