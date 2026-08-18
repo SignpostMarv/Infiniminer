@@ -2,3 +2,5 @@
 /.devcontainer/.ash_history
 /.devcontainer/.bash_history
 /dotnet/
+/msitools/
+/bin/
