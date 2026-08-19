@@ -5,6 +5,7 @@
 bin/Content
 bin/*.exe
 bin/*.dll
+bin/*.dll.config
 bin/*.pdb
 bin/*.xml
 code/*/bin
