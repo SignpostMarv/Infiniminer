@@ -1,5 +1,9 @@
 # Infiniminer
 
+> [!IMPORTANT]
+> This readme is currently out-of-date and has not been updated for
+> contemporary development.
+
 ## Building
 
 Building Infiniminer requires Visual Studio 2008 and XNA Game Studio 3.0.
