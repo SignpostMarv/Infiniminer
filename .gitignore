@@ -17,3 +17,4 @@ code/InfiniminerClient/Content/obj/code/MonoGame.*/
 code/NVorbis.*/
 code/System.*/
 vendor/
+*.xnb
