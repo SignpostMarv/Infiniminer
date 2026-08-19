@@ -1,10 +1,8 @@
-INFINIMINER
-===========
+# Infiniminer
 
-BUILDING
-========
+## Building
 
-Building Infiniminer requires Visual Studio 2008 and XNA Game Studio 3.0. 
+Building Infiniminer requires Visual Studio 2008 and XNA Game Studio 3.0.
 
 You'll also need the fonts 04b03b and 04b08 from the following site:
 
@@ -13,8 +11,7 @@ http://www.dsg4.com/04/extra/bitmap/
 Simply build the solution and you should be good to go.
 
 
-PATCHING AND ISSUE TRACKING
-===========================
+## Patcing and Issue Tracking
 
 The official branch is maintained by Zach Barth of Zachtronics Industries.
 
