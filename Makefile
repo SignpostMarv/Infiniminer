@@ -9,17 +9,16 @@ ARCHIVE_RESTORE = docker run --rm -it \
 		archive-restore
 
 MONO = docker run --rm -it \
-		-v /app/:/app/ \
-		-v /archive/infiniminer/:/archive/infiniminer/ \
-		-v /app/bin/:/archive/infiniminer/git/bin/ \
-		-v /home/vscode/.gitconfig:/home/vscode/.gitconfig:ro \
-		-w /archive/infiniminer/git/code/ \
+		-v /app/:/app/:ro \
+		-v /app/csharp/:/app/csharp/:rw \
+		-w /app/csharp/code/ \
 		-u vscode \
 		mono
 
 MSITOOLS = docker run --rm -it \
-		-v /app/msitools/:/app/ \
-		-w /app/ \
+		-v /app/:/app/:ro \
+		-v /app/msitools/:/app/msitools/:rw \
+		-w /app/msitools/ \
 		-u vscode \
 		msitools
 
@@ -45,17 +44,28 @@ build--msiextract:
 	@rm -fr ./msitools/xnafx30_redist/
 	@${MSITOOLS} \
 		msiextract --directory xnafx30_redist xnafx30_redist.msi
-
+	@rsync -au /app/msitools/xnafx30_redist/Program\ Files/Microsoft\ XNA/XNA\ Game\ Studio/*.dll /app/csharp/vendor/xna/
 
 build--init: build--msiextract
 	@docker build -t mono - < .devcontainer/mono.Dockerfile
-	@sudo chown -R vscode:vscode /archive/infiniminer/
 	@touch ./.devcontainer/.bash_history
-	@ if [ ! -d "/archive/infiniminer/git/.git" ]; then echo "It looks like you have not run \`make svn2git\`!" >&2; exit 1; fi
+
+mono: build--init
+	@${MONO} \
+		bash
 
 build: build--init
-	@rm -fr ./bin/*.dll ./bin/*.exe ./bin/*.ico ./bin/*.config ./bin/*.pdb ./bin/*.xml
+	@cd /app/csharp/ && rm -fr \
+		./bin/*.dll \
+		./bin/*.exe \
+		./bin/*.config \
+		./bin/*.pdb \
+		./bin/*.xml
 	@${MONO} \
-		msbuild InfiniminerClient/InfiniminerClient.csproj /p:TargetFramework=4.5
+		msbuild InfiniminerClient/InfiniminerClient.csproj \
+			/p:OutputPath=/app/csharp/bin/ \
+			/p:TargetFramework=4.5
 	@${MONO} \
-		msbuild InfiniminerServer/InfiniminerServer.csproj /p:TargetFramework=4.5
+		msbuild InfiniminerServer/InfiniminerServer.csproj \
+			/p:OutputPath=/app/csharp/bin/ \
+			/p:TargetFramework=4.5
