@@ -19,6 +19,9 @@
 			],
 			"settings": {
 				"editor.tabMovesFocus": false,
+				"files.associations": {
+					"*.contentproj": "xml"
+				},
 				"workbench.settings.showAISearchToggle": false,
 				"chat.disableAIFeatures": true,
 				"chat.agent.enabled": false
@@ -26,6 +29,8 @@
 		}
 	},
 	"features": {
+		"ghcr.io/devcontainers/features/dotnet:2": {
+		},
 		"ghcr.io/devcontainers/features/docker-in-docker:4": {
 			"moby": false
 		}
