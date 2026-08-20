@@ -1,10 +1,15 @@
 # top-most EditorConfig file
 root = true
 
-[*.cs]
-indent_size = 4
+[*]
 indent_style = space
 end_of_line = lf
 charset = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true
+
+[*.cs]
+indent_size = 4
+
+[*.csproj]
+indent_size = 2
