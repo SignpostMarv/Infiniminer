@@ -49,7 +49,7 @@ namespace Infiniminer
         // Server restarting variables.
         DateTime restartTime = DateTime.Now;
         bool restartTriggered = false;
-        
+
         //Variable handling
         Dictionary<string,bool> varBoolBindings = new Dictionary<string, bool>();
         Dictionary<string,string> varStringBindings = new Dictionary<string, string>();
@@ -261,7 +261,7 @@ namespace Infiniminer
 
         private void varListType(ICollection<string> keys, string naming)
         {
-            
+
             const int lineLength = 3;
             if (keys.Count > 0)
             {
@@ -967,11 +967,11 @@ namespace Infiniminer
         public void ConsoleProcessInput()
         {
             ConsoleWrite("> " + consoleInput);
-            
+
             ProcessCommand(consoleInput, (short)2, null);
             /*string[] args = consoleInput.Split(" ".ToCharArray(),2);
 
-            
+
             switch (args[0].ToLower().Trim())
             {
                 case "help":
@@ -1198,7 +1198,7 @@ namespace Infiniminer
                 }
                 SendServerMessage("Changing map to " + filename + "!");
                 disconnectAll();
-                
+
                 FileStream fs = new FileStream(filename, FileMode.Open);
                 StreamReader sr = new StreamReader(fs);
                 for (int x = 0; x < 64; x++)
@@ -1298,7 +1298,7 @@ namespace Infiniminer
                     beaconList.Remove(new Vector3(x,y,z));
                 SendSetBeacon(new Vector3(x, y+1, z), "", PlayerTeam.None);
             }
-            
+
             blockList[x, y, z] = blockType;
             blockCreatorTeam[x, y, z] = team;
 
@@ -1315,7 +1315,7 @@ namespace Infiniminer
 
             if (blockType == BlockType.Lava)
                 lavaBlockCount += 1;
-            
+
             //ConsoleWrite("BLOCKSET: " + x + " " + y + " " + z + " " + blockType.ToString());
         }
 
@@ -1489,7 +1489,7 @@ namespace Infiniminer
                 ConsoleWrite("CALCULATING INITIAL LAVA FLOWS");
                 ConsoleWrite("TOTAL LAVA BLOCKS = " + newMap());
             }
-            
+
 
             //Caculate the shape of spherical tnt explosions
             CalculateExplosionPattern();
@@ -1998,7 +1998,7 @@ namespace Infiniminer
         public void UsePickaxe(Player player, Vector3 playerPosition, Vector3 playerHeading)
         {
             player.QueueAnimationBreak = true;
-            
+
             // Figure out what we're hitting.
             Vector3 hitPoint = Vector3.Zero;
             Vector3 buildPoint = Vector3.Zero;
@@ -2153,7 +2153,7 @@ namespace Infiniminer
                 // If it's an explosive block, add it to our list.
                 if (blockType == BlockType.Explosive)
                     player.ExplosiveList.Add(buildPoint);
-            }            
+            }
         }
 
         public void UseDeconstructionGun(Player player, Vector3 playerPosition, Vector3 playerHeading)
@@ -2416,7 +2416,7 @@ namespace Infiniminer
 
             PlaySound(InfiniminerSound.CashDeposit, player.Position);
             ConsoleWrite("DEPOSIT_CASH: " + player.Handle + ", " + player.Cash);
-            
+
             player.Cash = 0;
             player.Weight = 0;
 
@@ -2510,7 +2510,7 @@ namespace Infiniminer
         /*public void SendCurrentMapB(NetConnection client)
         {
             Debug.Assert(MAPSIZE == 64, "The BlockBulkTransfer message requires a map size of 64.");
-            
+
             for (byte x = 0; x < MAPSIZE; x++)
                 for (byte y=0; y<MAPSIZE; y+=16)
                 {
@@ -2644,7 +2644,7 @@ namespace Infiniminer
             msgBuffer.Write((byte)winningTeam);
             foreach (NetConnection netConn in playerList.Keys)
                 if (netConn.Status == NetConnectionStatus.Connected)
-                    netServer.SendMessage(msgBuffer, netConn, NetChannel.ReliableUnordered);     
+                    netServer.SendMessage(msgBuffer, netConn, NetChannel.ReliableUnordered);
         }
 
         public void SendPlayerLeft(Player player, string reason)

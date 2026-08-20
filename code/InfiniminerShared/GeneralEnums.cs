@@ -9,7 +9,7 @@ namespace Infiniminer
 
         Fire,
         AltFire,
-        
+
         Forward,
         Backward,
         Left,
@@ -21,7 +21,7 @@ namespace Infiniminer
         Ping,
         Deposit,
         Withdraw,
-        
+
         //All buttons past this point will never be sent to the server
         SayAll,
         SayTeam,
@@ -36,7 +36,7 @@ namespace Infiniminer
         Tool5,
         ToolUp,
         ToolDown,
-        
+
         BlockUp,
         BlockDown
     }
@@ -80,9 +80,9 @@ namespace Infiniminer
 
     public enum InfiniminerMessage : byte
     {
-        BlockBulkTransfer,      // x-value, y-value, followed by 64 bytes of blocktype ; 
+        BlockBulkTransfer,      // x-value, y-value, followed by 64 bytes of blocktype ;
         BlockSet,               // x, y, z, type
-        UseTool,                // position, heading, tool, blocktype 
+        UseTool,                // position, heading, tool, blocktype
         SelectClass,            // class
         ResourceUpdate,         // ore, cash, weight, max ore, max weight, team ore, red cash, blue cash: ReliableInOrder1
         DepositOre,

@@ -22,7 +22,7 @@ namespace Infiniminer.States
         string nextState = null;
         SpriteFont uiFont;
         string[] currentHint;
-        
+
         static string[] HINTS = new string[19]
         {
             "Engineers can build bank blocks near ore veins for\nMiners to quickly fill the team's supplies.",

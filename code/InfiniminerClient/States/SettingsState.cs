@@ -178,7 +178,7 @@ namespace Infiniminer.States
                 addButtonAutomatic("Show FPS", "Yes", "No", dw.Data.ContainsKey("showfps") ? bool.Parse(dw.Data["showfps"]) : true);
             addSpace(16);
 
-            
+
             //_P.KillPlayer("");
         }
 

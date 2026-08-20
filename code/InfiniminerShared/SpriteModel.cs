@@ -37,24 +37,24 @@ namespace Infiniminer
     {
         /* Animation scripts provide a light-weight way to define animations. They consist of a sequence of frames
          * and callback events. The following animation (based off the above skeleton model),
-         * 
+         *
          *      "1,10"
-         * 
-         * will set the frame to frame 1 (idle) and then wait 10 seconds. When used with SetPassiveAnimation, it will 
+         *
+         * will set the frame to frame 1 (idle) and then wait 10 seconds. When used with SetPassiveAnimation, it will
          * loop, causing the skeleton to stand still. The following animation,
-         * 
+         *
          *      "0,0.5 ; 1,0.5 ; 2,0.5 ; 1,0.5"
-         *      
+         *
          * will cause the frames to cycle between 0, 1, 2, 1, and back to 0 when repeating (with SetPassiveAnimation),
          * waiting 0.5 seconds after each change of frame. The following animation,
-         * 
+         *
          *      "3,1 ; !ATTACKHIT ; 1,0.5 ; !ATTACKEND"
-         *      
-         * will cause the skeleton to switch to frame 3 (arm raised), wait one second, issue the string “ATTACKHIT” 
+         *
+         * will cause the skeleton to switch to frame 3 (arm raised), wait one second, issue the string “ATTACKHIT”
          * through the AnimationCallback event, return to frame 1 (idle), wait an additional half of a second, and
-         * then issue the string “ATTACKEND” through the AnimationCallback. When used with BeginActiveAnimation, this 
+         * then issue the string “ATTACKEND” through the AnimationCallback. When used with BeginActiveAnimation, this
          * could be used to time attacks and sync the enemy behavior with its animation.
-         * 
+         *
          * Whitespace is, of course, discarded when compiling animation scripts.
          */
 
@@ -72,10 +72,10 @@ namespace Infiniminer
         Game gameInstance;
         SpriteFont nameFont = null;
 
-        // Constructor for SpriteModel. Loads up the texture referenced by spriteSheetPath to use for drawing. 
-        // Each individual sprite should be fit to a 24×32 box with the bottom center of the box corresponding to 
-        // the SpriteModel's origin. A sprite sheet is expected to have a column of four sprites for every frame 
-        // designated by numFrames. A sprite sheet should be 128 pixels tall and padded on the right to bring the 
+        // Constructor for SpriteModel. Loads up the texture referenced by spriteSheetPath to use for drawing.
+        // Each individual sprite should be fit to a 24×32 box with the bottom center of the box corresponding to
+        // the SpriteModel's origin. A sprite sheet is expected to have a column of four sprites for every frame
+        // designated by numFrames. A sprite sheet should be 128 pixels tall and padded on the right to bring the
         // total texture width to a power of two.
         public SpriteModel(Game gameInstance, int numFrames)
         {
@@ -102,8 +102,8 @@ namespace Infiniminer
             texSprite = spriteTexture;
         }
 
-        // Draw the SpriteModel into gamespace at drawLocation, facing drawAngle, where the camera is located at 
-        // cameraLocation (used for finding the angle between the camera and the sprite's forward direction). 
+        // Draw the SpriteModel into gamespace at drawLocation, facing drawAngle, where the camera is located at
+        // cameraLocation (used for finding the angle between the camera and the sprite's forward direction).
         // The sprite will be drawn as 1*drawScale engine units wide and 1.5*drawScale engine units tall.
         public void Draw(Matrix viewMatrix, Matrix projectionMatrix, Vector3 cameraPosition, Vector3 cameraForward, Vector3 drawPosition, Vector3 drawHeading, float drawScale)
         {

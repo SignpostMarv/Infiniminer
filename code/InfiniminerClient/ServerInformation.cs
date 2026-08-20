@@ -46,7 +46,7 @@ namespace Infiniminer
                 if (serverExtra.Trim() != "")
                     serverDesc += " - " + serverExtra.Trim();
             }
-            
+
             return serverDesc;
         }
 

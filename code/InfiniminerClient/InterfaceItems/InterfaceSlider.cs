@@ -124,7 +124,7 @@ namespace InterfaceItems
                 spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Deferred, SaveStateMode.SaveState);
                 spriteBatch.Draw(shade, new Rectangle(size.X, size.Y, size.Height, size.Height), drawColour);
                 spriteBatch.Draw(shade, new Rectangle(size.X + size.Width - size.Height, size.Y, size.Height, size.Height), drawColour);
-                
+
                 //Draw line
                 float sliderPercent = getPercent();
                 int sliderPartialWidth = size.Height / 4;
@@ -141,8 +141,8 @@ namespace InterfaceItems
                     spriteBatch.DrawString(uiFont, text, new Vector2(size.X, size.Y - 36), drawColour);
                 }
                 //Draw amount
-                spriteBatch.DrawString(uiFont, (((float)(int)(value * 10)) / 10).ToString(), new Vector2(size.X, size.Y - 20), drawColour); 
-                
+                spriteBatch.DrawString(uiFont, (((float)(int)(value * 10)) / 10).ToString(), new Vector2(size.X, size.Y - 20), drawColour);
+
                 spriteBatch.End();
                 shade.Dispose();
             }

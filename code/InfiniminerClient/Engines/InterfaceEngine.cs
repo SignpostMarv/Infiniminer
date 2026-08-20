@@ -346,7 +346,7 @@ namespace Infiniminer
 
                 //Server name
                 RenderMessageCenter(spriteBatch, _P.serverName, new Vector2(graphicsDevice.Viewport.Width / 2, 32), _P.playerTeam == PlayerTeam.Blue ? _P.blue : _P.red, Color.Black);//Defines.IM_BLUE : Defines.IM_RED, Color.Black);
-                
+
                 if (_P.teamWinners != PlayerTeam.None)
                 {
                     string teamName = _P.teamWinners == PlayerTeam.Red ? "RED" : "BLUE";
@@ -391,7 +391,7 @@ namespace Infiniminer
                 {
                     Color chatColor = Color.White;
                     chatColor = _P.chatFullBuffer[i].type == ChatMessageType.SayAll ? Color.White : _P.chatFullBuffer[i].type == ChatMessageType.SayRedTeam ? InfiniminerGame.IM_RED : InfiniminerGame.IM_BLUE;
-                    
+
                     spriteBatch.DrawString(uiFont, _P.chatFullBuffer[i].message, new Vector2(22, graphicsDevice.Viewport.Height - 114 - 16 * i), Color.Black);
                     spriteBatch.DrawString(uiFont, _P.chatFullBuffer[i].message, new Vector2(20, graphicsDevice.Viewport.Height - 116 - 16 * i), chatColor);
                 }*/

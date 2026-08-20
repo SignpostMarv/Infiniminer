@@ -547,7 +547,7 @@ namespace Infiniminer.States
                 return;
             }else if (!_P.playerDead)
                 HandleInput((_SM as InfiniminerGame).keyBinds.GetBound(key));
-            
+
         }
 
         public override void OnKeyUp(Keys key)

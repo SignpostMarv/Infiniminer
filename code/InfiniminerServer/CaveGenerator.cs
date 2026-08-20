@@ -54,7 +54,7 @@ namespace Infiniminer
                     for (int z = 0; z <= Defines.GROUND_LEVEL; z++)
                         if (mountainData[x, y, z] == BlockType.None)
                             caveData[x, y, z] = BlockType.None;
-            
+
             // Carve some caves into the ground.
             float[, ,] caveNoise = CaveGenerator.GeneratePerlinNoise(32);
             caveNoise = InterpolateData(ref caveNoise, 32, size);
@@ -198,7 +198,7 @@ namespace Infiniminer
                 int fieldLength = randGen.Next(size/3, size);
                 float x = randGen.Next(0, size);
                 float y = randGen.Next(0, size);
-                
+
                 // generate a random z-value weighted toward a medium depth
                 float zf = 0;
                 for (int j = 0; j < 4; j++)
@@ -339,7 +339,7 @@ namespace Infiniminer
 
                     if (z < 0)
                         z = 0;
-                }  
+                }
             }
         }
 

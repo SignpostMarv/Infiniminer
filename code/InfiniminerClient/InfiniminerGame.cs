@@ -73,7 +73,7 @@ namespace Infiniminer
         public List<ServerInformation> EnumerateServers(float discoveryTime)
         {
             List<ServerInformation> serverList = new List<ServerInformation>();
-            
+
             // Discover local servers.
             propertyBag.netClient.DiscoverLocalServers(5565);
             NetBuffer msgBuffer = propertyBag.netClient.CreateBuffer();
@@ -605,7 +605,7 @@ namespace Infiniminer
         protected override void OnExiting(object sender, EventArgs args)
         {
             propertyBag.netClient.Shutdown("Client exiting.");
-            
+
             base.OnExiting(sender, args);
         }
 

@@ -50,7 +50,7 @@ namespace Infiniminer
 
         public void DrawLine(Vector3 posStart, Vector3 posEnd, Color color)
         {
-            
+
         }
 
         public VertexPositionColor[] ConstructSphereVertices(Vector3 position, float radius, Color color)

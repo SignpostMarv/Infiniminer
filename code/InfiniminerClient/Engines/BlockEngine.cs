@@ -21,10 +21,10 @@ namespace Infiniminer
         float shade;
 
         public static readonly VertexElement[] VertexElements = new VertexElement[]
-        { 
+        {
             new VertexElement(0,0,VertexElementFormat.Vector3, VertexElementMethod.Default, VertexElementUsage.Position, 0),
             new VertexElement(0,sizeof(float)*3,VertexElementFormat.Vector2, VertexElementMethod.Default, VertexElementUsage.TextureCoordinate, 0),
-            new VertexElement(0,sizeof(float)*5,VertexElementFormat.Single, VertexElementMethod.Default, VertexElementUsage.TextureCoordinate, 1)               
+            new VertexElement(0,sizeof(float)*5,VertexElementFormat.Single, VertexElementMethod.Default, VertexElementUsage.TextureCoordinate, 1)
         };
 
         public VertexPositionTextureShade(Vector3 position, Vector2 uv, double shade)
@@ -201,7 +201,7 @@ namespace Infiniminer
         // Returns true if we are solid at this point.
         public bool SolidAtPoint(Vector3 point)
         {
-            return BlockAtPoint(point) != BlockType.None; 
+            return BlockAtPoint(point) != BlockType.None;
         }
 
         public bool SolidAtPointForPlayer(Vector3 point)
@@ -227,7 +227,7 @@ namespace Infiniminer
             ushort z = (ushort)point.Z;
             if (x < 0 || y < 0 || z < 0 || x >= MAPSIZE || y >= MAPSIZE || z >= MAPSIZE)
                 return BlockType.None;
-            return blockList[x, y, z]; 
+            return blockList[x, y, z];
         }
 
         public bool RayCollision(Vector3 startPosition, Vector3 rayDirection, float distance, int searchGranularity, ref Vector3 hitPoint, ref Vector3 buildPoint)
@@ -297,14 +297,14 @@ namespace Infiniminer
             }
             else
                 basicEffect.CurrentTechnique = basicEffect.Techniques["Block"];
-            
+
             basicEffect.Parameters["xWorld"].SetValue(Matrix.Identity);
             basicEffect.Parameters["xView"].SetValue(gameInstance.propertyBag.playerCamera.ViewMatrix);
             basicEffect.Parameters["xProjection"].SetValue(gameInstance.propertyBag.playerCamera.ProjectionMatrix);
             basicEffect.Parameters["xTexture"].SetValue(blockTexture);
             basicEffect.Parameters["xLODColor"].SetValue(lodColor.ToVector3());
             basicEffect.Begin();
-            
+
             foreach (EffectPass pass in basicEffect.CurrentTechnique.Passes)
             {
                 pass.Begin();
@@ -334,7 +334,7 @@ namespace Infiniminer
 
                 pass.End();
             }
-            
+
             basicEffect.End();
         }
 
@@ -373,7 +373,7 @@ namespace Infiniminer
             foreach (uint faceInfo in faceList.Keys)
             {
                 BuildFaceVertices(ref vertexList, vertexPointer, faceInfo, texture == (int)BlockTexture.Spikes);
-                vertexPointer += 6;            
+                vertexPointer += 6;
             }
             DynamicVertexBuffer vertexBuffer = new DynamicVertexBuffer(gameInstance.GraphicsDevice, vertexList.Length * VertexPositionTextureShade.SizeInBytes, BufferUsage.WriteOnly);
             vertexBuffer.ContentLost += new EventHandler(vertexBuffer_ContentLost);
@@ -551,7 +551,7 @@ namespace Infiniminer
             y = regionNumber % REGIONRATIO;
             regionNumber = (regionNumber - y) / REGIONRATIO;
             z = regionNumber;
-            return new Vector3(x * REGIONSIZE + REGIONSIZE / 2, y * REGIONSIZE + REGIONSIZE / 2, z * REGIONSIZE + REGIONSIZE / 2);            
+            return new Vector3(x * REGIONSIZE + REGIONSIZE / 2, y * REGIONSIZE + REGIONSIZE / 2, z * REGIONSIZE + REGIONSIZE / 2);
         }
 
         private void ShowQuad(ushort x, ushort y, ushort z, BlockFaceDirection faceDir, BlockType blockType)

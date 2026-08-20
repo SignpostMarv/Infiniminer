@@ -171,7 +171,7 @@ namespace Infiniminer
                 graphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, vertexBuffer.SizeInBytes / VertexPositionTextureShade.SizeInBytes / 3);
 
                 particleEffect.Techniques[0].Passes[0].End();
-                particleEffect.End();  
+                particleEffect.End();
             }
         }
     }
