@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿extern alias Monogame;
+using Microsoft.Xna.Framework.Graphics;
+using Color = Monogame::Microsoft.Xna.Framework.Color;
 
 namespace Infiniminer
 {

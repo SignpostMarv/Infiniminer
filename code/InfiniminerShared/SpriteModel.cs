@@ -1,8 +1,15 @@
-﻿using System;
+﻿extern alias Monogame;
+
+using System;
 using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Graphics;
+
+using Color = Monogame::Microsoft.Xna.Framework.Color;
+using VertexPositionTexture = Monogame::Microsoft.Xna.Framework.Graphics.VertexPositionTexture;
+
 
 namespace Infiniminer
 {
@@ -58,7 +65,11 @@ namespace Infiniminer
         int animationStep = 0;
         bool runningActive = false;
         float timeCountdown = 0;
+
+        /** XNA 3.0
         VertexDeclaration vertexDeclaration;
+        */
+
         GraphicsDevice graphicsDevice;
         Effect effect;
         Game gameInstance;
@@ -86,7 +97,9 @@ namespace Infiniminer
             activeAnimation = new List<AnimationFrame>();
             activeAnimation.Add(dummyFrame);
 
+            /* XNA 3.0
             vertexDeclaration = new VertexDeclaration(graphicsDevice, VertexPositionTexture.VertexElements);
+            */
         }
 
         public void SetSpriteTexture(Texture2D spriteTexture)
@@ -107,8 +120,11 @@ namespace Infiniminer
             effect.Parameters["xView"].SetValue(viewMatrix);
             effect.Parameters["xProjection"].SetValue(projectionMatrix);
             effect.Parameters["xTexture"].SetValue(texSprite);
+            /* XNA 3.0
             effect.Begin();
             effect.Techniques[0].Passes[0].Begin();
+            */
+            effect.Techniques[0].Passes[0].Apply();
 
             graphicsDevice.RenderState.CullMode = CullMode.None;
             graphicsDevice.SamplerStates[0].MagFilter = TextureFilter.Point;

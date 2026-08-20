@@ -10,7 +10,7 @@
     <AssemblyName>Infiniminer</AssemblyName>
     <TargetFramework>net45</TargetFramework>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <XnaFrameworkVersion>v3.0</XnaFrameworkVersion>
+    <XnaFrameworkVersion>v4.0</XnaFrameworkVersion>
     <XnaPlatform>Windows</XnaPlatform>
     <XnaCrossPlatformGroupID>4bc950fa-53af-4657-abe1-2a90a69c6960</XnaCrossPlatformGroupID>
     <RestorePackagesPath>..\..\vendor\</RestorePackagesPath>
@@ -72,15 +72,25 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Lidgren.Network.Xna.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Xna.Framework, Version=3.0.0.0, Culture=neutral, PublicKeyToken=6d5c3888ef60e27d, processorArchitecture=x86">
+    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL">
       <Private>True</Private>
       <SpecificVersion>True</SpecificVersion>
       <HintPath>..\..\vendor\xna\Microsoft.Xna.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Xna.Framework.Game, Version=3.0.0.0, Culture=neutral, PublicKeyToken=6d5c3888ef60e27d, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL">
       <Private>True</Private>
       <SpecificVersion>True</SpecificVersion>
       <HintPath>..\..\vendor\xna\Microsoft.Xna.Framework.Game.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Net, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <SpecificVersion>True</SpecificVersion>
+      <HintPath>..\..\vendor\xna\Microsoft.Xna.Framework.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Storage, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <SpecificVersion>True</SpecificVersion>
+      <HintPath>..\..\vendor\xna\Microsoft.Xna.Framework.Storage.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>

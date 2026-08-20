@@ -49,12 +49,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Lidgren.Network.Xna.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Xna.Framework, Version=3.0.0.0, Culture=neutral, PublicKeyToken=6d5c3888ef60e27d, processorArchitecture=x86">
+    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL">
       <Private>True</Private>
       <SpecificVersion>True</SpecificVersion>
       <HintPath>..\..\vendor\xna\Microsoft.Xna.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Xna.Framework.Game, Version=3.0.0.0, Culture=neutral, PublicKeyToken=6d5c3888ef60e27d, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL">
       <Private>True</Private>
       <SpecificVersion>True</SpecificVersion>
       <HintPath>..\..\vendor\xna\Microsoft.Xna.Framework.Game.dll</HintPath>
