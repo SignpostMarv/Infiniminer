@@ -7,6 +7,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using Color = Monogame::Microsoft.Xna.Framework.Color;
+using Game = Monogame::Microsoft.Xna.Framework.Game;
+using Texture2D = Monogame::Microsoft.Xna.Framework.Graphics.Texture2D;
 
 namespace Infiniminer
 {

@@ -7,8 +7,27 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Graphics;
 
+using BoundingFrustum = Monogame::Microsoft.Xna.Framework.BoundingFrustum;
+using BoundingSphere = Monogame::Microsoft.Xna.Framework.BoundingSphere;
 using Color = Monogame::Microsoft.Xna.Framework.Color;
+using ContainmentType = Monogame::Microsoft.Xna.Framework.ContainmentType;
+using Game = Monogame::Microsoft.Xna.Framework.Game;
+using Matrix = Monogame::Microsoft.Xna.Framework.Matrix;
+using BlendState = Monogame::Microsoft.Xna.Framework.Graphics.BlendState;
+using Effect = Monogame::Microsoft.Xna.Framework.Graphics.Effect;
+using GraphicsDevice = Monogame::Microsoft.Xna.Framework.Graphics.GraphicsDevice;
+using PrimitiveType = Monogame::Microsoft.Xna.Framework.Graphics.PrimitiveType;
+using RasterizerState = Monogame::Microsoft.Xna.Framework.Graphics.RasterizerState;
+using SamplerState = Monogame::Microsoft.Xna.Framework.Graphics.SamplerState;
+using SpriteBatch = Monogame::Microsoft.Xna.Framework.Graphics.SpriteBatch;
+using SpriteFont = Monogame::Microsoft.Xna.Framework.Graphics.SpriteFont;
+using SpriteSortMode = Monogame::Microsoft.Xna.Framework.Graphics.SpriteSortMode;
+using Texture2D = Monogame::Microsoft.Xna.Framework.Graphics.Texture2D;
+using TextureFilter = Monogame::Microsoft.Xna.Framework.Graphics.TextureFilter;
+using VertexDeclaration = Monogame::Microsoft.Xna.Framework.Graphics.VertexDeclaration;
 using VertexPositionTexture = Monogame::Microsoft.Xna.Framework.Graphics.VertexPositionTexture;
+using Vector2 = Monogame::Microsoft.Xna.Framework.Vector2;
+using Vector3 = Monogame::Microsoft.Xna.Framework.Vector3;
 
 
 namespace Infiniminer
@@ -95,7 +114,7 @@ namespace Infiniminer
             activeAnimation = new List<AnimationFrame>();
             activeAnimation.Add(dummyFrame);
 
-            vertexDeclaration = new VertexDeclaration(VertexPositionTexture.VertexDeclaration.GetVertexElements());
+            vertexDeclaration = VertexPositionTexture.VertexDeclaration;
         }
 
         public void SetSpriteTexture(Texture2D spriteTexture)
