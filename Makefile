@@ -54,18 +54,26 @@ mono: build--init
 	@${MONO} \
 		bash
 
-build: build--init
+build--clean:
 	@cd /app/csharp/ && rm -fr \
 		./bin/*.dll \
 		./bin/*.exe \
 		./bin/*.config \
 		./bin/*.pdb \
 		./bin/*.xml
+
+build--InfiniminerClient--skip-init:
 	@${MONO} \
 		msbuild InfiniminerClient/InfiniminerClient.csproj \
 			/p:OutputPath=/app/csharp/bin/ \
 			/p:TargetFramework=4.5
+
+build--InfiniminerServer--skip-init:
 	@${MONO} \
 		msbuild InfiniminerServer/InfiniminerServer.csproj \
 			/p:OutputPath=/app/csharp/bin/ \
 			/p:TargetFramework=4.5
+
+build--skip-init: build--InfiniminerClient--skip-init build--InfiniminerServer--skip-init
+
+build: build--init build--clean build--skip-init
