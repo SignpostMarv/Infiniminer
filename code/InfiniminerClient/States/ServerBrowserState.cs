@@ -26,7 +26,6 @@ namespace Infiniminer.States
         SpriteFont uiFont;
         bool directConnectIPEnter = false;
         string directConnectIP = "";
-        //KeyMap keyMap;
 
         ClickRegion[] clkMenuServer = new ClickRegion[3] {
             new ClickRegion(new Rectangle(0,713,425,42), "direct"),
@@ -48,7 +47,6 @@ namespace Infiniminer.States
                                      1024);
 
             uiFont = _SM.Content.Load<SpriteFont>("font_04b08");
-            //keyMap = new KeyMap();
 
             serverList = (_SM as InfiniminerGame).EnumerateServers(0.5f);
         }
@@ -163,10 +161,6 @@ namespace Infiniminer.States
                     }
                     catch { }
                 }
-                /*else if (keyMap.IsKeyMapped(key))
-                {
-                    directConnectIP += keyMap.TranslateKey(key, false);
-                }*/
             }
             else
             {

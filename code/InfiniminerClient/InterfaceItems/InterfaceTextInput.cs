@@ -23,24 +23,20 @@ namespace InterfaceItems
         public string value = "";
         private bool partialInFocus = false;
         private bool inFocus=false;
-        //Infiniminer.KeyMap keyMap;
 
         public InterfaceTextInput()
         {
-            //keyMap = new Infiniminer.KeyMap();
         }
 
         public InterfaceTextInput(Infiniminer.InfiniminerGame gameInstance)
         {
             uiFont = gameInstance.Content.Load<SpriteFont>("font_04b08");
-            //keyMap = new Infiniminer.KeyMap();
         }
 
         public InterfaceTextInput(Infiniminer.InfiniminerGame gameInstance, Infiniminer.PropertyBag pb)
         {
             uiFont = gameInstance.Content.Load<SpriteFont>("font_04b08");
             _P = pb;
-            //keyMap = new Infiniminer.KeyMap();
         }
 
         public override void OnMouseDown(MouseButton button, int x, int y)
@@ -84,11 +80,9 @@ namespace InterfaceItems
                     _P.PlaySound(Infiniminer.InfiniminerSound.ClickHigh);
                 }
                 else if (key == Keys.Back&&value.Length>0)
-                    value = value.Substring(0, value.Length - 1);
-                /*else if (keyMap.IsKeyMapped(key))
                 {
-                    value += keyMap.TranslateKey(key, Keyboard.GetState().IsKeyDown(Keys.LeftShift) || Keyboard.GetState().IsKeyDown(Keys.RightShift));
-                }*/
+                    value = value.Substring(0, value.Length - 1);
+                }
             }
         }
 
