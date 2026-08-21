@@ -25,8 +25,16 @@ MSITOOLS = docker run --rm -it \
 		-u vscode \
 		msitools
 
-archive-restore--init:
+docker--build: \
+	build--init--mono \
+	archive-restore--build \
+	build--msiextract--build \
+	echo "done building docker images"
+
+archive-restore--build:
 	@docker build -t archive-restore -f .devcontainer/archive-restore.Dockerfile ./.devcontainer/.empty-directory-on-purpose
+
+archive-restore--init:
 	@sudo chown -R vscode:vscode /archive/infiniminer/
 	@touch ./.devcontainer/.ash_history
 
@@ -39,8 +47,10 @@ svn2git: archive-restore--init
 	@${ARCHIVE_RESTORE} \
 		make svn2git
 
-build--msiextract:
+build--msiextract--build:
 	@docker build -t msitools -f .devcontainer/msitools.Dockerfile ./.devcontainer/.empty-directory-on-purpose
+
+build--msiextract:
 	@touch ./msitools/.ash_history
 	@ if [ ! -f "/app/msitools/xnafx30_redist.msi" ]; then wget -P ./msitools/ https://download.microsoft.com/download/0/f/f/0ff8780d-f50a-41ef-a31a-09db7c0589a2/xnafx30_redist.msi; fi
 	@echo "51701be931330a55214c7ad72dc06b50014b4348b330ad5a88fad7113c6093972856cb81bf6f8bdc71894cce816ba1470472c2e2ddee11137d526b58bbfbd7dd *./msitools/xnafx30_redist.msi" | shasum -b -a 512 -c
@@ -49,8 +59,10 @@ build--msiextract:
 		msiextract --directory xnafx30_redist xnafx30_redist.msi
 	@rsync -au /app/msitools/xnafx30_redist/Program\ Files/Microsoft\ XNA/XNA\ Game\ Studio/*.dll /app/csharp/vendor/xna/
 
-build--init: build--msiextract
+build--init--mono:
 	@docker build -t mono -f .devcontainer/mono.Dockerfile ./.devcontainer/.empty-directory-on-purpose
+
+build--init: build--msiextract build--init--mono
 	@touch ./.devcontainer/.bash_history
 
 mono: build--init
