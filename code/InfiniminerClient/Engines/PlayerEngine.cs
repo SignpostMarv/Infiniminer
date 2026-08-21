@@ -1,7 +1,6 @@
 extern alias Monogame;
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 using GameTime = Monogame::Microsoft.Xna.Framework.GameTime;
 using GraphicsDevice = Monogame::Microsoft.Xna.Framework.Graphics.GraphicsDevice;

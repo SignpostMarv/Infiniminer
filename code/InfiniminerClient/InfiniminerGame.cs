@@ -6,7 +6,6 @@ using System.Net;
 using System.IO;
 using System.Threading;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Monogame::Microsoft.Xna.Framework.Media;
 using Lidgren.Network;
 using Lidgren.Network.Xna;

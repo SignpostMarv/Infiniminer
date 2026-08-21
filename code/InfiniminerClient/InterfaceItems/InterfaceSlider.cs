@@ -3,7 +3,6 @@ extern alias Monogame;
 using System;
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Monogame::Microsoft.Xna.Framework.Input;
 using Infiniminer;
 

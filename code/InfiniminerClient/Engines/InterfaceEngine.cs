@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Monogame::Microsoft.Xna.Framework.Input;
 
 using Color = Monogame::Microsoft.Xna.Framework.Color;

@@ -1,7 +1,6 @@
 extern alias Monogame;
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 using GraphicsDevice = Monogame::Microsoft.Xna.Framework.Graphics.GraphicsDevice;
 using Matrix = Monogame::Microsoft.Xna.Framework.Matrix;

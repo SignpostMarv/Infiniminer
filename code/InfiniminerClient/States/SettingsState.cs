@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using StateMasher;
 using InterfaceItems;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Monogame::Microsoft.Xna.Framework.Input;
 
 using Color = Monogame::Microsoft.Xna.Framework.Color;

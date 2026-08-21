@@ -4,7 +4,6 @@ using System;
 
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 using Texture2D = Monogame::Microsoft.Xna.Framework.Graphics.Texture2D;
 

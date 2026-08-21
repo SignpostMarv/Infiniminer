@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 using GameTime = Monogame::Microsoft.Xna.Framework.GameTime;
 using Color = Monogame::Microsoft.Xna.Framework.Color;

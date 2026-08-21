@@ -4,8 +4,6 @@ using System;
 using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Graphics;
 
 using BoundingFrustum = Monogame::Microsoft.Xna.Framework.BoundingFrustum;
 using BoundingSphere = Monogame::Microsoft.Xna.Framework.BoundingSphere;

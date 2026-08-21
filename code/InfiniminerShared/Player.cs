@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using Lidgren.Network;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 using Color = Monogame::Microsoft.Xna.Framework.Color;
 using Game = Monogame::Microsoft.Xna.Framework.Game;

@@ -2,7 +2,6 @@ extern alias Monogame;
 
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 using Color = Monogame::Microsoft.Xna.Framework.Color;
 using GraphicsDevice = Monogame::Microsoft.Xna.Framework.Graphics.GraphicsDevice;

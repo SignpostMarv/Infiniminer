@@ -82,11 +82,6 @@
       <SpecificVersion>True</SpecificVersion>
       <HintPath>..\..\vendor\xna\Microsoft.Xna.Framework.Game.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <SpecificVersion>True</SpecificVersion>
-      <HintPath>..\..\vendor\xna\Microsoft.Xna.Framework.Graphics.dll</HintPath>
-    </Reference>
     <Reference Include="MonoGame.Framework" Version="3.7.1.189">
       <Private>True</Private>
       <SpecificVersion>False</SpecificVersion>
