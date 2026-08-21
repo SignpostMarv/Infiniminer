@@ -31,7 +31,7 @@ devcontainer--postAttachCommand: \
 	echo "done setting up"
 
 docker--build: \
-	build--init--mono \
+	mono--build \
 	archive-restore--build \
 	build--msiextract--build \
 	echo "done building docker images"
@@ -64,13 +64,11 @@ build--msiextract:
 		msiextract --directory xnafx40_redist xnafx40_redist.msi
 	@rsync -au /app/msitools/xnafx40_redist/Program\ Files/Microsoft\ XNA/XNA\ Game\ Studio/*.dll /app/csharp/vendor/xna/
 
-build--init--mono:
+mono--build:
 	@docker build -t mono -f .devcontainer/mono.Dockerfile ./.devcontainer/.empty-directory-on-purpose
 
-build--init:
-	@touch ./.devcontainer/.bash_history
-
-mono: build--init
+mono--shell:
+	@touch ./.devcontainer/mono.bash_history
 	@${MONO} \
 		bash
 
@@ -82,18 +80,20 @@ build--clean:
 		./bin/*.pdb \
 		./bin/*.xml
 
-build--InfiniminerClient--skip-init:
+build--InfiniminerClient:
 	@${MONO} \
 		msbuild InfiniminerClient/InfiniminerClient.csproj \
 			/p:OutputPath=/app/csharp/bin/ \
 			/p:TargetFramework=4.5
 
-build--InfiniminerServer--skip-init:
+build--InfiniminerServer:
 	@${MONO} \
 		msbuild InfiniminerServer/InfiniminerServer.csproj \
 			/p:OutputPath=/app/csharp/bin/ \
 			/p:TargetFramework=4.5
 
-build--skip-init: build--InfiniminerClient--skip-init build--InfiniminerServer--skip-init
-
-build: build--init build--clean build--skip-init
+build: \
+	build--clean \
+	build--InfiniminerClient \
+	build--InfiniminerServer \
+	echo "done building"
