@@ -145,5 +145,5 @@ build--InfiniminerServer:
 build: \
 	build--clean \
 	build--InfiniminerClient \
-	build--InfiniminerServer \
+	build--InfiniminerServer
 	echo "done building"
