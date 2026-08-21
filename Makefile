@@ -81,6 +81,15 @@ build--msiextract:
 		msiextract --directory xnafx40_redist xnafx40_redist.msi
 	@rsync -au /app/msitools/xnafx40_redist/Program\ Files/Microsoft\ XNA/XNA\ Game\ Studio/*.dll /app/csharp/vendor/xna/
 
+build--msiextract--xna30:
+	@touch ./msitools/.ash_history
+	@ if [ ! -f "/app/msitools/xnafx30_redist.msi" ]; then wget -P ./msitools/ https://download.microsoft.com/download/a/c/2/ac2c903b-e6e8-42c2-9fd7-bebac362a930/xnafx30_redist.msi; fi
+	@echo "51701be931330a55214c7ad72dc06b50014b4348b330ad5a88fad7113c6093972856cb81bf6f8bdc71894cce816ba1470472c2e2ddee11137d526b58bbfbd7dd *./msitools/xnafx30_redist.msi" | shasum -b -a 512 -c
+	@rm -fr ./msitools/xnafx30_redist/
+	@${MSITOOLS} \
+		msiextract --directory xnafx30_redist xnafx30_redist.msi
+	@rsync -au /app/msitools/xnafx30_redist/Program\ Files/Microsoft\ XNA/XNA\ Game\ Studio/*.dll /app/csharp/vendor/xna/
+
 build--ikdasm:
 	@cd /app/csharp/vendor/xna/ && \
 		find . -name "*.dll" | \
