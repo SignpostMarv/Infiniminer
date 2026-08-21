@@ -18,6 +18,12 @@ MONO = docker run --rm -it \
 		-w /app/csharp/code/ \
 		mono
 
+MONO_NONTTY = docker run --rm \
+		$(MONO_DOCKER_TEMPLATE) \
+		-v /app/ikdasm/:/app/ikdasm/:rw \
+		-w /app/ \
+		mono
+
 MSITOOLS = docker run --rm -it \
 		-v /app/:/app/:ro \
 		-v /app/msitools/:/app/msitools/:rw \
@@ -34,6 +40,7 @@ docker--build: \
 	mono--build \
 	archive-restore--build \
 	build--msiextract--build \
+	build--ikdasm \
 	echo "done building docker images"
 
 archive-restore--build:
@@ -63,6 +70,25 @@ build--msiextract:
 	@${MSITOOLS} \
 		msiextract --directory xnafx40_redist xnafx40_redist.msi
 	@rsync -au /app/msitools/xnafx40_redist/Program\ Files/Microsoft\ XNA/XNA\ Game\ Studio/*.dll /app/csharp/vendor/xna/
+
+build--ikdasm:
+	@cd /app/csharp/vendor/xna/ && \
+		find . -name "*.dll" | \
+			while read dll; do \
+				${MONO_NONTTY} \
+					ikdasm "/app/csharp/vendor/xna/$$dll" > "/app/ikdasm/$${dll}.txt" \
+			; done
+	@docker run --rm \
+		-v /app/:/app/:rw \
+		-w /app/ \
+		-u 1000:1000 \
+		node:26-alpine \
+			npm install --save-dev @types/node@~26
+	@docker run --rm \
+		-v /app/:/app/:ro \
+		-u 1000:1000 \
+		node:26-alpine \
+			/app/ikdasm/parse-ikdasm.ts
 
 mono--build:
 	@docker build -t mono -f .devcontainer/mono.Dockerfile ./.devcontainer/.empty-directory-on-purpose
