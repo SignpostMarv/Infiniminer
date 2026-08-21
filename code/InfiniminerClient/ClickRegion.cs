@@ -1,5 +1,10 @@
+extern alias Monogame;
+
 using StateMasher;
 using Microsoft.Xna.Framework;
+
+using Rectangle = Monogame::Microsoft.Xna.Framework.Rectangle;
+using Point = Monogame::Microsoft.Xna.Framework.Point;
 
 namespace Infiniminer
 {

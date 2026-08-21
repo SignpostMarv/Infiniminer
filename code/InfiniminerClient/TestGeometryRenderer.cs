@@ -1,5 +1,18 @@
+extern alias Monogame;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+
+using Color = Monogame::Microsoft.Xna.Framework.Color;
+using Effect = Monogame::Microsoft.Xna.Framework.Graphics.Effect;
+using EffectPass = Monogame::Microsoft.Xna.Framework.Graphics.EffectPass;
+using GraphicsDevice = Monogame::Microsoft.Xna.Framework.Graphics.GraphicsDevice;
+using PrimitiveType = Monogame::Microsoft.Xna.Framework.Graphics.PrimitiveType;
+using RasterizerState = Monogame::Microsoft.Xna.Framework.Graphics.RasterizerState;
+using VertexDeclaration = Monogame::Microsoft.Xna.Framework.Graphics.VertexDeclaration;
+using VertexPositionColor = Monogame::Microsoft.Xna.Framework.Graphics.VertexPositionColor;
+using Matrix = Monogame::Microsoft.Xna.Framework.Matrix;
+using Vector3 = Monogame::Microsoft.Xna.Framework.Vector3;
 
 namespace Infiniminer
 {
@@ -15,7 +28,7 @@ namespace Infiniminer
         public GeometryDebugger(GraphicsDevice graphicsDevice, Effect effect)
         {
             this.graphicsDevice = graphicsDevice;
-            vertexDeclaration = new VertexDeclaration(graphicsDevice, VertexPositionColor.VertexElements);
+            vertexDeclaration = VertexPositionColor.VertexDeclaration;
             this.effect = effect;
         }
 
@@ -26,16 +39,12 @@ namespace Infiniminer
             effect.Parameters["World"].SetValue(Matrix.Identity);
             effect.Parameters["View"].SetValue(ViewMatrix);
             effect.Parameters["Projection"].SetValue(ProjectionMatrix);
-            effect.Begin();
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
-                pass.Begin();
-                graphicsDevice.RenderState.CullMode = CullMode.None;
-                graphicsDevice.VertexDeclaration = vertexDeclaration;
+                pass.Apply();
+                graphicsDevice.RasterizerState = RasterizerState.CullNone;
                 graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, sphereVertices, 0, sphereVertices.Length / 3);
-                pass.End();
             }
-            effect.End();
         }
 
         public void DrawLine(Vector3 posStart, Vector3 posEnd, Color color)

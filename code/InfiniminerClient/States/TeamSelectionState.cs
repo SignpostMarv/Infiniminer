@@ -1,7 +1,21 @@
-﻿using StateMasher;
+extern alias Monogame;
+
+using StateMasher;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+
+using Color = Monogame::Microsoft.Xna.Framework.Color;
+using GameTime = Monogame::Microsoft.Xna.Framework.GameTime;
+using BlendState = Monogame::Microsoft.Xna.Framework.Graphics.BlendState;
+using GraphicsDevice = Monogame::Microsoft.Xna.Framework.Graphics.GraphicsDevice;
+using SpriteBatch = Monogame::Microsoft.Xna.Framework.Graphics.SpriteBatch;
+using SpriteFont = Monogame::Microsoft.Xna.Framework.Graphics.SpriteFont;
+using SpriteSortMode = Monogame::Microsoft.Xna.Framework.Graphics.SpriteSortMode;
+using Texture2D = Monogame::Microsoft.Xna.Framework.Graphics.Texture2D;
+using Point = Monogame::Microsoft.Xna.Framework.Point;
+using Rectangle = Monogame::Microsoft.Xna.Framework.Rectangle;
+using Vector2 = Monogame::Microsoft.Xna.Framework.Vector2;
 
 namespace Infiniminer.States
 {
@@ -15,8 +29,9 @@ namespace Infiniminer.States
 
         ClickRegion[] clkTeamMenu = new ClickRegion[2] {
             new ClickRegion(new Rectangle(229,156,572,190), "red"),
-            new ClickRegion(new Rectangle(135,424,761,181), "blue")//,
-            //new ClickRegion(new Rectangle(0,0,0,0), "cancel")
+            new ClickRegion(new Rectangle(135,424,761,181), "blue")/*,
+            new ClickRegion(new Rectangle(0,0,0,0), "cancel")
+            */
         };
 
         public override void OnEnter(string oldState)
@@ -71,7 +86,7 @@ namespace Infiniminer.States
             }
 
             SpriteBatch spriteBatch = new SpriteBatch(graphicsDevice);
-            spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Deferred, SaveStateMode.SaveState);
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             spriteBatch.Draw(texMenu, drawRect, Color.White);
             QuickDrawText(spriteBatch, "" + redTeamCount + " PLAYERS", 360, _P.red);//Defines.IM_RED);
             QuickDrawText(spriteBatch, "" + blueTeamCount + " PLAYERS", 620, _P.blue);//Defines.IM_BLUE);

@@ -1,10 +1,14 @@
-﻿using System;
+﻿extern alias Monogame;
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using Lidgren.Network;
 using Lidgren.Network.Xna;
 using Microsoft.Xna.Framework;
+
+using Vector3 = Monogame::Microsoft.Xna.Framework.Vector3;
 
 namespace Infiniminer
 {
@@ -1627,8 +1631,8 @@ namespace Infiniminer
 
                                         case InfiniminerMessage.UseTool:
                                             {
-                                                Vector3 playerPosition = msgBuffer.ReadVector3();
-                                                Vector3 playerHeading = msgBuffer.ReadVector3();
+                                                Vector3 playerPosition = XnaAlongsideMonoGame.Vector3FromMessageBuffer(msgBuffer);
+                                                Vector3 playerHeading = XnaAlongsideMonoGame.Vector3FromMessageBuffer(msgBuffer);
                                                 PlayerTools playerTool = (PlayerTools)msgBuffer.ReadByte();
                                                 BlockType blockType = (BlockType)msgBuffer.ReadByte();
                                                 switch (playerTool)
@@ -1741,8 +1745,8 @@ namespace Infiniminer
 
                                         case InfiniminerMessage.PlayerUpdate:
                                             {
-                                                player.Position = msgBuffer.ReadVector3();
-                                                player.Heading = msgBuffer.ReadVector3();
+                                                player.Position = XnaAlongsideMonoGame.Vector3FromMessageBuffer(msgBuffer);
+                                                player.Heading = XnaAlongsideMonoGame.Vector3FromMessageBuffer(msgBuffer);
                                                 player.Tool = (PlayerTools)msgBuffer.ReadByte();
                                                 player.UsingTool = msgBuffer.ReadBoolean();
                                                 SendPlayerUpdate(player);
@@ -1774,7 +1778,7 @@ namespace Infiniminer
                                         case InfiniminerMessage.PlaySound:
                                             {
                                                 InfiniminerSound sound = (InfiniminerSound)msgBuffer.ReadByte();
-                                                Vector3 position = msgBuffer.ReadVector3();
+                                                Vector3 position = XnaAlongsideMonoGame.Vector3FromMessageBuffer(msgBuffer);
                                                 PlaySound(sound, position);
                                             }
                                             break;
@@ -2243,7 +2247,10 @@ namespace Infiniminer
             // Send off the explosion to clients.
             NetBuffer msgBuffer = netServer.CreateBuffer();
             msgBuffer.Write((byte)InfiniminerMessage.TriggerExplosion);
-            msgBuffer.Write(new Vector3(x, y, z));
+            XnaAlongsideMonoGame.Vector3ToMessageBuffer(
+                msgBuffer,
+                new Vector3(x, y, z)
+            );
             foreach (NetConnection netConn in playerList.Keys)
                 if (netConn.Status == NetConnectionStatus.Connected)
                     netServer.SendMessage(msgBuffer, netConn, NetChannel.ReliableUnordered);
@@ -2541,8 +2548,14 @@ namespace Infiniminer
             NetBuffer msgBuffer = netServer.CreateBuffer();
             msgBuffer.Write((byte)InfiniminerMessage.PlayerUpdate);
             msgBuffer.Write((uint)player.ID);
-            msgBuffer.Write(player.Position);
-            msgBuffer.Write(player.Heading);
+            XnaAlongsideMonoGame.Vector3ToMessageBuffer(
+                msgBuffer,
+                player.Position
+            );
+            XnaAlongsideMonoGame.Vector3ToMessageBuffer(
+                msgBuffer,
+                player.Heading
+            );
             msgBuffer.Write((byte)player.Tool);
 
             if (player.QueueAnimationBreak)
@@ -2564,7 +2577,10 @@ namespace Infiniminer
         {
             NetBuffer msgBuffer = netServer.CreateBuffer();
             msgBuffer.Write((byte)InfiniminerMessage.SetBeacon);
-            msgBuffer.Write(position);
+            XnaAlongsideMonoGame.Vector3ToMessageBuffer(
+                msgBuffer,
+                position
+            );
             msgBuffer.Write(text);
             msgBuffer.Write((byte)team);
             foreach (NetConnection netConn in playerList.Keys)
@@ -2603,7 +2619,10 @@ namespace Infiniminer
                 position.Y += 1; // beacon is shown a block below its actually position to make altitude show up right
                 msgBuffer = netServer.CreateBuffer();
                 msgBuffer.Write((byte)InfiniminerMessage.SetBeacon);
-                msgBuffer.Write(position);
+                XnaAlongsideMonoGame.Vector3ToMessageBuffer(
+                    msgBuffer,
+                    position
+                );
                 msgBuffer.Write(bPair.Value.ID);
                 msgBuffer.Write((byte)bPair.Value.Team);
                 if (player.NetConn.Status == NetConnectionStatus.Connected)
@@ -2702,7 +2721,10 @@ namespace Infiniminer
             msgBuffer.Write((byte)InfiniminerMessage.PlaySound);
             msgBuffer.Write((byte)sound);
             msgBuffer.Write(true);
-            msgBuffer.Write(position);
+            XnaAlongsideMonoGame.Vector3ToMessageBuffer(
+                msgBuffer,
+                position
+            );
             foreach (NetConnection netConn in playerList.Keys)
                 if (netConn.Status == NetConnectionStatus.Connected)
                     netServer.SendMessage(msgBuffer, netConn, NetChannel.ReliableUnordered);

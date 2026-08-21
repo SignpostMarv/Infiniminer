@@ -1,7 +1,18 @@
-﻿using StateMasher;
+extern alias Monogame;
+
+using StateMasher;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+
+using Color = Monogame::Microsoft.Xna.Framework.Color;
+using GameTime = Monogame::Microsoft.Xna.Framework.GameTime;
+using BlendState = Monogame::Microsoft.Xna.Framework.Graphics.BlendState;
+using GraphicsDevice = Monogame::Microsoft.Xna.Framework.Graphics.GraphicsDevice;
+using SpriteBatch = Monogame::Microsoft.Xna.Framework.Graphics.SpriteBatch;
+using SpriteSortMode = Monogame::Microsoft.Xna.Framework.Graphics.SpriteSortMode;
+using Texture2D = Monogame::Microsoft.Xna.Framework.Graphics.Texture2D;
+using Rectangle = Monogame::Microsoft.Xna.Framework.Rectangle;
 
 namespace Infiniminer.States
 {
@@ -44,7 +55,7 @@ namespace Infiniminer.States
         public override void OnRenderAtUpdate(GraphicsDevice graphicsDevice, GameTime gameTime)
         {
             SpriteBatch spriteBatch = new SpriteBatch(graphicsDevice);
-            spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Deferred, SaveStateMode.SaveState);
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             spriteBatch.Draw(texMenu, drawRect, Color.White);
             spriteBatch.End();
         }

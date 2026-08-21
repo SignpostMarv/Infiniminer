@@ -1,3 +1,5 @@
+extern alias Monogame;
+
 using System;
 using System.Runtime.InteropServices;
 using System.Reflection;
@@ -6,12 +8,18 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+using Color = Monogame::Microsoft.Xna.Framework.Color;
+using Game = Monogame::Microsoft.Xna.Framework.Game;
+using GameTime = Monogame::Microsoft.Xna.Framework.GameTime;
+using GraphicsDevice = Monogame::Microsoft.Xna.Framework.Graphics.GraphicsDevice;
+using GraphicsDeviceManager = Monogame::Microsoft.Xna.Framework.GraphicsDeviceManager;
+
 namespace StateMasher
 {
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class StateMachine : Microsoft.Xna.Framework.Game
+    public class StateMachine : Game
     {
         [DllImport("user32.dll")]
         public static extern int GetForegroundWindow();
@@ -108,7 +116,7 @@ namespace StateMasher
         protected override void Update(GameTime gameTime)
         {
             if (frameCount > 0)
-                frameRate = frameCount / gameTime.TotalRealTime.TotalSeconds;
+                frameRate = frameCount / gameTime.TotalGameTime.TotalSeconds;
 
             if (currentState != null && propertyBag != null)
             {

@@ -31,6 +31,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <AutoGenerateBindingRedirects>True</AutoGenerateBindingRedirects>
     <Title>Infiniminer</Title>
     <Product>Infiniminer</Product>
     <Copyright>Copyright ©  2009</Copyright>
@@ -91,6 +92,12 @@
       <Private>True</Private>
       <SpecificVersion>True</SpecificVersion>
       <HintPath>..\..\vendor\xna\Microsoft.Xna.Framework.Storage.dll</HintPath>
+    </Reference>
+    <Reference Include="MonoGame.Framework" Version="3.7.1.189">
+      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>../../vendor/MonoGame.Framework.DesktopGL.3.7.1.189/lib/net45/MonoGame.Framework.dll</HintPath>
+      <Aliases>Monogame</Aliases>
     </Reference>
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>

@@ -1,9 +1,26 @@
-﻿using System;
+﻿extern alias Monogame;
+
+using System;
 using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+
+using Color = Monogame::Microsoft.Xna.Framework.Color;
+using GameTime = Monogame::Microsoft.Xna.Framework.GameTime;
+using BlendState = Monogame::Microsoft.Xna.Framework.Graphics.BlendState;
+using GraphicsDevice = Monogame::Microsoft.Xna.Framework.Graphics.GraphicsDevice;
+using SamplerState = Monogame::Microsoft.Xna.Framework.Graphics.SamplerState;
+using SpriteFont = Monogame::Microsoft.Xna.Framework.Graphics.SpriteFont;
+using SpriteBatch = Monogame::Microsoft.Xna.Framework.Graphics.SpriteBatch;
+using SpriteSortMode = Monogame::Microsoft.Xna.Framework.Graphics.SpriteSortMode;
+using Texture2D = Monogame::Microsoft.Xna.Framework.Graphics.Texture2D;
+using TextureFilter = Monogame::Microsoft.Xna.Framework.Graphics.TextureFilter;
+using Matrix = Monogame::Microsoft.Xna.Framework.Matrix;
+using Rectangle = Monogame::Microsoft.Xna.Framework.Rectangle;
+using Vector2 = Monogame::Microsoft.Xna.Framework.Vector2;
+using Vector3 = Monogame::Microsoft.Xna.Framework.Vector3;
 
 namespace Infiniminer
 {
@@ -181,7 +198,7 @@ namespace Infiniminer
         {
             int screenWidth = graphicsDevice.Viewport.Width;
             int screenHeight = graphicsDevice.Viewport.Height;
-            graphicsDevice.SamplerStates[0].MagFilter = TextureFilter.Point;
+            graphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
 
             Texture2D textureToUse;
             if (Mouse.GetState().LeftButton == ButtonState.Pressed || Mouse.GetState().MiddleButton == ButtonState.Pressed || Mouse.GetState().RightButton == ButtonState.Pressed)
@@ -196,7 +213,7 @@ namespace Infiniminer
         {
             int screenWidth = graphicsDevice.Viewport.Width;
             int screenHeight = graphicsDevice.Viewport.Height;
-            graphicsDevice.SamplerStates[0].MagFilter = TextureFilter.Point;
+            graphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
 
             int drawX = screenWidth / 2 - 32 * 3;
             int drawY = screenHeight - 102 * 3;
@@ -222,7 +239,7 @@ namespace Infiniminer
         {
             int screenWidth = graphicsDevice.Viewport.Width;
             int screenHeight = graphicsDevice.Viewport.Height;
-            graphicsDevice.SamplerStates[0].MagFilter = TextureFilter.Point;
+            graphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
 
             int drawX = screenWidth / 2 - 60 * 3;
             int drawY = screenHeight - 91 * 3;
@@ -267,7 +284,7 @@ namespace Infiniminer
                 _P = gameInstance.propertyBag;
 
             // Draw the UI.
-            spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Immediate, SaveStateMode.SaveState);
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 
             // Draw the crosshair.
             spriteBatch.Draw(texCrosshairs, new Rectangle(graphicsDevice.Viewport.Width / 2 - texCrosshairs.Width / 2,

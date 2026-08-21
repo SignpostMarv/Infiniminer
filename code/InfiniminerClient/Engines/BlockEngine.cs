@@ -1,7 +1,33 @@
-﻿using System;
+﻿extern alias Monogame;
+
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+
+using BoundingSphere = Monogame::Microsoft.Xna.Framework.BoundingSphere;
+using BoundingFrustum = Monogame::Microsoft.Xna.Framework.BoundingFrustum;
+using Color = Monogame::Microsoft.Xna.Framework.Color;
+using ContainmentType = Monogame::Microsoft.Xna.Framework.ContainmentType;
+using GameTime = Monogame::Microsoft.Xna.Framework.GameTime;
+using BlendState = Monogame::Microsoft.Xna.Framework.Graphics.BlendState;
+using BufferUsage = Monogame::Microsoft.Xna.Framework.Graphics.BufferUsage;
+using DepthStencilState = Monogame::Microsoft.Xna.Framework.Graphics.DepthStencilState;
+using DynamicVertexBuffer = Monogame::Microsoft.Xna.Framework.Graphics.DynamicVertexBuffer;
+using Effect = Monogame::Microsoft.Xna.Framework.Graphics.Effect;
+using EffectPass = Monogame::Microsoft.Xna.Framework.Graphics.EffectPass;
+using GraphicsDevice = Monogame::Microsoft.Xna.Framework.Graphics.GraphicsDevice;
+using PrimitiveType = Monogame::Microsoft.Xna.Framework.Graphics.PrimitiveType;
+using RasterizerState = Monogame::Microsoft.Xna.Framework.Graphics.RasterizerState;
+using SamplerState = Monogame::Microsoft.Xna.Framework.Graphics.SamplerState;
+using Texture2D = Monogame::Microsoft.Xna.Framework.Graphics.Texture2D;
+using VertexDeclaration = Monogame::Microsoft.Xna.Framework.Graphics.VertexDeclaration;
+using VertexElement = Monogame::Microsoft.Xna.Framework.Graphics.VertexElement;
+using VertexElementFormat = Monogame::Microsoft.Xna.Framework.Graphics.VertexElementFormat;
+using VertexElementUsage = Monogame::Microsoft.Xna.Framework.Graphics.VertexElementUsage;
+using Matrix = Monogame::Microsoft.Xna.Framework.Matrix;
+using Vector2 = Monogame::Microsoft.Xna.Framework.Vector2;
+using Vector3 = Monogame::Microsoft.Xna.Framework.Vector3;
 
 namespace Infiniminer
 {
@@ -14,9 +40,9 @@ namespace Infiniminer
 
         public static readonly VertexElement[] VertexElements = new VertexElement[]
         {
-            new VertexElement(0,0,VertexElementFormat.Vector3, VertexElementMethod.Default, VertexElementUsage.Position, 0),
-            new VertexElement(0,sizeof(float)*3,VertexElementFormat.Vector2, VertexElementMethod.Default, VertexElementUsage.TextureCoordinate, 0),
-            new VertexElement(0,sizeof(float)*5,VertexElementFormat.Single, VertexElementMethod.Default, VertexElementUsage.TextureCoordinate, 1)
+            new VertexElement(0,VertexElementFormat.Vector3, VertexElementUsage.Position, 0),
+            new VertexElement(sizeof(float)*3,VertexElementFormat.Vector2, VertexElementUsage.TextureCoordinate, 0),
+            new VertexElement(sizeof(float)*5,VertexElementFormat.Single, VertexElementUsage.TextureCoordinate, 1)
         };
 
         public VertexPositionTextureShade(Vector3 position, Vector2 uv, double shade)
@@ -178,7 +204,7 @@ namespace Infiniminer
                     vertexListDirty[i, j] = true;
 
             // Initialize any graphics stuff.
-            vertexDeclaration = new VertexDeclaration(gameInstance.GraphicsDevice, VertexPositionTextureShade.VertexElements);
+            vertexDeclaration = new VertexDeclaration(VertexPositionTextureShade.VertexElements);
 
             // Initialize the bloom engine.
             if (gameInstance.RenderPretty)
@@ -269,7 +295,7 @@ namespace Infiniminer
                         continue;
 
                     // Actually render.
-                    RenderVertexList(graphicsDevice, regionBuffer, blockTextures[(byte)blockTexture].Texture, blockTextures[(byte)blockTexture].LODColor, renderTranslucent, blockTexture == BlockTexture.Lava, (float)gameTime.TotalRealTime.TotalSeconds);
+                    RenderVertexList(graphicsDevice, regionBuffer, blockTextures[(byte)blockTexture].Texture, blockTextures[(byte)blockTexture].LODColor, renderTranslucent, blockTexture == BlockTexture.Lava, (float)gameTime.TotalGameTime.TotalSeconds);
                 }
 
             // Apply posteffects.
@@ -295,39 +321,34 @@ namespace Infiniminer
             basicEffect.Parameters["xProjection"].SetValue(gameInstance.propertyBag.playerCamera.ProjectionMatrix);
             basicEffect.Parameters["xTexture"].SetValue(blockTexture);
             basicEffect.Parameters["xLODColor"].SetValue(lodColor.ToVector3());
-            basicEffect.Begin();
 
             foreach (EffectPass pass in basicEffect.CurrentTechnique.Passes)
             {
-                pass.Begin();
+                pass.Apply();
 
                 if (renderTranslucent)
                 {
                     // TODO: Make translucent blocks look like we actually want them to look!
                     // We probably also want to pull this out to be rendered AFTER EVERYTHING ELSE IN THE GAME.
-                    graphicsDevice.RenderState.DepthBufferWriteEnable = false;
-                    graphicsDevice.RenderState.AlphaBlendEnable = true;
-                    graphicsDevice.RenderState.SourceBlend = Blend.SourceAlpha;
-                    graphicsDevice.RenderState.DestinationBlend = Blend.InverseSourceAlpha;
+                    graphicsDevice.DepthStencilState = DepthStencilState.DepthRead;
+                    graphicsDevice.BlendState = BlendState.AlphaBlend;
                 }
 
-                graphicsDevice.RenderState.CullMode = CullMode.CullCounterClockwiseFace;
-                graphicsDevice.SamplerStates[0].MagFilter = TextureFilter.Point;
+                graphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
+                graphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
+                /* Not needed in XNA 4.0, apparently
                 graphicsDevice.VertexDeclaration = vertexDeclaration;
-                graphicsDevice.Vertices[0].SetSource(vertexBuffer, 0, VertexPositionTextureShade.SizeInBytes);
-                graphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, vertexBuffer.SizeInBytes / VertexPositionTextureShade.SizeInBytes / 3);
-                graphicsDevice.RenderState.CullMode = CullMode.None;
+                */
+                graphicsDevice.SetVertexBuffer(vertexBuffer);
+                graphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, vertexBuffer.VertexCount / 3);
+                graphicsDevice.RasterizerState = RasterizerState.CullNone;
 
                 if (renderTranslucent)
                 {
-                    graphicsDevice.RenderState.DepthBufferWriteEnable = true;
-                    graphicsDevice.RenderState.AlphaBlendEnable = false;
+                    graphicsDevice.DepthStencilState = DepthStencilState.Default;
+                    graphicsDevice.BlendState = BlendState.AlphaBlend;
                 }
-
-                pass.End();
             }
-
-            basicEffect.End();
         }
 
         private void RegenerateDirtyVertexLists()
@@ -367,8 +388,10 @@ namespace Infiniminer
                 BuildFaceVertices(ref vertexList, vertexPointer, faceInfo, texture == (int)BlockTexture.Spikes);
                 vertexPointer += 6;
             }
-            DynamicVertexBuffer vertexBuffer = new DynamicVertexBuffer(gameInstance.GraphicsDevice, vertexList.Length * VertexPositionTextureShade.SizeInBytes, BufferUsage.WriteOnly);
+            DynamicVertexBuffer vertexBuffer = new DynamicVertexBuffer(gameInstance.GraphicsDevice, typeof(VertexPositionTextureShade), vertexList.Length, BufferUsage.WriteOnly);
+            /* MonoGame doesn't support this
             vertexBuffer.ContentLost += new EventHandler(vertexBuffer_ContentLost);
+            */
             vertexBuffer.Tag = new DynamicVertexBufferTag(this, texture, region);
             vertexBuffer.SetData(vertexList);
             return vertexBuffer;

@@ -1,10 +1,24 @@
-﻿using System;
+﻿extern alias Monogame;
+
+using System;
 using System.Collections.Generic;
 using System.Net;
 using StateMasher;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+
+using Color = Monogame::Microsoft.Xna.Framework.Color;
+using GameTime = Monogame::Microsoft.Xna.Framework.GameTime;
+using BlendState = Monogame::Microsoft.Xna.Framework.Graphics.BlendState;
+using GraphicsDevice = Monogame::Microsoft.Xna.Framework.Graphics.GraphicsDevice;
+using SpriteBatch = Monogame::Microsoft.Xna.Framework.Graphics.SpriteBatch;
+using SpriteFont = Monogame::Microsoft.Xna.Framework.Graphics.SpriteFont;
+using SpriteSortMode = Monogame::Microsoft.Xna.Framework.Graphics.SpriteSortMode;
+using Texture2D = Monogame::Microsoft.Xna.Framework.Graphics.Texture2D;
+using Point = Monogame::Microsoft.Xna.Framework.Point;
+using Rectangle = Monogame::Microsoft.Xna.Framework.Rectangle;
+using Vector2 = Monogame::Microsoft.Xna.Framework.Vector2;
 
 namespace Infiniminer.States
 {
@@ -62,7 +76,7 @@ namespace Infiniminer.States
         {
             descWidths = new List<int>();
             SpriteBatch spriteBatch = new SpriteBatch(graphicsDevice);
-            spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Deferred, SaveStateMode.SaveState);
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             spriteBatch.Draw(texMenu, drawRect, Color.White);
 
             int drawY = 80;

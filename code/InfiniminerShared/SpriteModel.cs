@@ -12,6 +12,7 @@ using BoundingSphere = Monogame::Microsoft.Xna.Framework.BoundingSphere;
 using Color = Monogame::Microsoft.Xna.Framework.Color;
 using ContainmentType = Monogame::Microsoft.Xna.Framework.ContainmentType;
 using Game = Monogame::Microsoft.Xna.Framework.Game;
+using GameTime = Monogame::Microsoft.Xna.Framework.GameTime;
 using Matrix = Monogame::Microsoft.Xna.Framework.Matrix;
 using BlendState = Monogame::Microsoft.Xna.Framework.Graphics.BlendState;
 using Effect = Monogame::Microsoft.Xna.Framework.Graphics.Effect;
@@ -135,10 +136,6 @@ namespace Infiniminer
             effect.Parameters["xView"].SetValue(viewMatrix);
             effect.Parameters["xProjection"].SetValue(projectionMatrix);
             effect.Parameters["xTexture"].SetValue(texSprite);
-            /* XNA 3.0
-            effect.Begin();
-            effect.Techniques[0].Passes[0].Begin();
-            */
             effect.Techniques[0].Passes[0].Apply();
 
             graphicsDevice.RasterizerState = RasterizerState.CullNone;
