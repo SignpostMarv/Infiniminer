@@ -25,6 +25,11 @@ MSITOOLS = docker run --rm -it \
 		-u vscode \
 		msitools
 
+devcontainer--postAttachCommand: \
+	docker-build \
+	build--msiextract \
+	echo "done setting up"
+
 docker--build: \
 	build--init--mono \
 	archive-restore--build \
@@ -62,7 +67,7 @@ build--msiextract:
 build--init--mono:
 	@docker build -t mono -f .devcontainer/mono.Dockerfile ./.devcontainer/.empty-directory-on-purpose
 
-build--init: build--msiextract build--init--mono
+build--init:
 	@touch ./.devcontainer/.bash_history
 
 mono: build--init
