@@ -8,11 +8,14 @@ ARCHIVE_RESTORE = docker run --rm -it \
 		-u vscode \
 		archive-restore
 
-MONO = docker run --rm -it \
+MONO_DOCKER_TEMPLATE = \
 		-v /app/:/app/:ro \
 		-v /app/csharp/:/app/csharp/:rw \
+		-u vscode
+
+MONO = docker run --rm -it \
+		$(MONO_DOCKER_TEMPLATE) \
 		-w /app/csharp/code/ \
-		-u vscode \
 		mono
 
 MSITOOLS = docker run --rm -it \
