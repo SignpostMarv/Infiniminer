@@ -4,7 +4,7 @@ using System;
 using StateMasher;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+using Monogame::Microsoft.Xna.Framework.Input;
 
 using Color = Monogame::Microsoft.Xna.Framework.Color;
 using GameTime = Monogame::Microsoft.Xna.Framework.GameTime;

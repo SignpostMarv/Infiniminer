@@ -6,7 +6,7 @@ using System.Reflection;
 using Infiniminer;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+using Monogame::Microsoft.Xna.Framework.Input;
 
 using Color = Monogame::Microsoft.Xna.Framework.Color;
 using Game = Monogame::Microsoft.Xna.Framework.Game;

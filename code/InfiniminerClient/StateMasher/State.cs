@@ -3,7 +3,7 @@ extern alias Monogame;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+using Monogame::Microsoft.Xna.Framework.Input;
 using Infiniminer;
 
 using GameTime = Monogame::Microsoft.Xna.Framework.GameTime;
