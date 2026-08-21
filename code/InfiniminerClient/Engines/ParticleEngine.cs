@@ -3,16 +3,10 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Monogame::Microsoft.Xna.Framework.Graphics;
 
 using GameTime = Monogame::Microsoft.Xna.Framework.GameTime;
 using Color = Monogame::Microsoft.Xna.Framework.Color;
-using BufferUsage = Monogame::Microsoft.Xna.Framework.Graphics.BufferUsage;
-using Effect = Monogame::Microsoft.Xna.Framework.Graphics.Effect;
-using GraphicsDevice = Monogame::Microsoft.Xna.Framework.Graphics.GraphicsDevice;
-using PrimitiveType = Monogame::Microsoft.Xna.Framework.Graphics.PrimitiveType;
-using RasterizerState = Monogame::Microsoft.Xna.Framework.Graphics.RasterizerState;
-using VertexDeclaration = Monogame::Microsoft.Xna.Framework.Graphics.VertexDeclaration;
-using VertexBuffer = Monogame::Microsoft.Xna.Framework.Graphics.VertexBuffer;
 using Matrix = Monogame::Microsoft.Xna.Framework.Matrix;
 using Vector2 = Monogame::Microsoft.Xna.Framework.Vector2;
 using Vector3 = Monogame::Microsoft.Xna.Framework.Vector3;

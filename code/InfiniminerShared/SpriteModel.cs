@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
+using Monogame::Microsoft.Xna.Framework.Graphics;
 
 using BoundingFrustum = Monogame::Microsoft.Xna.Framework.BoundingFrustum;
 using BoundingSphere = Monogame::Microsoft.Xna.Framework.BoundingSphere;
@@ -12,19 +13,6 @@ using ContainmentType = Monogame::Microsoft.Xna.Framework.ContainmentType;
 using Game = Monogame::Microsoft.Xna.Framework.Game;
 using GameTime = Monogame::Microsoft.Xna.Framework.GameTime;
 using Matrix = Monogame::Microsoft.Xna.Framework.Matrix;
-using BlendState = Monogame::Microsoft.Xna.Framework.Graphics.BlendState;
-using Effect = Monogame::Microsoft.Xna.Framework.Graphics.Effect;
-using GraphicsDevice = Monogame::Microsoft.Xna.Framework.Graphics.GraphicsDevice;
-using PrimitiveType = Monogame::Microsoft.Xna.Framework.Graphics.PrimitiveType;
-using RasterizerState = Monogame::Microsoft.Xna.Framework.Graphics.RasterizerState;
-using SamplerState = Monogame::Microsoft.Xna.Framework.Graphics.SamplerState;
-using SpriteBatch = Monogame::Microsoft.Xna.Framework.Graphics.SpriteBatch;
-using SpriteFont = Monogame::Microsoft.Xna.Framework.Graphics.SpriteFont;
-using SpriteSortMode = Monogame::Microsoft.Xna.Framework.Graphics.SpriteSortMode;
-using Texture2D = Monogame::Microsoft.Xna.Framework.Graphics.Texture2D;
-using TextureFilter = Monogame::Microsoft.Xna.Framework.Graphics.TextureFilter;
-using VertexDeclaration = Monogame::Microsoft.Xna.Framework.Graphics.VertexDeclaration;
-using VertexPositionTexture = Monogame::Microsoft.Xna.Framework.Graphics.VertexPositionTexture;
 using Vector2 = Monogame::Microsoft.Xna.Framework.Vector2;
 using Vector3 = Monogame::Microsoft.Xna.Framework.Vector3;
 

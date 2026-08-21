@@ -1,7 +1,7 @@
 ﻿extern alias Monogame;
 
 using Color = Monogame::Microsoft.Xna.Framework.Color;
-using Texture2D = Monogame::Microsoft.Xna.Framework.Graphics.Texture2D;
+using Monogame::Microsoft.Xna.Framework.Graphics;
 
 namespace Infiniminer
 {

@@ -2,15 +2,11 @@ extern alias Monogame;
 
 using StateMasher;
 using Microsoft.Xna.Framework;
+using Monogame::Microsoft.Xna.Framework.Graphics;
 using Monogame::Microsoft.Xna.Framework.Input;
 
 using Color = Monogame::Microsoft.Xna.Framework.Color;
 using GameTime = Monogame::Microsoft.Xna.Framework.GameTime;
-using BlendState = Monogame::Microsoft.Xna.Framework.Graphics.BlendState;
-using GraphicsDevice = Monogame::Microsoft.Xna.Framework.Graphics.GraphicsDevice;
-using SpriteBatch = Monogame::Microsoft.Xna.Framework.Graphics.SpriteBatch;
-using SpriteSortMode = Monogame::Microsoft.Xna.Framework.Graphics.SpriteSortMode;
-using Texture2D = Monogame::Microsoft.Xna.Framework.Graphics.Texture2D;
 using Rectangle = Monogame::Microsoft.Xna.Framework.Rectangle;
 
 namespace Infiniminer.States

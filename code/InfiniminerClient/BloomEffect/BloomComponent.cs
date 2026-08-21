@@ -12,23 +12,12 @@ extern alias Monogame;
 #region Using Statements
 using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 
 #region Monogame references
+using Monogame::Microsoft.Xna.Framework.Content;
+using Monogame::Microsoft.Xna.Framework.Graphics;
 using Color = Monogame::Microsoft.Xna.Framework.Color;
 using ContentManager = Monogame::Microsoft.Xna.Framework.Content.ContentManager;
-using BlendState = Monogame::Microsoft.Xna.Framework.Graphics.BlendState;
-using Effect = Monogame::Microsoft.Xna.Framework.Graphics.Effect;
-using EffectParameter = Monogame::Microsoft.Xna.Framework.Graphics.EffectParameter;
-using EffectParameterCollection = Monogame::Microsoft.Xna.Framework.Graphics.EffectParameterCollection;
-using GraphicsDevice = Monogame::Microsoft.Xna.Framework.Graphics.GraphicsDevice;
-using PresentationParameters = Monogame::Microsoft.Xna.Framework.Graphics.PresentationParameters;
-using RenderTarget2D = Monogame::Microsoft.Xna.Framework.Graphics.RenderTarget2D;
-using SpriteBatch = Monogame::Microsoft.Xna.Framework.Graphics.SpriteBatch;
-using SurfaceFormat = Monogame::Microsoft.Xna.Framework.Graphics.SurfaceFormat;
-using SpriteSortMode = Monogame::Microsoft.Xna.Framework.Graphics.SpriteSortMode;
-using Texture2D = Monogame::Microsoft.Xna.Framework.Graphics.Texture2D;
-using Viewport = Monogame::Microsoft.Xna.Framework.Graphics.Viewport;
 using Rectangle = Monogame::Microsoft.Xna.Framework.Rectangle;
 using Vector2 = Monogame::Microsoft.Xna.Framework.Vector2;
 #endregion

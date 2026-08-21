@@ -4,8 +4,7 @@ using System;
 
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
-
-using Texture2D = Monogame::Microsoft.Xna.Framework.Graphics.Texture2D;
+using Monogame::Microsoft.Xna.Framework.Graphics;
 
 namespace Infiniminer
 {

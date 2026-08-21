@@ -3,17 +3,11 @@ extern alias Monogame;
 using System;
 
 using Microsoft.Xna.Framework;
+using Monogame::Microsoft.Xna.Framework.Graphics;
 using Monogame::Microsoft.Xna.Framework.Input;
 using Infiniminer;
 
 using Color = Monogame::Microsoft.Xna.Framework.Color;
-using BlendState = Monogame::Microsoft.Xna.Framework.Graphics.BlendState;
-using GraphicsDevice = Monogame::Microsoft.Xna.Framework.Graphics.GraphicsDevice;
-using SpriteBatch = Monogame::Microsoft.Xna.Framework.Graphics.SpriteBatch;
-using SpriteFont = Monogame::Microsoft.Xna.Framework.Graphics.SpriteFont;
-using SpriteSortMode = Monogame::Microsoft.Xna.Framework.Graphics.SpriteSortMode;
-using SurfaceFormat = Monogame::Microsoft.Xna.Framework.Graphics.SurfaceFormat;
-using Texture2D = Monogame::Microsoft.Xna.Framework.Graphics.Texture2D;
 using Rectangle = Monogame::Microsoft.Xna.Framework.Rectangle;
 using Vector2 = Monogame::Microsoft.Xna.Framework.Vector2;
 

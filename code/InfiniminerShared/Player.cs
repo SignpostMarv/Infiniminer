@@ -4,10 +4,10 @@ using System;
 using System.Collections.Generic;
 using Lidgren.Network;
 using Microsoft.Xna.Framework;
+using Monogame::Microsoft.Xna.Framework.Graphics;
 
 using Color = Monogame::Microsoft.Xna.Framework.Color;
 using Game = Monogame::Microsoft.Xna.Framework.Game;
-using Texture2D = Monogame::Microsoft.Xna.Framework.Graphics.Texture2D;
 using Vector3 = Monogame::Microsoft.Xna.Framework.Vector3;
 
 namespace Infiniminer

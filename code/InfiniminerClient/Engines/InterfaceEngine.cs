@@ -4,18 +4,11 @@ using System;
 using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
+using Monogame::Microsoft.Xna.Framework.Graphics;
 using Monogame::Microsoft.Xna.Framework.Input;
 
 using Color = Monogame::Microsoft.Xna.Framework.Color;
 using GameTime = Monogame::Microsoft.Xna.Framework.GameTime;
-using BlendState = Monogame::Microsoft.Xna.Framework.Graphics.BlendState;
-using GraphicsDevice = Monogame::Microsoft.Xna.Framework.Graphics.GraphicsDevice;
-using SamplerState = Monogame::Microsoft.Xna.Framework.Graphics.SamplerState;
-using SpriteFont = Monogame::Microsoft.Xna.Framework.Graphics.SpriteFont;
-using SpriteBatch = Monogame::Microsoft.Xna.Framework.Graphics.SpriteBatch;
-using SpriteSortMode = Monogame::Microsoft.Xna.Framework.Graphics.SpriteSortMode;
-using Texture2D = Monogame::Microsoft.Xna.Framework.Graphics.Texture2D;
-using TextureFilter = Monogame::Microsoft.Xna.Framework.Graphics.TextureFilter;
 using Matrix = Monogame::Microsoft.Xna.Framework.Matrix;
 using Rectangle = Monogame::Microsoft.Xna.Framework.Rectangle;
 using Vector2 = Monogame::Microsoft.Xna.Framework.Vector2;

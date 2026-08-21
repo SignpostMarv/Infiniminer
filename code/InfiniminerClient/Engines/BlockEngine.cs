@@ -3,27 +3,13 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Monogame::Microsoft.Xna.Framework.Graphics;
 
 using BoundingSphere = Monogame::Microsoft.Xna.Framework.BoundingSphere;
 using BoundingFrustum = Monogame::Microsoft.Xna.Framework.BoundingFrustum;
 using Color = Monogame::Microsoft.Xna.Framework.Color;
 using ContainmentType = Monogame::Microsoft.Xna.Framework.ContainmentType;
 using GameTime = Monogame::Microsoft.Xna.Framework.GameTime;
-using BlendState = Monogame::Microsoft.Xna.Framework.Graphics.BlendState;
-using BufferUsage = Monogame::Microsoft.Xna.Framework.Graphics.BufferUsage;
-using DepthStencilState = Monogame::Microsoft.Xna.Framework.Graphics.DepthStencilState;
-using DynamicVertexBuffer = Monogame::Microsoft.Xna.Framework.Graphics.DynamicVertexBuffer;
-using Effect = Monogame::Microsoft.Xna.Framework.Graphics.Effect;
-using EffectPass = Monogame::Microsoft.Xna.Framework.Graphics.EffectPass;
-using GraphicsDevice = Monogame::Microsoft.Xna.Framework.Graphics.GraphicsDevice;
-using PrimitiveType = Monogame::Microsoft.Xna.Framework.Graphics.PrimitiveType;
-using RasterizerState = Monogame::Microsoft.Xna.Framework.Graphics.RasterizerState;
-using SamplerState = Monogame::Microsoft.Xna.Framework.Graphics.SamplerState;
-using Texture2D = Monogame::Microsoft.Xna.Framework.Graphics.Texture2D;
-using VertexDeclaration = Monogame::Microsoft.Xna.Framework.Graphics.VertexDeclaration;
-using VertexElement = Monogame::Microsoft.Xna.Framework.Graphics.VertexElement;
-using VertexElementFormat = Monogame::Microsoft.Xna.Framework.Graphics.VertexElementFormat;
-using VertexElementUsage = Monogame::Microsoft.Xna.Framework.Graphics.VertexElementUsage;
 using Matrix = Monogame::Microsoft.Xna.Framework.Matrix;
 using Vector2 = Monogame::Microsoft.Xna.Framework.Vector2;
 using Vector3 = Monogame::Microsoft.Xna.Framework.Vector3;

@@ -1,11 +1,10 @@
 extern alias Monogame;
 
 using Microsoft.Xna.Framework;
+using Monogame::Microsoft.Xna.Framework.Graphics;
 using Monogame::Microsoft.Xna.Framework.Input;
 using Infiniminer;
 
-using GraphicsDevice = Monogame::Microsoft.Xna.Framework.Graphics.GraphicsDevice;
-using SpriteFont = Monogame::Microsoft.Xna.Framework.Graphics.SpriteFont;
 using Rectangle = Monogame::Microsoft.Xna.Framework.Rectangle;
 
 namespace InterfaceItems

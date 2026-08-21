@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 using System.Reflection;
 using Infiniminer;
 using Microsoft.Xna.Framework;
+using Monogame::Microsoft.Xna.Framework.Graphics;
 using Monogame::Microsoft.Xna.Framework.Input;
 
 using Color = Monogame::Microsoft.Xna.Framework.Color;
 using Game = Monogame::Microsoft.Xna.Framework.Game;
 using GameTime = Monogame::Microsoft.Xna.Framework.GameTime;
-using GraphicsDevice = Monogame::Microsoft.Xna.Framework.Graphics.GraphicsDevice;
 using GraphicsDeviceManager = Monogame::Microsoft.Xna.Framework.GraphicsDeviceManager;
 
 namespace StateMasher

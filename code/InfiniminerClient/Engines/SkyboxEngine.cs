@@ -2,20 +2,11 @@ extern alias Monogame;
 
 using System;
 using Microsoft.Xna.Framework;
+using Monogame::Microsoft.Xna.Framework.Graphics;
 
 using Color = Monogame::Microsoft.Xna.Framework.Color;
 using GameTime = Monogame::Microsoft.Xna.Framework.GameTime;
 using GameWindow = Monogame::Microsoft.Xna.Framework.GameWindow;
-using DepthStencilState = Monogame::Microsoft.Xna.Framework.Graphics.DepthStencilState;
-using Effect = Monogame::Microsoft.Xna.Framework.Graphics.Effect;
-using EffectPass = Monogame::Microsoft.Xna.Framework.Graphics.EffectPass;
-using GraphicsDevice = Monogame::Microsoft.Xna.Framework.Graphics.GraphicsDevice;
-using PrimitiveType = Monogame::Microsoft.Xna.Framework.Graphics.PrimitiveType;
-using RasterizerState = Monogame::Microsoft.Xna.Framework.Graphics.RasterizerState;
-using SamplerState = Monogame::Microsoft.Xna.Framework.Graphics.SamplerState;
-using Texture2D = Monogame::Microsoft.Xna.Framework.Graphics.Texture2D;
-using VertexDeclaration = Monogame::Microsoft.Xna.Framework.Graphics.VertexDeclaration;
-using VertexPositionTexture = Monogame::Microsoft.Xna.Framework.Graphics.VertexPositionTexture;
 using Matrix = Monogame::Microsoft.Xna.Framework.Matrix;
 using Vector2 = Monogame::Microsoft.Xna.Framework.Vector2;
 using Vector3 = Monogame::Microsoft.Xna.Framework.Vector3;
