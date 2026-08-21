@@ -31,9 +31,18 @@ MSITOOLS = docker run --rm -it \
 		-u vscode \
 		msitools
 
+MGCB = docker run --rm -it \
+		-v /app/:/app/:ro \
+		-v /app/csharp/:/app/csharp/:rw \
+		-v /app/mgcb/:/app/mgcb/:rw \
+		-w /app/mgcb/ \
+		-u 1000:1000 \
+		mgcb
+
 devcontainer--postAttachCommand: \
 	docker-build \
 	build--msiextract \
+	build--mgcb \
 	echo "done setting up"
 
 docker--build: \
@@ -41,6 +50,7 @@ docker--build: \
 	archive-restore--build \
 	build--msiextract--build \
 	build--ikdasm \
+	build--mgcb--build \
 	echo "done building docker images"
 
 archive-restore--build:
@@ -89,6 +99,20 @@ build--ikdasm:
 		-u 1000:1000 \
 		node:26-alpine \
 			/app/ikdasm/parse-ikdasm.ts
+
+build--mgcb--build:
+	@docker build -t mgcb -f .devcontainer/mgcb.Dockerfile ./.devcontainer/.empty-directory-on-purpose
+
+build--mgcb:
+	@touch ./mgcb/.bash_history
+	@rm -f ./mgcb/config.files
+	@touch ./mgcb/config.files
+	@cd /app/csharp/code/InfiniminerClient/Content/ && \
+		find . -name "*.png" | while read png; \
+			do echo "/build:$$png" >> /app/mgcb/config.files; \
+			done;
+	@${MGCB} \
+		mgcb /@/config /@/config.files
 
 mono--build:
 	@docker build -t mono -f .devcontainer/mono.Dockerfile ./.devcontainer/.empty-directory-on-purpose
