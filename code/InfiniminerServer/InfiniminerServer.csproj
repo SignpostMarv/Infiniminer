@@ -12,6 +12,12 @@
     <AssemblyName>InfiniminerServer</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <Title>InfiniminerServer</Title>
+    <Product>InfiniminerServer</Product>
+    <Copyright>Copyright ©  2009</Copyright>
+    <ComVisible>false</ComVisible>
+    <Guid>f79b48a2-8222-4ea3-8d8a-50aeb2f7c316</Guid>
+    <Version>1.0.0.0</Version>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

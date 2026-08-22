@@ -30,6 +30,12 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <Title>Infiniminer</Title>
+    <Product>Infiniminer</Product>
+    <Copyright>Copyright ©  2009</Copyright>
+    <ComVisible>false</ComVisible>
+    <Guid>45edfcb1-4bed-4029-a7c4-b542bf7b27c6</Guid>
+    <Version>1.0.0.0</Version>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>

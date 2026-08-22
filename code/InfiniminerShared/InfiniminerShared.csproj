@@ -30,6 +30,12 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <Title>InfiniminerShared</Title>
+    <Product>InfiniminerShared</Product>
+    <Copyright>Copyright ©  2009</Copyright>
+    <ComVisible>false</ComVisible>
+    <Guid>c81d68f7-83e8-42a4-86f9-74ea54750f70</Guid>
+    <Version>1.0.0.0</Version>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
