@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using Lidgren.Network;
-using Lidgren.Network.Xna;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
