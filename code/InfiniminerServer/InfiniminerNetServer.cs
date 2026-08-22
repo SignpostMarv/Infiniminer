@@ -5,7 +5,6 @@ using System.IO;
 using System.Threading;
 using Lidgren.Network;
 using Lidgren.Network.Xna;
-using Microsoft.Xna.Framework;
 
 namespace Infiniminer
 {
