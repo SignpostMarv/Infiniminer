@@ -10,6 +10,7 @@
     <AssemblyName>InfiniminerShared</AssemblyName>
     <TargetFramework>net45</TargetFramework>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <RestorePackagesPath>..\..\vendor\</RestorePackagesPath>
     <XnaFrameworkVersion>v3.0</XnaFrameworkVersion>
     <XnaPlatform>Windows</XnaPlatform>
     <XnaCrossPlatformGroupID>ab66b5e0-6d1e-4c31-96b4-68198862338d</XnaCrossPlatformGroupID>
