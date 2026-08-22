@@ -68,10 +68,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Lidgren.Network.dll</HintPath>
     </Reference>
-    <Reference Include="MonoGame.Framework" Version="3.7.1.189">
+    <Reference Include="MonoGame.Framework">
       <Private>True</Private>
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>../../vendor/MonoGame.Framework.DesktopGL.3.7.1.189/lib/net45/MonoGame.Framework.dll</HintPath>
+      <HintPath>..\..\vendor\MonoGame.Framework.DesktopGL.3.7.1.189\lib\net45\MonoGame.Framework.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
