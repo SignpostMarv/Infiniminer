@@ -4,6 +4,7 @@
     <OutputType>Library</OutputType>
     <TargetFramework>net45</TargetFramework>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <RestorePackagesPath>..\..\vendor\</RestorePackagesPath>
     <RootNamespace>Lidgren.Network.MonoGame</RootNamespace>
     <AssemblyName>Lidgren.Network.MonoGame</AssemblyName>
     <FileAlignment>512</FileAlignment>
