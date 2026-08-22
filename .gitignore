@@ -3,11 +3,11 @@
 *.csproj.user
 *.cachefile
 bin/Content
-bin/*.exe
+bin/**/*.exe
 bin/**/*.dll
 bin/**/*.dll.config
 bin/**/*.pdb
-bin/*.xml
+bin/**/*.xml
 bin/*.lvl
 bin/**/*.dylib
 bin/**/*.so.*
