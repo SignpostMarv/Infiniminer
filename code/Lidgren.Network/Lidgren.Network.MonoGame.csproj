@@ -1,26 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Library</OutputType>
+    <TargetFramework>net45</TargetFramework>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <RootNamespace>Lidgren.Network.MonoGame</RootNamespace>
     <AssemblyName>Lidgren.Network.MonoGame</AssemblyName>
     <FileAlignment>512</FileAlignment>
+    <OutputPath>..\..\bin\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
     <Reference Include="Lidgren.Network, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Lidgren.Network.dll</HintPath>
     </Reference>
-    <Reference Include="MonoGame.Framework" Version="3.7.1.189">
+    <Reference Include="MonoGame.Framework">
       <Private>True</Private>
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>../../vendor/MonoGame.Framework.DesktopGL.3.7.1.189/lib/net45/MonoGame.Framework.dll</HintPath>
+      <HintPath>..\..\vendor\MonoGame.Framework.DesktopGL.3.7.1.189\lib\net45\MonoGame.Framework.dll</HintPath>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="MonoGame.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
