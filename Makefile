@@ -57,6 +57,8 @@ build--mgcb:
 			done;
 	@${MGCB} \
 		mgcb /@/config /@/config.files
+	@${MGCB} \
+		mgcb /@/config /@/config.files /OutputDir:/app/csharp/bin/net45/Content/
 
 build--clean:
 	@cd /app/csharp/ && rm -fr \
