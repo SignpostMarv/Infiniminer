@@ -4,11 +4,13 @@
 *.cachefile
 bin/Content
 bin/*.exe
-bin/*.dll
-bin/*.dll.config
-bin/*.pdb
+bin/**/*.dll
+bin/**/*.dll.config
+bin/**/*.pdb
 bin/*.xml
 bin/*.lvl
+bin/**/*.dylib
+bin/**/*.so.*
 code/*/bin
 code/*/obj
 # for some reason the above two ignores
