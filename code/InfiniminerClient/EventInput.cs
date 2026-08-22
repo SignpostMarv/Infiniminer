@@ -1,12 +1,8 @@
-﻿extern alias Monogame;
-
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
 
 using Microsoft.Xna.Framework;
-using Monogame::Microsoft.Xna.Framework.Input;
-
-using GameWindow = Monogame::Microsoft.Xna.Framework.GameWindow;
+using Microsoft.Xna.Framework.Input;
 
 namespace EventInput
 {

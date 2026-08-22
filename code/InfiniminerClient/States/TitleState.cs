@@ -1,13 +1,8 @@
-extern alias Monogame;
-
 using StateMasher;
-using Microsoft.Xna.Framework;
-using Monogame::Microsoft.Xna.Framework.Graphics;
-using Monogame::Microsoft.Xna.Framework.Input;
 
-using Color = Monogame::Microsoft.Xna.Framework.Color;
-using GameTime = Monogame::Microsoft.Xna.Framework.GameTime;
-using Rectangle = Monogame::Microsoft.Xna.Framework.Rectangle;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace Infiniminer.States
 {

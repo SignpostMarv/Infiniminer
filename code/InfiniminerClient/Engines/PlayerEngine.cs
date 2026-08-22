@@ -1,10 +1,5 @@
-extern alias Monogame;
-
 using Microsoft.Xna.Framework;
-using Monogame::Microsoft.Xna.Framework.Graphics;
-
-using GameTime = Monogame::Microsoft.Xna.Framework.GameTime;
-using Vector3 = Monogame::Microsoft.Xna.Framework.Vector3;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Infiniminer
 {

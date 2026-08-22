@@ -1,8 +1,6 @@
-﻿extern alias Monogame;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
-using Monogame::Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Input;
 
 namespace Infiniminer
 {

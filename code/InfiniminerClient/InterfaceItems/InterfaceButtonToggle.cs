@@ -1,13 +1,7 @@
-extern alias Monogame;
-
 using Microsoft.Xna.Framework;
-using Monogame::Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Graphics;
+
 using Infiniminer;
-using Color = Monogame::Microsoft.Xna.Framework.Color;
-/*
-using Rectangle = Monogame::Microsoft.Xna.Framework.Rectangle;
-*/
-using Vector2 = Monogame::Microsoft.Xna.Framework.Vector2;
 
 namespace InterfaceItems
 {

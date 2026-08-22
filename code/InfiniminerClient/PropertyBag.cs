@@ -1,17 +1,10 @@
-﻿extern alias Monogame;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Monogame::Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Audio;
 using Lidgren.Network;
-using Lidgren.Network.Xna;
+using Lidgren.Network.MonoGame;
 using System.IO;
-
-using Color = Monogame::Microsoft.Xna.Framework.Color;
-using GameTime = Monogame::Microsoft.Xna.Framework.GameTime;
-using Matrix = Monogame::Microsoft.Xna.Framework.Matrix;
-using Vector3 = Monogame::Microsoft.Xna.Framework.Vector3;
 
 namespace Infiniminer
 {
@@ -269,7 +262,7 @@ namespace Infiniminer
             NetBuffer msgBuffer = netClient.CreateBuffer();
             msgBuffer.Write((byte)InfiniminerMessage.PlaySound);
             msgBuffer.Write((byte)sound);
-            XnaAlongsideMonoGame.Vector3ToMessageBuffer(msgBuffer, position);
+            msgBuffer.Write(position);
             netClient.SendMessage(msgBuffer, NetChannel.ReliableUnordered);
         }
 
@@ -533,8 +526,8 @@ namespace Infiniminer
 
             NetBuffer msgBuffer = netClient.CreateBuffer();
             msgBuffer.Write((byte)InfiniminerMessage.UseTool);
-            XnaAlongsideMonoGame.Vector3ToMessageBuffer(msgBuffer, playerPosition);
-            XnaAlongsideMonoGame.Vector3ToMessageBuffer(msgBuffer, playerCamera.GetLookVector());
+            msgBuffer.Write(playerPosition);
+            msgBuffer.Write(playerCamera.GetLookVector());
             msgBuffer.Write((byte)PlayerTools.ProspectingRadar);
             msgBuffer.Write((byte)BlockType.None);
             netClient.SendMessage(msgBuffer, NetChannel.ReliableUnordered);
@@ -549,8 +542,8 @@ namespace Infiniminer
 
             NetBuffer msgBuffer = netClient.CreateBuffer();
             msgBuffer.Write((byte)InfiniminerMessage.UseTool);
-            XnaAlongsideMonoGame.Vector3ToMessageBuffer(msgBuffer, playerPosition);
-            XnaAlongsideMonoGame.Vector3ToMessageBuffer(msgBuffer, playerCamera.GetLookVector());
+            msgBuffer.Write(playerPosition);
+            msgBuffer.Write(playerCamera.GetLookVector());
             msgBuffer.Write((byte)PlayerTools.Pickaxe);
             msgBuffer.Write((byte)BlockType.None);
             netClient.SendMessage(msgBuffer, NetChannel.ReliableUnordered);
@@ -572,8 +565,8 @@ namespace Infiniminer
             // Send the message.
             NetBuffer msgBuffer = netClient.CreateBuffer();
             msgBuffer.Write((byte)InfiniminerMessage.UseTool);
-            XnaAlongsideMonoGame.Vector3ToMessageBuffer(msgBuffer, playerPosition);
-            XnaAlongsideMonoGame.Vector3ToMessageBuffer(msgBuffer, playerCamera.GetLookVector());
+            msgBuffer.Write(playerPosition);
+            msgBuffer.Write(playerCamera.GetLookVector());
             msgBuffer.Write((byte)PlayerTools.ConstructionGun);
             BlockType nb = blockType;
             if (alternate)
@@ -608,8 +601,8 @@ namespace Infiniminer
             // Send the message.
             NetBuffer msgBuffer = netClient.CreateBuffer();
             msgBuffer.Write((byte)InfiniminerMessage.UseTool);
-            XnaAlongsideMonoGame.Vector3ToMessageBuffer(msgBuffer, playerPosition);
-            XnaAlongsideMonoGame.Vector3ToMessageBuffer(msgBuffer, playerCamera.GetLookVector());
+            msgBuffer.Write(playerPosition);
+            msgBuffer.Write(playerCamera.GetLookVector());
             msgBuffer.Write((byte)PlayerTools.DeconstructionGun);
             msgBuffer.Write((byte)BlockType.None);
             netClient.SendMessage(msgBuffer, NetChannel.ReliableUnordered);
@@ -625,8 +618,8 @@ namespace Infiniminer
             // Send the message.
             NetBuffer msgBuffer = netClient.CreateBuffer();
             msgBuffer.Write((byte)InfiniminerMessage.UseTool);
-            XnaAlongsideMonoGame.Vector3ToMessageBuffer(msgBuffer, playerPosition);
-            XnaAlongsideMonoGame.Vector3ToMessageBuffer(msgBuffer, playerCamera.GetLookVector());
+            msgBuffer.Write(playerPosition);
+            msgBuffer.Write(playerCamera.GetLookVector());
             msgBuffer.Write((byte)PlayerTools.Detonator);
             msgBuffer.Write((byte)BlockType.None);
             netClient.SendMessage(msgBuffer, NetChannel.ReliableUnordered);
@@ -706,8 +699,8 @@ namespace Infiniminer
 
             NetBuffer msgBuffer = netClient.CreateBuffer();
             msgBuffer.Write((byte)InfiniminerMessage.PlayerUpdate);
-            XnaAlongsideMonoGame.Vector3ToMessageBuffer(msgBuffer, playerPosition);
-            XnaAlongsideMonoGame.Vector3ToMessageBuffer(msgBuffer, playerCamera.GetLookVector());
+            msgBuffer.Write(playerPosition);
+            msgBuffer.Write(playerCamera.GetLookVector());
             msgBuffer.Write((byte)playerTools[playerToolSelected]);
             msgBuffer.Write(playerToolCooldown > 0.001f);
             netClient.SendMessage(msgBuffer, NetChannel.UnreliableInOrder1);

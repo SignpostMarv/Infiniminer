@@ -1,5 +1,3 @@
-extern alias Monogame;
-
 #region File Description
 //-----------------------------------------------------------------------------
 // BloomComponent.cs
@@ -11,15 +9,10 @@ extern alias Monogame;
 
 #region Using Statements
 using System;
-using Microsoft.Xna.Framework;
 
-#region Monogame references
-using Monogame::Microsoft.Xna.Framework.Graphics;
-using Color = Monogame::Microsoft.Xna.Framework.Color;
-using ContentManager = Monogame::Microsoft.Xna.Framework.Content.ContentManager;
-using Rectangle = Monogame::Microsoft.Xna.Framework.Rectangle;
-using Vector2 = Monogame::Microsoft.Xna.Framework.Vector2;
-#endregion
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
 #endregion
 

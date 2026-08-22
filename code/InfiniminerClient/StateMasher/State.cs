@@ -1,12 +1,9 @@
-extern alias Monogame;
-
 
 using Microsoft.Xna.Framework;
-using Monogame::Microsoft.Xna.Framework.Graphics;
-using Monogame::Microsoft.Xna.Framework.Input;
-using Infiniminer;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
-using GameTime = Monogame::Microsoft.Xna.Framework.GameTime;
+using Infiniminer;
 
 namespace StateMasher
 {

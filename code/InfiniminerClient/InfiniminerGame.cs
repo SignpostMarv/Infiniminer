@@ -1,20 +1,14 @@
-extern alias Monogame;
-
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.IO;
 using System.Threading;
 using Microsoft.Xna.Framework;
-using Monogame::Microsoft.Xna.Framework.Graphics;
-using Monogame::Microsoft.Xna.Framework.Media;
-using Lidgren.Network;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 
-using Color = Monogame::Microsoft.Xna.Framework.Color;
-using Game = Monogame::Microsoft.Xna.Framework.Game;
-using GameTime = Monogame::Microsoft.Xna.Framework.GameTime;
-using DepthFormat = Monogame::Microsoft.Xna.Framework.Graphics.DepthFormat;
-using Vector3 = Monogame::Microsoft.Xna.Framework.Vector3;
+using Lidgren.Network;
+using Lidgren.Network.MonoGame;
 
 namespace Infiniminer
 {
@@ -244,7 +238,7 @@ namespace Infiniminer
 
                                     case InfiniminerMessage.SetBeacon:
                                         {
-                                            Vector3 position = XnaAlongsideMonoGame.Vector3FromMessageBuffer(msgBuffer);
+                                            Vector3 position = msgBuffer.ReadVector3();
                                             string text = msgBuffer.ReadString();
                                             PlayerTeam team = (PlayerTeam)msgBuffer.ReadByte();
 
@@ -309,7 +303,7 @@ namespace Infiniminer
 
                                     case InfiniminerMessage.TriggerExplosion:
                                         {
-                                            Vector3 blockPos = XnaAlongsideMonoGame.Vector3FromMessageBuffer(msgBuffer);
+                                            Vector3 blockPos = msgBuffer.ReadVector3();
 
                                             // Play the explosion sound.
                                             propertyBag.PlaySound(InfiniminerSound.Explosion, blockPos);
@@ -403,8 +397,8 @@ namespace Infiniminer
                                             if (propertyBag.playerList.ContainsKey(playerId))
                                             {
                                                 Player player = propertyBag.playerList[playerId];
-                                                player.UpdatePosition(XnaAlongsideMonoGame.Vector3FromMessageBuffer(msgBuffer), gameTime.TotalGameTime.TotalSeconds);
-                                                player.Heading = XnaAlongsideMonoGame.Vector3FromMessageBuffer(msgBuffer);
+                                                player.UpdatePosition(msgBuffer.ReadVector3(), gameTime.TotalGameTime.TotalSeconds);
+                                                player.Heading = msgBuffer.ReadVector3();
                                                 player.Tool = (PlayerTools)msgBuffer.ReadByte();
                                                 player.UsingTool = msgBuffer.ReadBoolean();
                                                 player.Score = (uint)(msgBuffer.ReadUInt16() * 100);
@@ -449,7 +443,7 @@ namespace Infiniminer
                                             {
                                                 propertyBag.PlaySound(
                                                     sound,
-                                                    XnaAlongsideMonoGame.Vector3FromMessageBuffer(msgBuffer)
+                                                    msgBuffer.ReadVector3()
                                                 );
                                             }
                                             else

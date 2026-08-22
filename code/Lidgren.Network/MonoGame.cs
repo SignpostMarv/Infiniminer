@@ -1,16 +1,12 @@
-extern alias Monogame;
-
 using Lidgren.Network;
 
-using Vector3 = Monogame::Microsoft.Xna.Framework.Vector3;
+using Microsoft.Xna.Framework;
 
-namespace Infiniminer
+namespace Lidgren.Network.MonoGame
 {
-    public class XnaAlongsideMonoGame
+    public static class MonoGameExtensions
     {
-        public static Vector3 Vector3FromMessageBuffer(
-            NetBuffer msgBuffer
-        )
+        public static Vector3 ReadVector3(this NetBuffer msgBuffer)
         {
             return new Vector3(
                 msgBuffer.ReadFloat(),
@@ -19,10 +15,7 @@ namespace Infiniminer
             );
         }
 
-        public static void Vector3ToMessageBuffer(
-            NetBuffer msgBuffer,
-            Vector3 vector
-        )
+        public static void Write(this NetBuffer msgBuffer, Vector3 vector)
         {
             msgBuffer.Write(vector.X);
             msgBuffer.Write(vector.Y);

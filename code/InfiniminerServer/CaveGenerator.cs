@@ -1,10 +1,9 @@
-extern alias Monogame;
-
 using System;
 
 using System.Diagnostics;
+
 using Microsoft.Xna.Framework;
-using Monogame::Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Infiniminer
 {

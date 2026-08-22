@@ -1,14 +1,11 @@
-extern alias Monogame;
-
 using System;
 using StateMasher;
-using Microsoft.Xna.Framework;
-using Monogame::Microsoft.Xna.Framework.Graphics;
-using Monogame::Microsoft.Xna.Framework.Input;
-using Lidgren.Network;
 
-using GameTime = Monogame::Microsoft.Xna.Framework.GameTime;
-using Vector3 = Monogame::Microsoft.Xna.Framework.Vector3;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+
+using Lidgren.Network;
 
 namespace Infiniminer.States
 {

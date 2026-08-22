@@ -68,25 +68,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Lidgren.Network.dll</HintPath>
     </Reference>
-    <Reference Include="Lidgren.Network.Xna, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Lidgren.Network.Xna.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <SpecificVersion>True</SpecificVersion>
-      <HintPath>..\..\vendor\xna\Microsoft.Xna.Framework.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <SpecificVersion>True</SpecificVersion>
-      <HintPath>..\..\vendor\xna\Microsoft.Xna.Framework.Game.dll</HintPath>
-    </Reference>
     <Reference Include="MonoGame.Framework" Version="3.7.1.189">
       <Private>True</Private>
       <SpecificVersion>False</SpecificVersion>
       <HintPath>../../vendor/MonoGame.Framework.DesktopGL.3.7.1.189/lib/net45/MonoGame.Framework.dll</HintPath>
-      <Aliases>Monogame</Aliases>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -127,11 +112,6 @@
     <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
       <Visible>False</Visible>
       <ProductName>Windows Installer 3.1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Xna.Framework.3.0">
-      <Visible>False</Visible>
-      <ProductName>Microsoft XNA Framework Redistributable 3.0</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
