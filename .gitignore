@@ -1,10 +1,5 @@
 /.devcontainer/.env
 /.devcontainer/.ash_history
-/.devcontainer/*.bash_history
 /dotnet/
-/msitools/
 /bin/
-/node_modules/
-/ikdasm/node_modules/
-/ikdasm/**/*.txt
 /mgcb/
