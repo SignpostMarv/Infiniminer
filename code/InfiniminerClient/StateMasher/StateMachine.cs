@@ -4,7 +4,6 @@ using System.Runtime.InteropServices;
 using System.Reflection;
 using Infiniminer;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
