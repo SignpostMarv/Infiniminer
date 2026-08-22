@@ -6,7 +6,6 @@ using System.Diagnostics;
 using StateMasher;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
 
 namespace Infiniminer
 {
