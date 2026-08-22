@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-using System.Text;
-using System.Diagnostics;
 using StateMasher;
 using InterfaceItems;
 using Microsoft.Xna.Framework;

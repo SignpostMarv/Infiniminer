@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Net;
-using System.Diagnostics;
 using StateMasher;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

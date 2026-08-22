@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-using System.Text;
-
-namespace Infiniminer
+﻿namespace Infiniminer
 {
     public enum BlockType : byte
     {
