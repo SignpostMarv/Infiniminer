@@ -1,26 +1,12 @@
 # Infiniminer
 
-## Restoring the Infiniminer source code
-
-Refer to [archive-restore/README.md](archive-restore/README.md)
-for in-depth instructions.
-
-This project uses devcontainers with docker-in-docker to run a custom image
-in order to properly convert the archived svn repo toa pair of git
-repositories.
-
-To restore the source code archive to a pair of git repositories,
-refer to [the setup notes](archive-restore/README.md#setup)
-then run `make svn2git`.
-
-### `/archive/infiniminer/git/`
-
-This will contain the trunk and development branches of the svn repository.
-
-### `/archive/infiniminer/wiki-git/`
-
-This will contain the markdownified wiki files.
-
 ## Building Infiniminer
 
-Not yet documented.
+> [!IMPORTANT]
+> This project currently builds but does not run due to an in-progress
+> XNA to Monogame conversion.
+
+1. Clone the repo
+2. Get a devcontainer-enabled IDE such as vscode
+3. Open the repo in the IDE
+4. run `make build`
