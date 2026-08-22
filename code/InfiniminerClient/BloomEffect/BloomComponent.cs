@@ -14,7 +14,6 @@ using System;
 using Microsoft.Xna.Framework;
 
 #region Monogame references
-using Monogame::Microsoft.Xna.Framework.Content;
 using Monogame::Microsoft.Xna.Framework.Graphics;
 using Color = Monogame::Microsoft.Xna.Framework.Color;
 using ContentManager = Monogame::Microsoft.Xna.Framework.Content.ContentManager;
