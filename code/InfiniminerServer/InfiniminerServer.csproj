@@ -9,7 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>InfiniminerServer</RootNamespace>
     <AssemblyName>InfiniminerServer</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFramework>net45</TargetFramework>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <UseWindowsForms>true</UseWindowsForms>
     <FileAlignment>512</FileAlignment>
     <Title>InfiniminerServer</Title>
     <Product>InfiniminerServer</Product>
@@ -58,10 +60,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\InfiniminerShared\InfiniminerShared.csproj">
-      <Project>{CC122120-E018-43DA-B92D-EC368AA0CFF5}</Project>
-      <Name>InfiniminerShared</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\InfiniminerShared\InfiniminerShared.csproj" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

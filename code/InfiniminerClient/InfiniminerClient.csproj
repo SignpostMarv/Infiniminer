@@ -8,7 +8,8 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Infiniminer</RootNamespace>
     <AssemblyName>Infiniminer</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFramework>net45</TargetFramework>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <XnaFrameworkVersion>v3.0</XnaFrameworkVersion>
     <XnaPlatform>Windows</XnaPlatform>
     <XnaCrossPlatformGroupID>4bc950fa-53af-4657-abe1-2a90a69c6960</XnaCrossPlatformGroupID>
@@ -120,10 +121,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\InfiniminerShared\InfiniminerShared.csproj">
-      <Project>{CC122120-E018-43DA-B92D-EC368AA0CFF5}</Project>
-      <Name>InfiniminerShared</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\InfiniminerShared\InfiniminerShared.csproj" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

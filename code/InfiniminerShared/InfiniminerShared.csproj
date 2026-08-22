@@ -8,7 +8,8 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>InfiniminerShared</RootNamespace>
     <AssemblyName>InfiniminerShared</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFramework>net45</TargetFramework>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <XnaFrameworkVersion>v3.0</XnaFrameworkVersion>
     <XnaPlatform>Windows</XnaPlatform>
     <XnaCrossPlatformGroupID>ab66b5e0-6d1e-4c31-96b4-68198862338d</XnaCrossPlatformGroupID>
