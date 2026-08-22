@@ -6,7 +6,6 @@ using System.Diagnostics;
 using StateMasher;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Design;
 using Infiniminer;
 
 namespace InterfaceItems
