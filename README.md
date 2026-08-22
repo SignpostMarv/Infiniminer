@@ -1,12 +1,12 @@
 # Infiniminer
 
 > [!IMPORTANT]
-> This readme is currently out-of-date and has not been updated for
+> This readme is currently out-of-date and is still being updated for
 > contemporary development.
 
 ## Building
 
-Building Infiniminer requires Visual Studio 2008 and XNA Game Studio 3.0.
+Building Infiniminer requires Visual Studio 2026 or a [devcontainer-supporting IDE](https://github.com/SignpostMarv/Infiniminer/tree/main).
 
 You'll also need the fonts 04b03b and 04b08 from the following site:
 
