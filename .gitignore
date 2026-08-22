@@ -19,3 +19,6 @@ code/System.*/
 vendor/
 *.xnb
 *.exe.config
+/code/.vs/
+/code/Backup/
+/code/UpgradeLog.htm
