@@ -71,7 +71,7 @@ namespace StateMasher
 
         public bool WindowHasFocus()
         {
-            return GetForegroundWindow() == (int)Window.Handle;
+            return this.IsActive;
         }
 
         protected override void Initialize()
