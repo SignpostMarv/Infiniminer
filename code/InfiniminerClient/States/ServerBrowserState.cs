@@ -151,7 +151,7 @@ namespace Infiniminer.States
                 {
                     try
                     {
-                        directConnectIP += System.Windows.Forms.Clipboard.GetText();
+                        directConnectIP += TextCopy.ClipboardService.GetText();
                     }
                     catch { }
                 }

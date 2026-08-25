@@ -488,17 +488,17 @@ namespace Infiniminer.States
                 {
                     if (key == Keys.V)
                     {
-                        _P.chatEntryBuffer += System.Windows.Forms.Clipboard.GetText();
+                        _P.chatEntryBuffer += TextCopy.ClipboardService.GetText();
                         return;
                     }
                     else if (key == Keys.C)
                     {
-                        System.Windows.Forms.Clipboard.SetText(_P.chatEntryBuffer);
+                        TextCopy.ClipboardService.SetText(_P.chatEntryBuffer);
                         return;
                     }
                     else if (key == Keys.X)
                     {
-                        System.Windows.Forms.Clipboard.SetText(_P.chatEntryBuffer);
+                        TextCopy.ClipboardService.SetText(_P.chatEntryBuffer);
                         _P.chatEntryBuffer = "";
                         return;
                     }

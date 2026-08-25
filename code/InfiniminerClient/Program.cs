@@ -1,4 +1,7 @@
 using System;
+using System.IO;
+
+using Aprillz.MewUI;
 
 namespace Infiniminer
 {
@@ -18,7 +21,12 @@ namespace Infiniminer
                 }
                 catch (Exception e)
                 {
-                    System.Windows.Forms.MessageBox.Show(e.Message + "\r\n\r\n" + e.StackTrace);
+                    string log = e.Message + "\r\n\r\n" + e.StackTrace;
+
+                    File.WriteAllText(
+                        "InfiniminerClient.crash.log",
+                        log
+                    );
                 }
             }
         }

@@ -11,6 +11,8 @@ bin/**/*.xml
 bin/*.lvl
 bin/**/*.dylib
 bin/**/*.so.*
+bin/*.runtimeconfig.json
+bin/runtimes/*
 code/*/bin
 code/*/obj
 # for some reason the above two ignores

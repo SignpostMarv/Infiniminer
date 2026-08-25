@@ -10,6 +10,8 @@ using Microsoft.Xna.Framework.Media;
 using Lidgren.Network;
 using Lidgren.Network.MonoGame;
 
+using MessageBox = Aprillz.MewUI.MessageBox;
+
 namespace Infiniminer
 {
     public class InfiniminerGame : StateMasher.StateMachine
@@ -151,10 +153,21 @@ namespace Infiniminer
                             try
                             {
                                 string[] reason = msgBuffer.ReadString().Split(";".ToCharArray());
+
+                                string log;
+
                                 if (reason.Length < 2 || reason[0] == "VER")
-                                    System.Windows.Forms.MessageBox.Show("Error: client/server version incompability!\r\nServer: " + msgBuffer.ReadString() + "\r\nClient: " + Defines.INFINIMINER_VERSION);
+                                {
+                                    log = "Error: client/server version incompability!\r\nServer: " + msgBuffer.ReadString() + "\r\nClient: " + Defines.INFINIMINER_VERSION;
+                                }
                                 else
-                                    System.Windows.Forms.MessageBox.Show("Error: you are banned from this server!");
+                                {
+                                    log = "Error: you are banned from this server!";
+                                }
+
+                                MessageBox.Confirm(
+                                    log
+                                );
                             }
                             catch { }
                             ChangeState("Infiniminer.States.ServerBrowserState");
@@ -599,7 +612,7 @@ namespace Infiniminer
             base.Update(gameTime);
         }
 
-        protected override void OnExiting(object sender, EventArgs args)
+        protected override void OnExiting(object sender, ExitingEventArgs args)
         {
             propertyBag.netClient.Shutdown("Client exiting.");
 
