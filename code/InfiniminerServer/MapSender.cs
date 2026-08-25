@@ -8,6 +8,9 @@ namespace Infiniminer
     {
         NetConnection client;
         Thread conn;
+
+        CancellationTokenSource source;
+
         Infiniminer.InfiniminerServer infs;
         Infiniminer.InfiniminerNetServer infsN;
         int MAPSIZE = 64;
@@ -29,8 +32,12 @@ namespace Infiniminer
             MAPSIZE = nMAPSIZE;
             compression = compress;
             //finished = false;
-            conn = new Thread(new ThreadStart(this.start));
-            conn.Start();
+            source = new CancellationTokenSource();
+            conn = new Thread(new ParameterizedThreadStart((obj) =>
+            {
+                this.start();
+            }));
+            conn.Start(source.Token);
             DateTime started = DateTime.Now;
             TimeSpan diff = DateTime.Now - started;
             while (!conn.IsAlive&&diff.Milliseconds<250) //Hold execution until it starts
@@ -87,12 +94,12 @@ namespace Infiniminer
                             infsN.SendMessage(msgBuffer, client, NetChannel.ReliableUnordered);
                     }
                 }
-            conn.Abort();
+            source.Cancel();
         }
 
         public void stop()
         {
-            conn.Abort();
+            source.Cancel();
         }
     }
 }
