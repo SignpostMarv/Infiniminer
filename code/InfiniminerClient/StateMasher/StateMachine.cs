@@ -27,7 +27,7 @@ namespace StateMasher
             get { return currentStateType; }
         }
 
-        private State currentState = null;
+        protected State currentState = null;
         private bool needToRenderOnEnter = false;
 
         private int frameCount = 0;

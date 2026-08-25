@@ -5,6 +5,7 @@ using System.IO;
 using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
 using Lidgren.Network;
@@ -604,6 +605,21 @@ namespace Infiniminer
                 Console.WriteLine("Creating default keymap...");
             }
             graphicsDeviceManager.ApplyChanges();
+
+            Window.KeyDown += (s, e) =>
+            {
+                Keys pressed_key = e.Key;
+
+                currentState?.OnKeyDown(pressed_key);
+            };
+
+            Window.KeyUp += (s, e) =>
+            {
+                Keys pressed_key = e.Key;
+
+                currentState?.OnKeyUp(pressed_key);
+            };
+
             base.Initialize();
         }
 
