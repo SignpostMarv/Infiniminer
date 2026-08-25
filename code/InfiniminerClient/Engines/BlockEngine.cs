@@ -6,18 +6,24 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Infiniminer
 {
     [Serializable]
-    public struct VertexPositionTextureShade
+    public struct VertexPositionTextureShade: IVertexType
     {
         Vector3 pos;
         Vector2 tex;
         float shade;
 
-        public static readonly VertexElement[] VertexElements = new VertexElement[]
-        {
+        public static readonly VertexDeclaration VertexDeclaration = new VertexDeclaration(
             new VertexElement(0,VertexElementFormat.Vector3, VertexElementUsage.Position, 0),
             new VertexElement(sizeof(float)*3,VertexElementFormat.Vector2, VertexElementUsage.TextureCoordinate, 0),
             new VertexElement(sizeof(float)*5,VertexElementFormat.Single, VertexElementUsage.TextureCoordinate, 1)
-        };
+        );
+
+        public static readonly VertexElement[] VertexElements = VertexDeclaration.GetVertexElements();
+
+        VertexDeclaration IVertexType.VertexDeclaration
+        {
+            get { return VertexDeclaration; }
+        }
 
         public VertexPositionTextureShade(Vector3 position, Vector2 uv, double shade)
         {
