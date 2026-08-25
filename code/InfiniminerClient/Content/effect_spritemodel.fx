@@ -1,6 +1,6 @@
 struct VertexToPixel
 {
-    float4 Position   	: POSITION;    
+    float4 Position   	: POSITION;
     float2 TextureCoords: TEXCOORD0;
 };
 
@@ -29,21 +29,21 @@ sampler TextureSampler = sampler_state
 //------- Technique: Block --------
 
 VertexToPixel BlockVS( float4 inPos : POSITION, float2 inTexCoords: TEXCOORD0)
-{	
+{
 	VertexToPixel Output = (VertexToPixel)0;
 	float4x4 preViewProjection = mul (xView, xProjection);
 	float4x4 preWorldViewProjection = mul (xWorld, preViewProjection);
-    
-	Output.Position = mul(inPos, preWorldViewProjection);	
+
+	Output.Position = mul(inPos, preWorldViewProjection);
 	Output.TextureCoords = inTexCoords;
-	
-	return Output;    
+
+	return Output;
 }
 
-PixelToFrame BlockPS(VertexToPixel PSIn) 
+PixelToFrame BlockPS(VertexToPixel PSIn)
 {
-	PixelToFrame Output = (PixelToFrame)0;		
-	
+	PixelToFrame Output = (PixelToFrame)0;
+
 	Output.Color = tex2D(TextureSampler, PSIn.TextureCoords);
 
 	if(Output.Color.a < 0.5) discard;
@@ -54,7 +54,7 @@ PixelToFrame BlockPS(VertexToPixel PSIn)
 technique SpriteModel
 {
 	pass Pass0
-	{   
+	{
 		VertexShader = compile vs_2_0 BlockVS();
 		PixelShader  = compile ps_2_0 BlockPS();
 	}

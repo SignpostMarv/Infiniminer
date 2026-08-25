@@ -30,22 +30,22 @@ sampler NoiseSampler = sampler_state {
 //------- Technique: Textured --------
 
 VertexToPixel TexturedVS( float4 inPos : POSITION, float2 inTexCoords: TEXCOORD0)
-{	
+{
 	VertexToPixel Output = (VertexToPixel)0;
 	float4x4 preViewProjection = mul (xView, xProjection);
 	float4x4 preWorldViewProjection = mul (xWorld, preViewProjection);
-    
-	Output.Position = mul(inPos, preWorldViewProjection);	
+
+	Output.Position = mul(inPos, preWorldViewProjection);
 	Output.TextureCoords = inTexCoords;
-	    
-	return Output;    
+
+	return Output;
 }
 
-PixelToFrame TexturedPS(VertexToPixel PSIn) 
+PixelToFrame TexturedPS(VertexToPixel PSIn)
 {
 	PixelToFrame Output = (PixelToFrame)0;
-	
-	float2 direction = float2(0.5, 1.0);		
+
+	float2 direction = float2(0.5, 1.0);
 	float2 uv = PSIn.TextureCoords / 20;
 	float t = xTime / 8000;
 	float4 perlin = 0;
@@ -62,7 +62,7 @@ PixelToFrame TexturedPS(VertexToPixel PSIn)
 technique Skyplane
 {
 	pass Pass0
-	{   
+	{
 		VertexShader = compile vs_2_0 TexturedVS();
 		PixelShader  = compile ps_2_0 TexturedPS();
 	}

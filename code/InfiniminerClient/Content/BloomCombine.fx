@@ -28,15 +28,15 @@ float4 DoDoPixelShader(float2 texCoord : TEXCOORD0) : COLOR0
     // Look up the bloom and original base image colors.
     float4 bloom = tex2D(BloomSampler, texCoord);
     float4 base = tex2D(BaseSampler, texCoord);
-    
+
     // Adjust color saturation and intensity.
     bloom = AdjustSaturation(bloom, BloomSaturation) * BloomIntensity;
     base = AdjustSaturation(base, BaseSaturation) * BaseIntensity;
-    
+
     // Darken down the base image in areas where there is a lot of bloom,
     // to prevent things looking excessively burned-out.
     base *= (1 - saturate(bloom));
-    
+
     // Combine the two images.
     return base + bloom;
 }

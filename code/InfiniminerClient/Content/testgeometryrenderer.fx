@@ -17,25 +17,25 @@ struct ColoredPixel
 };
 
 ColoredPixel ColoredVS(float4 position : POSITION, float3 normal: NORMAL, float4 color: COLOR0)
-{    
+{
     ColoredPixel output = (ColoredPixel)0;
     float4x4 transform = mul(World, mul(View, Projection));
-    
-    output.Position = mul(position, transform);    
+
+    output.Position = mul(position, transform);
     output.Color = color;
-    
+
     normal = normalize(mul(normalize(normal), World));
     output.LightingFactor = 1;
     if (EnableLighting)
         output.LightingFactor = saturate(dot(normal, -LightDirection));
-    
-    return output;    
+
+    return output;
 }
 
 float4 ColoredPS(ColoredPixel pixel) : COLOR
 {
     float4 color = 0;
-    
+
     color = pixel.Color;
     color.rgb *= saturate(pixel.LightingFactor + Ambient);
 
