@@ -13,6 +13,13 @@ namespace Infiniminer
         {
             using (InfiniminerGame game = new InfiniminerGame(args))
             {
+                if (System.Diagnostics.Debugger.IsAttached)
+                {
+                    game.Run();
+
+                    return;
+                }
+
                 try
                 {
                     game.Run();
