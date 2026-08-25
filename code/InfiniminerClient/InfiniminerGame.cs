@@ -38,6 +38,8 @@ namespace Infiniminer
 
         public bool anyPacketsReceived = false;
 
+        private MouseState previous_mouse_state;
+
         public InfiniminerGame(string[] args)
         {
         }
@@ -625,6 +627,67 @@ namespace Infiniminer
 
         protected override void Update(GameTime gameTime)
         {
+            MouseState current_mouse_state = Mouse.GetState();
+
+            if (null != current_mouse_state)
+            {
+                MouseButton? button = null;
+                Action<MouseButton, int, int> action = null;
+
+                foreach (
+                    (
+                        MouseButton checking_button,
+                        ButtonState current_checking,
+                        ButtonState previous_checking
+                    ) in new[]
+                    {
+                        (
+                            MouseButton.LeftButton,
+                            current_mouse_state.LeftButton,
+                            previous_mouse_state.LeftButton
+                        ),
+                        (
+                            MouseButton.RightButton,
+                            current_mouse_state.RightButton,
+                            previous_mouse_state.RightButton
+                        ),
+                        (
+                            MouseButton.MiddleButton,
+                            current_mouse_state.MiddleButton,
+                            previous_mouse_state.MiddleButton
+                        )
+                    }
+                )
+                {
+                    if (
+                        current_checking == ButtonState.Pressed
+                        && previous_checking == ButtonState.Released
+                    )
+                    {
+                        button = checking_button;
+                        action = currentState.OnMouseDown;
+                    } else if (
+                        current_checking == ButtonState.Released
+                        && previous_checking == ButtonState.Pressed
+                    )
+                    {
+                        button = checking_button;
+                        action = currentState.OnMouseUp;
+                    }
+                }
+
+                if (null != button && null != action)
+                {
+                    action(
+                        (MouseButton)button,
+                        current_mouse_state.X,
+                        current_mouse_state.Y
+                    );
+                }
+            }
+
+            previous_mouse_state = current_mouse_state;
+
             base.Update(gameTime);
         }
 
