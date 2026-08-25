@@ -1,8 +1,6 @@
 using System;
 using System.IO;
 
-using Aprillz.MewUI;
-
 namespace Infiniminer
 {
     static class Program
