@@ -10,3 +10,5 @@
 2. Get a devcontainer-enabled IDE such as vscode
 3. Open the repo in the IDE
 4. run `make build`
+5. Refer to the [Content](./csharp/README.md#content) section regarding
+	the current dependency on Windows to compile shaders.

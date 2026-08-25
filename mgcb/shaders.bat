@@ -1,0 +1,1 @@
+mgcb /@:config /@:config.shaders
