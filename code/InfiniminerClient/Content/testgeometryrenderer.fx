@@ -46,7 +46,7 @@ technique Colored
 {
     pass Pass0
     {
-        VertexShader = compile vs_1_1 ColoredVS();
-        PixelShader = compile ps_1_1 ColoredPS();
+        VertexShader = compile vs_2_0 ColoredVS();
+        PixelShader = compile ps_2_0 ColoredPS();
     }
 }
