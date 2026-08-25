@@ -25,3 +25,4 @@ vendor/
 /code/Backup/
 /code/UpgradeLog.htm
 **/keymap.txt
+*.ttf
