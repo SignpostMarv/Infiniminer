@@ -102,7 +102,10 @@ namespace Infiniminer
             // Discover remote servers.
             try
             {
+                /*
                 string publicList = HttpRequest.Get("http://apps.keithholman.net/plain", null);
+                */
+                string publicList = "";
                 foreach (string s in publicList.Split("\r\n".ToCharArray()))
                 {
                     string[] args = s.Split(";".ToCharArray());
