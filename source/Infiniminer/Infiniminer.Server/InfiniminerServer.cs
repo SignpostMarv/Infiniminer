@@ -1460,7 +1460,7 @@ namespace Infiniminer
                                             SendResourceUpdate(player);
                                             SendPlayerDead(player);
 
-                                            string deathMessage = msgBuffer.ReadString();
+                                            deathMessage = msgBuffer.ReadString();
                                             if (deathMessage != "")
                                             {
                                                 msgBuffer = netServer.CreateBuffer();
