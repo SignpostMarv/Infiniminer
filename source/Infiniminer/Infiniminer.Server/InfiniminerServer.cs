@@ -1460,6 +1460,7 @@ namespace Infiniminer
                                             SendResourceUpdate(player);
                                             SendPlayerDead(player);
 
+                                            // @TODO check if this should be sanitised as well
                                             deathMessage = msgBuffer.ReadString();
                                             if (deathMessage != "")
                                             {
