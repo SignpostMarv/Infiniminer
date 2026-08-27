@@ -512,6 +512,8 @@ namespace Infiniminer
             using(ConfigurationFileReader reader = new ConfigurationFileReader(TitleContainer.OpenStream("client.config.txt")))
             {
                 ConfigurationItem? item = null;
+                Color temp;
+                string[] data;
 
                 while((item = reader.ReadLine()) is not null)
                 {
@@ -570,8 +572,8 @@ namespace Infiniminer
                             break;
 
                         case "red":
-                            Color temp = new Color();
-                            string[] data = item.Value.Split(',');
+                            temp = new Color();
+                            data = item.Value.Split(',');
                             try
                             {
                                 temp.R = byte.Parse(data[0].Trim());
@@ -590,8 +592,8 @@ namespace Infiniminer
                             break;
 
                         case "blue":
-                            Color temp = new Color();
-                            string[] data = item.Value.Split(',');
+                            temp = new Color();
+                            data = item.Value.Split(',');
                             try
                             {
                                 temp.R = byte.Parse(data[0].Trim());
