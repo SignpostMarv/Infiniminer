@@ -349,7 +349,7 @@ namespace Infiniminer.States
                 if (clkServer != null)
                 {
                     int serverIndex = int.Parse(clkServer.Tag);
-                    
+
                         (_SM as InfiniminerGame).propertyBag.serverName = serverList[serverIndex].serverName;
                     (_SM as InfiniminerGame).JoinGame(serverList[serverIndex].ipEndPoint);
                     nextState = "Infiniminer.States.LoadingState";

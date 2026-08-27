@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
 
 namespace Infiniminer
@@ -11,7 +11,7 @@ namespace Infiniminer
 
         Fire,
         AltFire,
-        
+
         Forward,
         Backward,
         Left,
@@ -23,7 +23,7 @@ namespace Infiniminer
         Ping,
         Deposit,
         Withdraw,
-        
+
         //All buttons past this point will never be sent to the server
         SayAll,
         SayTeam,
@@ -38,7 +38,7 @@ namespace Infiniminer
         Tool5,
         ToolUp,
         ToolDown,
-        
+
         BlockUp,
         BlockDown
     }
