@@ -235,7 +235,8 @@ namespace Infiniminer.States
                 if (i >= 23)
                     break;
 
-                string serverDesc = serverList[i].GetServerDesc();
+                ServerInformation server = serverList[i];
+                string serverDesc = server.GetServerDesc();
                 Rectangle rect = clkServers[i].Rectangle;
 
                 spriteBatch.DrawString(uiFont, serverDesc, new Vector2(drawRect.X + rect.X + TxtPanningX, drawRect.Y + rect.Y + TxtPanningY), !server.lanServer && server.numPlayers == server.maxPlayers ? new Color(0.7f, 0.7f, 0.7f) : Color.White);
