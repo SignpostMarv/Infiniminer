@@ -184,14 +184,38 @@ namespace Infiniminer.States
             base.OnLeave(newState);
         }
 
-        public override void OnMouseDown(MouseButton button, int x, int y)
+        public override string OnUpdate(GameTime gameTime, KeyboardState keyState, MouseState mouseState)
         {
-            base.OnMouseDown(button, x, y);
+            ///////////////////////////////////////////////////////////////////
+            /// Update Network stuff
+            ///////////////////////////////////////////////////////////////////
+            (_SM as InfiniminerGame).UpdateNetwork(gameTime);
+
+            ///////////////////////////////////////////////////////////////////
+            /// Update the current screen effect.
+            ///////////////////////////////////////////////////////////////////
+            _P.screenEffectCounter += gameTime.ElapsedGameTime.TotalSeconds;
+
+            ///////////////////////////////////////////////////////////////////
+            /// Update engines
+            ///////////////////////////////////////////////////////////////////
+            _P.skyplaneEngine.Update(gameTime);
+            _P.playerEngine.Update(gameTime);
+            _P.interfaceEngine.Update(gameTime);
+            _P.particleEngine.Update(gameTime);
+            _P.inputEngine.Update(gameTime);
+
+            int x = InputManager.Mouse.X;
+            int y = InputManager.Mouse.Y;
+
+            if (InputManager.Mouse.LeftButtonPressed())
+            {
+
             foreach (InterfaceElement element in elements)
             {
-                element.OnMouseDown(button, x, y);
+                    element.OnMouseDown(x, y);
             }
-            switch(ClickRegion.HitTest(clkMenuSettings,new Point(x,y)).Tag)
+                switch (ClickRegion.HitTest(clkMenuSettings, new Point(x, y))?.Tag)
             {
                 case "cancel":
                     nextState = "Infiniminer.States.ServerBrowserState";
@@ -205,15 +229,16 @@ namespace Infiniminer.States
                     nextState = "Infiniminer.States.KeySettingsState";
                     break;*/
             }
-        }
-
-        public override void OnMouseUp(MouseButton button, int x, int y)
-        {
-            base.OnMouseUp(button, x, y);
+            }
+            else if (InputManager.Mouse.LeftButtonReleased())
+            {
             foreach (InterfaceElement element in elements)
             {
-                element.OnMouseUp(button, x, y);
+                    element.OnMouseUp(x, y);
             }
+            }
+
+            return nextState;
         }
 
         public int saveData()
@@ -279,11 +304,6 @@ namespace Infiniminer.States
             {
                 element.OnKeyUp(key);
             }
-        }
-
-        public override string OnUpdate(GameTime gameTime, KeyboardState keyState, MouseState mouseState)
-        {
-            return nextState;
         }
 
         public override void OnRenderAtUpdate(GraphicsDevice graphicsDevice, GameTime gameTime)

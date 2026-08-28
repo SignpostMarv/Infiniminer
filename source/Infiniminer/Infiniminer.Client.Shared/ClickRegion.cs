@@ -41,7 +41,9 @@ namespace Infiniminer
         /// <summary>
         /// Returns the tag, if any, of the region that contains point.
         /// </summary>
-        public static ClickRegion HitTest(ClickRegion[] regionList, Point point)
+        #nullable enable
+        public static ClickRegion? HitTest(ClickRegion[] regionList, Point point)
+        #nullable disable
         {
             foreach (ClickRegion r in regionList)
             {

@@ -52,7 +52,7 @@ namespace InterfaceItems
             return (value - minVal) / (maxVal - minVal);
         }
 
-        public override void OnMouseDown(MouseButton button, int x, int y)
+        public override void OnMouseDown(int x, int y)
         {
             if (size.Contains(x, y))
             {

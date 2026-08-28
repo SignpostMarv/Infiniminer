@@ -46,11 +46,11 @@ namespace InterfaceItems
         {
         }
 
-        public virtual void OnMouseDown(MouseButton button, int x, int y)
+        public virtual void OnMouseDown(int x, int y)
         {
         }
 
-        public virtual void OnMouseUp(MouseButton button, int x, int y)
+        public virtual void OnMouseUp(int x, int y)
         {
         }
 
