@@ -134,17 +134,5 @@ namespace Infiniminer
             }
             //System.Console.WriteLine("Finished texture shading!");
         }
-
-        public static string Sanitize(string input)
-        {
-            string output = "";
-            for (int i = 0; i < input.Length; i++)
-            {
-                char c = (char)input[i];
-                if (c >= 32 && c <= 126)
-                    output += c;
-            }
-            return output;
-        }
     }
 }
