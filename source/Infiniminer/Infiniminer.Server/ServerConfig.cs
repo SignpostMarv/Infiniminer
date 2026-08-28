@@ -47,4 +47,49 @@ public class ServerConfig
     ///     When <see langword="true"/>, all blocks will be free and the game will be unwinnable.
     /// </summary>
     public bool SandboxMode { get; set; } = false;
+
+    /// <summary>
+    ///     When <see langword="false"/>, tnt will just disappear instead of exploding.
+    /// </summary>
+    public bool TntExplodes { get; set; } = false;
+
+    /// <summary>
+    ///     When <see langword="true"/>, tnt explosions will be spherical.
+    /// </summary>
+    public bool TntSpherical { get; set; } = true;
+
+    /// <summary>
+    ///     The radius of spherical tnt explosions.
+    /// </summary>
+    public uint TntExplosionRadius { get; set; } = 3;
+
+    /// <summary>
+    ///     When <see langword="true"/>, lava will spread to shock blocks to the side and above - allows for "piping" lava to new areas or flooding places - Fish's idea
+    /// </summary>
+    public bool LavaSpreadsViaShockBlocks { get; set; } = true;
+
+    /// <summary>
+    ///     When <see langword="true"/>, road blocks above lava will absorb the lava - Fish's idea
+    /// </summary>
+    public bool LavaAbsorbedByRoads { get; set; } = true;
+
+    /// <summary>
+    ///     When <see langword="true"/>, lava will be aggressive - it won't need solid ground to spread!
+    /// </summary>
+    public bool LavaSpreadsAggressively { get; set; } = false;
+
+    /// <summary>
+    ///     When <see langword="true"/>, Lava can be mined by the pickaxe
+    /// </summary>
+    public bool LavaIsMineable { get; set; } = true;
+
+    /// <summary>
+    ///     If set, this message will be sent to newcomers - [name] will be replace with their name
+    /// </summary>
+    public string GreetingMessage { get; set; } = "";
+
+    /// <summary>
+    ///     When <see langword="true"/>, the above level will be loaded whenever the server is started
+    /// </summary>
+    public bool AutoLoad { get; set; } = false;
 }

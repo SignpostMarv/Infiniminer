@@ -1053,6 +1053,63 @@ namespace Infiniminer
                         config.SandboxMode = bool.Parse(item.Value);
                         break;
 
+                    case nameof(ServerConfig.TntExplodes):
+                        config.TntExplodes = bool.Parse(item.Value);
+                        break;
+
+                    case "notnt":
+                        config.TntExplodes = !bool.Parse(item.Value);
+                        break;
+
+                    case nameof(ServerConfig.TntSpherical):
+                    case "sphericaltnt":
+                    case "stnt":
+                        config.TntSpherical = bool.Parse(item.Value);
+                        break;
+
+                    case nameof(ServerConfig.TntExplosionRadius):
+                    case "explosionradius":
+                        config.TntExplosionRadius = uint.Parse(item.Value, System.Globalization.CultureInfo.InvariantCulture);
+                        break;
+
+                    case nameof(ServerConfig.LavaSpreadsViaShockBlocks):
+                    case "sspreads":
+                        config.LavaSpreadsViaShockBlocks = bool.Parse(item.Value);
+                        break;
+
+                    case nameof(ServerConfig.LavaAbsorbedByRoads):
+                    case "roadabsorbs":
+                        config.LavaAbsorbedByRoads = bool.Parse(item.Value);
+                        break;
+
+                    case nameof(ServerConfig.LavaSpreadsAggressively):
+                    case "insanelava":
+                        config.LavaSpreadsAggressively = bool.Parse(item.Value);
+                        break;
+
+                    case nameof(ServerConfig.LavaIsMineable):
+                    case "minelava":
+                        config.LavaIsMineable = bool.Parse(item.Value);
+                        break;
+
+                    case nameof(ServerConfig.GreetingMessage):
+                    case "greeter":
+                        config.GreetingMessage = item.Value;
+                        break;
+
+                    case "autoannounce":
+                        autoannounce = bool.Parse(item.Value);
+                        break;
+
+                    case nameof(ServerConfig.AutoLoad):
+                    case "autoload":
+                        config.AutoLoad = bool.Parse(item.Value);
+                        break;
+
+                    case "levelname":
+                        levelToLoad = item.Value;
+                        break;
+
                     default: continue;
                 }
             }
