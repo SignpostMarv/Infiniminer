@@ -91,7 +91,10 @@ namespace Infiniminer
                 else
                 {
                     prevMaxPlayers = config.MaxPlayers;
+                    if (null != netServer)
+                    {
                     netServer.Configuration.MaxConnections = (int) value;
+                    }
                 }
             }
         }
