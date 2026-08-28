@@ -71,7 +71,7 @@ namespace InterfaceItems
                 //Generate 1px white texture
                 Texture2D shade = new Texture2D(graphicsDevice, 1, 1);
                 shade.SetData(new Color[] { Color.White });
-                
+
                 //Draw base button
                 SpriteBatch spriteBatch = new SpriteBatch(graphicsDevice);
                 spriteBatch.Begin();
@@ -104,7 +104,7 @@ namespace InterfaceItems
 
                 //Draw slider
                 spriteBatch.Draw(shade, new Rectangle(size.X + size.Height + actualPosition - sliderPartialWidth, size.Y + midHeight - sliderPartialWidth, size.Height / 2, size.Height / 2), drawColour);
-                
+
                 //Draw amount
                 spriteBatch.DrawString(uiFont, (((float)(int)(value * 10)) / 10).ToString(), new Vector2(size.X, size.Y - 20), drawColour);
                 */
