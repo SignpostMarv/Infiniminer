@@ -130,8 +130,10 @@ namespace Infiniminer.States
                         if (windowBounds.Contains(InputManager.Mouse.X, InputManager.Mouse.Y) && InputManager.Mouse.LeftButtonPressed())
                             mouseInitialized = true;
                     }
+                    /* @TODO re-enable once we find a non-janky solution for mouse locking
                     if (mouseInitialized)
                         InputManager.Mouse.Position = new Point(clientBounds.Width / 2, clientBounds.Height / 2);
+                    */
                 }
                 else
                     mouseInitialized = false;
