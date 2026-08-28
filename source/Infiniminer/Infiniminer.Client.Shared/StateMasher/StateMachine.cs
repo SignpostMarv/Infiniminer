@@ -33,13 +33,6 @@ using Microsoft.Xna.Framework.Input;
 
 namespace StateMasher
 {
-    public enum MouseButton
-    {
-        LeftButton,
-        MiddleButton,
-        RightButton
-    }
-	
     /// <summary>
     /// This is the main type for your game
     /// </summary>
