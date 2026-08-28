@@ -64,7 +64,6 @@ publish--InfiniminerServer:
 
 build: \
 	build--clean \
-	build--mgcb \
 	build--InfiniminerClient \
 	build--InfiniminerServer
 	echo "done building"
@@ -74,7 +73,6 @@ publish--clean:
 
 publish: \
 	publish--clean \
-	build--mgcb \
 	publish--InfiniminerClient \
 	publish--InfiniminerServer
 	echo "done building"
