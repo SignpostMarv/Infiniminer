@@ -109,8 +109,8 @@ namespace Infiniminer.States
                         float dy;
                         if (_P.inputEngine.ControlType == ControlType.KeyboardMouse)
                         {
-                            dx = InputManager.Mouse.X - clientBounds.Width / 2;
-                            dy = InputManager.Mouse.Y - clientBounds.Height / 2;
+                            dx = -InputManager.Mouse.DeltaX;
+                            dy = -InputManager.Mouse.DeltaY;
                         }
                         else
                         {
