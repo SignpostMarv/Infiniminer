@@ -210,32 +210,31 @@ namespace Infiniminer.States
 
             if (InputManager.Mouse.LeftButtonPressed())
             {
-
-            foreach (InterfaceElement element in elements)
-            {
+                foreach (InterfaceElement element in elements)
+                {
                     element.OnMouseDown(x, y);
-            }
+                }
                 switch (ClickRegion.HitTest(clkMenuSettings, new Point(x, y))?.Tag)
-            {
-                case "cancel":
-                    nextState = "Infiniminer.States.ServerBrowserState";
-                    break;
-                case "accept":
-                    if (saveData()>=1)
-                        _SM.Exit();
-                    break;
-                /*case "keylayout":
-                    saveData();
-                    nextState = "Infiniminer.States.KeySettingsState";
-                    break;*/
-            }
+                {
+                    case "cancel":
+                        nextState = "Infiniminer.States.ServerBrowserState";
+                        break;
+                    case "accept":
+                        if (saveData()>=1)
+                            _SM.Exit();
+                        break;
+                    /*case "keylayout":
+                        saveData();
+                        nextState = "Infiniminer.States.KeySettingsState";
+                        break;*/
+                }
             }
             else if (InputManager.Mouse.LeftButtonReleased())
             {
-            foreach (InterfaceElement element in elements)
-            {
+                foreach (InterfaceElement element in elements)
+                {
                     element.OnMouseUp(x, y);
-            }
+                }
             }
 
             return nextState;
