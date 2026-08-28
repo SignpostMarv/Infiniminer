@@ -399,7 +399,7 @@ namespace Infiniminer.States
                     _P.RespawnPlayer();
                 }
             }
-                
+
             ///////////////////////////////////////////////////////////////////
             /// Update the camera regardless of if we're alive or not.
             ///////////////////////////////////////////////////////////////////
@@ -602,7 +602,7 @@ namespace Infiniminer.States
             _P.particleEngine.Render(graphicsDevice);
             _P.playerEngine.Render(graphicsDevice);
             _P.blockEngine.Render(graphicsDevice, gameTime);
-            
+
             // Apply posteffects.
             if (_P.blockEngine.bloomPosteffect != null)
                 _P.blockEngine.bloomPosteffect.Draw(graphicsDevice);
@@ -639,7 +639,7 @@ namespace Infiniminer.States
                 _P.SaveMap();
                 return;
             }
-            
+
             if (_P.chatMode != ChatMessageType.None)
             {
                 // @TODO restore cut/copy/paste chat
