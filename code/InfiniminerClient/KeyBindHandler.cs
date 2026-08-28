@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework.Input;
 
+using StateMasher;
+
 namespace Infiniminer
 {
     public class KeyBindHandler

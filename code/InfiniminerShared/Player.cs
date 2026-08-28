@@ -15,30 +15,6 @@ using Microsoft.Xna.Framework.Storage;
 
 namespace Infiniminer
 {
-    public enum PlayerClass
-    {
-        Prospector,
-        Miner,
-        Engineer,
-        Sapper
-    }
-
-    public enum PlayerTools
-    {
-        Pickaxe,
-        ConstructionGun,
-        DeconstructionGun,
-        ProspectingRadar,
-        Detonator,
-    }
-
-    public enum PlayerTeam
-    {
-        None,
-        Red,
-        Blue
-    }
-
     public class Player
     {
         public bool Kicked = false; // set to true when a player is kicked to let other clients know they were kicked

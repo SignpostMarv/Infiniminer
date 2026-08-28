@@ -15,6 +15,15 @@ using Infiniminer;
 
 namespace StateMasher
 {
+    public enum MouseButton
+    {
+        LeftButton,
+        MiddleButton,
+        RightButton,
+        WheelUp,
+        WheelDown
+    }
+
     public class State
     {
         public StateMachine _SM = null;
