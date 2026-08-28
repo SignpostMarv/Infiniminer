@@ -55,7 +55,9 @@ namespace Infiniminer
         public Color blue = Defines.IM_BLUE;
         public string blueName = "Blue";
 
+        /* @TODO update to work with controller support
         public KeyBindHandler keyBinds = new KeyBindHandler();
+        */
 
         public bool anyPacketsReceived = false;
 
@@ -594,6 +596,7 @@ namespace Infiniminer
                 }
             }
 
+            /* @TODO update to work with controller support
             //Now to read the key bindings
             if (!File.Exists("keymap.txt"))
             {
@@ -629,6 +632,7 @@ namespace Infiniminer
                 keyBinds.SaveBinds(dataFile, "keymap.txt");
                 Console.WriteLine("Creating default keymap...");
             }
+            */
 
             graphicsDeviceManager.ApplyChanges();
             base.Initialize();
@@ -655,7 +659,9 @@ namespace Infiniminer
             propertyBag.playerHandle = playerHandle;
             propertyBag.volumeLevel = volumeLevel;
             propertyBag.mouseSensitivity = mouseSensitivity;
+            /* @TODO update to work with controller support
             propertyBag.keyBinds = keyBinds;
+            */
             propertyBag.blue = blue;
             propertyBag.red = red;
             propertyBag.blueName = blueName;

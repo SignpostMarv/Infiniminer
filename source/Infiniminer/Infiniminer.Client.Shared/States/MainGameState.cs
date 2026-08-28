@@ -231,6 +231,7 @@ namespace Infiniminer.States
 
             if (_P.chatMode == ChatMessageType.None)
             {
+                /* @TODO update to work with controller support
                 if ((_SM as InfiniminerGame).keyBinds.IsPressed(Buttons.Forward))//keyState.IsKeyDown(Keys.W))
                     moveVector += _P.playerCamera.GetLookVector();
                 if ((_SM as InfiniminerGame).keyBinds.IsPressed(Buttons.Backward))//keyState.IsKeyDown(Keys.S))
@@ -242,6 +243,7 @@ namespace Infiniminer.States
                 //Sprinting
                 if ((_SM as InfiniminerGame).keyBinds.IsPressed(Buttons.Sprint))//keyState.IsKeyDown(Keys.LeftShift) || keyState.IsKeyDown(Keys.RightShift))
                     sprinting = true;
+                */
             }
 
             if (moveVector.X != 0 || moveVector.Z != 0)

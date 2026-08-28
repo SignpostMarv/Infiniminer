@@ -75,7 +75,9 @@ namespace Infiniminer
         public string serverName = "";
 
         //Input stuff.
+        /* @TODO update to work with controller support
         public KeyBindHandler keyBinds = null;
+        */
 
         // Player variables.
         public Camera playerCamera = null;

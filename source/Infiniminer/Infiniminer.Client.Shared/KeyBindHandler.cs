@@ -7,6 +7,7 @@ using StateMasher;
 
 namespace Infiniminer
 {
+    /* @TODO update to work with controller support
     public class KeyBindHandler
     {
         //Cases where there are multiple keys under the same name
@@ -183,7 +184,6 @@ namespace Infiniminer
 
         public void CreateDefaultSet()
         {
-            /* @TODO update to work with controller support
             mouseBinds.Add(MouseButton.LeftButton, Buttons.Fire);
 
             keyBinds.Add(Keys.W, Buttons.Forward);
@@ -215,7 +215,7 @@ namespace Infiniminer
             keyBinds.Add(Keys.R, Buttons.BlockUp);
             mouseBinds.Add(MouseButton.WheelUp, Buttons.BlockUp);
             mouseBinds.Add(MouseButton.WheelDown, Buttons.BlockDown);
-            */
         }
     }
+    */
 }

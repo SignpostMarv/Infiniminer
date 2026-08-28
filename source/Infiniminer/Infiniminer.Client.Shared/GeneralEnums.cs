@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Infiniminer
 {
+    /* @TODO update to work with controller support
+    *
     public enum Buttons
     {
         None=0,
@@ -40,4 +42,5 @@ namespace Infiniminer
         BlockUp,
         BlockDown
     }
+    */
 }
