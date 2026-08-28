@@ -4,9 +4,6 @@ namespace Infiniminer
 {
     public class Defines
     {
-        public const string INFINIMINER_VERSION = "v1.5";
-        public const int GROUND_LEVEL = 8;
-
         public static Color[] BLUE_SHADES = { //Darkest to lightest
                                                 new Color(0,28,57),
                                                 new Color(0,58,117),
