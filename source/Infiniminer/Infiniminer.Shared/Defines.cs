@@ -33,12 +33,12 @@ public class Defines
     public const int GROUND_LEVEL = 8;
 
     /*
-    public const string deathByLava = "HAD AN UNFORTUNATE SMELTING ACCIDENT!";
-    public const string deathByElec = "WAS LIT UP!";//"GOT TOO CLOSE TO THE POWER LINES!";
-    public const string deathByExpl = "WAS KILLED BY AN EXPLOSION!";//SAW A BRIGHT FLASH";
-    public const string deathByFall = "HAD A QUICK MEET WITH GRAVITY!";//SOLID GROUND!";
-    public const string deathByMiss = "WAS KILLED BY MISADVENTURE!";
-    public const string deathBySuic = "HAS COMMITED PIXELCIDE!";
+    public const string DEATH_BY_LAVA = "HAD AN UNFORTUNATE SMELTING ACCIDENT!";
+    public const string DEATH_BY_ELEC = "WAS LIT UP!";//"GOT TOO CLOSE TO THE POWER LINES!";
+    public const string DEATH_BY_EXPL = "WAS KILLED BY AN EXPLOSION!";//SAW A BRIGHT FLASH";
+    public const string DEATH_BY_FALL = "HAD A QUICK MEET WITH GRAVITY!";//SOLID GROUND!";
+    public const string DEATH_BY_MISS = "WAS KILLED BY MISADVENTURE!";
+    public const string DEATH_BY_SUIC = "HAS COMMITED PIXELCIDE!";
     */
 
     public const string DEATH_BY_LAVA = "WAS INCINERATED BY LAVA!";
