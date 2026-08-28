@@ -1,8 +1,8 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Infiniminer
 {
-    public class Defines
+    public class CustomTeamColor
     {
         public static Color[] BLUE_SHADES = { //Darkest to lightest
                                                 new Color(0,28,57),

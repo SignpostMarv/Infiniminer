@@ -240,7 +240,7 @@ namespace Infiniminer
                 orig.GetData<Color>(data);
                 Texture2D temp = new Texture2D(orig.GraphicsDevice,orig.Width,orig.Height);
                 temp.SetData<Color>(data);
-                Defines.generateShadedTexture(team == PlayerTeam.Blue ? blueTeam : redTeam, orig, ref temp);
+                CustomTeamColor.generateShadedTexture(team == PlayerTeam.Blue ? blueTeam : redTeam, orig, ref temp);
                 Console.WriteLine("Team: " + team.ToString() + "; Red col: " + redTeam.ToString() + "; Blue col: " + blueTeam.ToString());
                 this.SpriteModel.SetSpriteTexture(temp);
             }
