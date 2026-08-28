@@ -9,4 +9,4 @@
 
 ### C#
 
-Refer to the C# implementation [README.md](./csharp/README.md)
+Refer to the C# implementation [README.md](https://github.com/SignpostMarv/Infiniminer/blob/9641084e47c1ffcc48e5a780f1de0fde8984fd90/README.md)
