@@ -2467,6 +2467,7 @@ namespace Infiniminer
         }
 
         Thread updater;
+        CancellationTokenSource source;
         bool updated = true;
 
         public void CommitUpdate()
@@ -2477,11 +2478,14 @@ namespace Infiniminer
                 {
                     if (updater != null && !updater.IsAlive)
                     {
-                        updater.Abort();
+                        source.Cancel();
                         updater.Join();
                     }
                     updated = false;
-                    updater = new Thread(new ThreadStart(this.RunUpdateThread));
+                    updater = new Thread(new ParameterizedThreadStart((obj) =>
+                    {
+                        this.RunUpdateThread();
+                    }));
                     updater.Start();
                 }
             }
