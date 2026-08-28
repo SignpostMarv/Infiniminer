@@ -1,5 +1,5 @@
 # Infiniminer Monogame 3.8.2.1105 Port
-This repository is a port of the original Infiniminer source code forked from https://github.com/gibbed/Infiniminer.  This port brings the Infiniminer source from XNA 3.1 to MonoGame 3.8.2.1105.  
+This repository is a port of the original Infiniminer source code forked from https://github.com/gibbed/Infiniminer.  This port brings the Infiniminer source from XNA 3.1 to MonoGame 3.8.2.1105.
 
 The goal of this port was to port the original source code which targeted .NET Framework and bring it up to target .NET 6 and make use of the MonoGame Cross Platform Desktop Project (mgdesktopgl) templates so that the game could be run on Windows, Mac, and Linux.
 
@@ -23,7 +23,7 @@ At this time, the original source code has been ported to MonoGame 3.8.2.1105 an
 - Open the Solution `/source/Infiniminer.MonoGame.sln`
 - Build `Infiniminer.Client` and `Infiniminer.Server`
 
-To start a local server, run the `Infiniminer.Server` project.  
+To start a local server, run the `Infiniminer.Server` project.
 To start a new client, run the `Infiniminer.Client` project.
 
 ## Additional Notes
@@ -46,4 +46,4 @@ First, I would like to thank Zach Barth and everyone at Zachtronics Industries f
 
 Next, I would like to thank members of the MonoGame Community Discord.  As I worked through this port, there were several times where I was scratching my head, and they were increadibly helpful either though answering questions or by just showing interest and support in general.  Specifically I'd like to thank BlueRaven, NKast, MrGrak, Lupin, and Crippy-D.
 
-Finally, I would thank the MonoGame team for creating and maintaining MonoGame in the first place.  This wouldn't have been possible without the work that has been put in by the maintainers and community contributions over the years.  
+Finally, I would thank the MonoGame team for creating and maintaining MonoGame in the first place.  This wouldn't have been possible without the work that has been put in by the maintainers and community contributions over the years.
