@@ -42,8 +42,17 @@ This repository consists of several parts, each of which have their own license 
 
 
 ## Acknowledgements
+
+### [https://github.com/AristurtleDev/Infiniminer](AristurtleDev)
+
 First, I would like to thank Zach Barth and everyone at Zachtronics Industries for making this source code open under the MIT license.  From research, the circumstances which made them publish the source under the MIT was unfortunate, but thank you regardless for it.
 
 Next, I would like to thank members of the MonoGame Community Discord.  As I worked through this port, there were several times where I was scratching my head, and they were increadibly helpful either though answering questions or by just showing interest and support in general.  Specifically I'd like to thank BlueRaven, NKast, MrGrak, Lupin, and Crippy-D.
 
 Finally, I would thank the MonoGame team for creating and maintaining MonoGame in the first place.  This wouldn't have been possible without the work that has been put in by the maintainers and community contributions over the years.
+
+### [https://github.com/SignpostMarv/Infiniminer/](SignpostMarv)
+
+Would like to thank AristurtleDev for getting the game ported to MonoGame, as my own attempt was not exactly succesful 😅
+
+Would also like to thank everyone that worked on the svn fork back in the day when those of us found git too much to learn right away 😅
