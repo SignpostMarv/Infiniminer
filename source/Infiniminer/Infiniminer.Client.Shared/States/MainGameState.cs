@@ -131,7 +131,7 @@ namespace Infiniminer.States
                             mouseInitialized = true;
                     }
                     if (mouseInitialized)
-                        Mouse.SetPosition(clientBounds.Width / 2, clientBounds.Height / 2);
+                        InputManager.Mouse.Position = new Point(clientBounds.Width / 2, clientBounds.Height / 2);
                 }
                 else
                     mouseInitialized = false;
