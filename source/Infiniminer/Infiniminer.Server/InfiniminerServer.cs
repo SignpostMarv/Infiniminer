@@ -1225,8 +1225,8 @@ namespace Infiniminer
             // Store the last time that we did a flow calculation.
             DateTime lastFlowCalc = DateTime.Now;
 
-                blockList = new BlockType[config.MapSize, config.MapSize, config.MapSize];
-                blockCreatorTeam = new PlayerTeam[config.MapSize, config.MapSize, config.MapSize];
+            blockList = new BlockType[config.MapSize, config.MapSize, config.MapSize];
+            blockCreatorTeam = new PlayerTeam[config.MapSize, config.MapSize, config.MapSize];
 
             //Check if we should autoload a level
             if (config.AutoLoad)
