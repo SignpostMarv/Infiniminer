@@ -3,12 +3,10 @@
 ## Building Infiniminer
 
 > [!IMPORTANT]
-> This project currently builds but does not run due to an in-progress
-> XNA to Monogame conversion.
+> The C# implementation currently only builds correctly on Windows due to
+> the MonoGame content pipeline insisting on requiring Wine, and trying to
+> get Wine behaving in the DevContainer was a massive headache.
 
-1. Clone the repo
-2. Get a devcontainer-enabled IDE such as vscode
-3. Open the repo in the IDE
-4. run `make build`
-5. Refer to the [Content](./csharp/README.md#content) section regarding
-	the current dependency on Windows to compile shaders.
+### C#
+
+Refer to the C# implementation [README.md](./csharp/README.md)
