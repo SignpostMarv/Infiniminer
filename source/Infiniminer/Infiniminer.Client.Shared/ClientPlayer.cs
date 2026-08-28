@@ -76,7 +76,7 @@ namespace Infiniminer
         public override bool IdleAnimation
         {
             get { return base.IdleAnimation; }
-            set 
+            set
             {
                 if (value != base.IdleAnimation)
                 {
@@ -114,13 +114,12 @@ namespace Infiniminer
                 Texture2D temp = new Texture2D(orig.GraphicsDevice,orig.Width,orig.Height);
                 temp.SetData<Color>(data);
                 CustomTeamColor.generateShadedTexture(Team == PlayerTeam.Blue ? blueTeam : redTeam, orig, ref temp);
-                Console.WriteLine("Team: " + Team.ToString() + "; Red col: " + redTeam.ToString() + "; Blue col: " + blueTeam.ToString());
                 SpriteModel?.SetSpriteTexture(temp);
             }
             else
                 SpriteModel?.SetSpriteTexture(orig);
         }
-        
+
         private string GenerateTextureName()
         {
             string name = "sprites/tex_sprite_";
