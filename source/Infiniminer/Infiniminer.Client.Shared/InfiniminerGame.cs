@@ -327,7 +327,7 @@ namespace Infiniminer
                                             // Figure out what the effect is.
                                             float distFromExplosive = (blockPos + 0.5f * Vector3.One - propertyBag.playerPosition).Length();
                                             if (distFromExplosive < 3)
-                                                propertyBag.KillPlayer(Defines.deathByExpl);//"WAS KILLED IN AN EXPLOSION!");
+                                                propertyBag.KillPlayer(Defines.DEATH_BY_EXPL);//"WAS KILLED IN AN EXPLOSION!");
                                             else if (distFromExplosive < 8)
                                             {
                                                 // If we're not in explosion mode, turn it on with the minimum ammount of shakiness.
@@ -485,7 +485,7 @@ namespace Infiniminer
             BlockType upperBlock = propertyBag.blockEngine.BlockAtPoint(movePosition);
             if (upperBlock == BlockType.Lava || lowerBlock == BlockType.Lava || midBlock == BlockType.Lava)
             {
-                propertyBag.KillPlayer(Defines.deathByLava);
+                propertyBag.KillPlayer(Defines.DEATH_BY_LAVA);
             }
         }
 

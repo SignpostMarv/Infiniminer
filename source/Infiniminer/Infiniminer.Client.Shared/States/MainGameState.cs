@@ -155,7 +155,7 @@ namespace Infiniminer.States
                     if (fallDamage >= 1)
                     {
                         _P.PlaySoundForEveryone(InfiniminerSound.GroundHit, _P.playerPosition);
-                        _P.KillPlayer(Defines.deathByFall);//"WAS KILLED BY GRAVITY!");
+                        _P.KillPlayer(Defines.DEATH_BY_FALL);//"WAS KILLED BY GRAVITY!");
                         return;
                     }
                     else if (fallDamage > 0.5)
@@ -201,7 +201,7 @@ namespace Infiniminer.States
                         break;
 
                     case BlockType.Lava:
-                        _P.KillPlayer(Defines.deathByLava);
+                        _P.KillPlayer(Defines.DEATH_BY_LAVA);
                         return;
                 }
 
@@ -209,11 +209,11 @@ namespace Infiniminer.States
                 switch (hittingHeadOnBlock)
                 {
                     case BlockType.Shock:
-                        _P.KillPlayer(Defines.deathByElec);
+                        _P.KillPlayer(Defines.DEATH_BY_ELEC);
                         return;
 
                     case BlockType.Lava:
-                        _P.KillPlayer(Defines.deathByLava);
+                        _P.KillPlayer(Defines.DEATH_BY_LAVA);
                         return;
                 }
             }
@@ -222,7 +222,7 @@ namespace Infiniminer.States
             // Death by falling off the map.
             if (_P.playerPosition.Y < -30)
             {
-                _P.KillPlayer(Defines.deathByMiss);
+                _P.KillPlayer(Defines.DEATH_BY_MISS);
                 return;
             }
 
@@ -290,7 +290,7 @@ namespace Infiniminer.States
             // It's solid there, so see if it's a lava block. If so, touching it will kill us!
             if (upperBlock == BlockType.Lava || lowerBlock == BlockType.Lava || midBlock == BlockType.Lava)
             {
-                _P.KillPlayer(Defines.deathByLava);
+                _P.KillPlayer(Defines.DEATH_BY_LAVA);
                 return true;
             }
 
@@ -353,7 +353,7 @@ namespace Infiniminer.States
             // Pixelcide!
             if (key == Keys.K && Keyboard.GetState().IsKeyDown(Keys.Escape) && !_P.playerDead)
             {
-                _P.KillPlayer(Defines.deathBySuic);//"HAS COMMMITTED PIXELCIDE!");
+                _P.KillPlayer(Defines.DEATH_BY_SUIC);//"HAS COMMMITTED PIXELCIDE!");
                 return;
             }
 

@@ -7,15 +7,6 @@ namespace Infiniminer
         public const string INFINIMINER_VERSION = "v1.5";
         public const int GROUND_LEVEL = 8;
 
-        public const string deathByLava = "WAS INCINERATED BY LAVA!";
-        public const string deathByElec = "WAS ELECTROCUTED!";
-        public const string deathByExpl = "WAS KILLED IN AN EXPLOSION!";
-        public const string deathByFall = "WAS KILLED BY GRAVITY!";
-        public const string deathByMiss = "WAS KILLED BY MISADVENTURE!";
-        public const string deathBySuic = "HAS COMMITED PIXELCIDE!";
-        public static Color IM_BLUE = new Color(80, 150, 255);
-        public static Color IM_RED = new Color(222, 24, 24);
-
         public static Color[] BLUE_SHADES = { //Darkest to lightest
                                                 new Color(0,28,57),
                                                 new Color(0,58,117),
