@@ -6,12 +6,13 @@ The goal of this port was to port the original source code which targeted .NET F
 Another goal of this port was for educational purposes.  I wanted to take a complex game originally written in XNA 3.1 and update it to the current MonoGame version.  For all port related changes, see any commits that are titled `Port from XNA to MonoGame`.  These commits specifically have the changes made to bring it from XNA 3.1 to MonoGame.
 
 ## Branches
-This repository contains two branches as defined below
+This repository contains several c# branches as defined below
 
 | Branch | Description |
 |---|---|
-| `main` | This branch contains all updated work done to port Infiniminer to MonoGame 3.8.2.1105 |
-| `original` | This branch contains the original source code forked. |
+| `csharp` | This branch contains all updated work done to port Infiniminer to MonoGame 3.8.2.1105 |
+| `svn/trunk-with-restored-git-history` | This branch contains a gitified version of the Google Code SVN rebased on top of a restored version of the original git repo. |
+| `svn/trunk` | This branch contains a gitified version of the Google Code SVN. |
 
 ## Current Port Status
 At this time, the original source code has been ported to MonoGame 3.8.2.1105 and will run without crashing, but the following bugs need to be fixed before the game is fully playable.
@@ -19,12 +20,12 @@ At this time, the original source code has been ported to MonoGame 3.8.2.1105 an
 - ❌ Bug: `System.Windows.Forms` is used in several sections in the code base.  This will need to be adjusted to be cross platform once a good general solution is found
 
 ## Building
-- Clone the source: `https://github.com/AristurtleDev/Infiniminer.git`
+- Clone the source: `https://github.com/SignpostMarv/Infiniminer.git`
 - Open the Solution `/source/Infiniminer.MonoGame.sln`
-- Build `Infiniminer.Client` and `Infiniminer.Server`
+- Build `Infiniminer.Client.WindowsDX` and `Infiniminer.Server`
 
 To start a local server, run the `Infiniminer.Server` project.
-To start a new client, run the `Infiniminer.Client` project.
+To start a new client, run the `Infiniminer.Client.WindowsDX` project.
 
 ## Additional Notes
 To ensure the port was made smoothly, the version of Lidgren that was used in this port is version 1.0.0.0.  More information on why this was used can be found in the [Lidgren Readme](./source/Lidgren/README.md) file.
