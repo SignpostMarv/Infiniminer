@@ -1,1 +1,1 @@
-sudo dotnet workload install android wasm-tools-net8
+sudo dotnet workload install android wasm-tools

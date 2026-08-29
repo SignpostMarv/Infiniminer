@@ -34,6 +34,7 @@
 	},
 	"features": {
 		"ghcr.io/devcontainers/features/dotnet:2": {
+			"version": "8.0"
 		},
 		"ghcr.io/devcontainers/features/docker-in-docker:4": {
 			"moby": false
