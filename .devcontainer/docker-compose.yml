@@ -8,10 +8,18 @@ services:
         volumes:
             - ../:/app/:cached
             - infiniminer-archive:/archive/infiniminer/
+            - cargo-cache:/usr/local/cargo
+            - cargo-xwin-cache:/home/vscode/.cache/cargo-xwin
         environment:
             DOTNET_CLI_TELEMETRY_OPTOUT: 1
             git_init_defaultbranch: "${git_init_defaultbranch:-main}"
 
 volumes:
     infiniminer-archive:
+        external: true
+    npm-cache:
+        external: true
+    cargo-cache:
+        external: true
+    cargo-xwin-cache:
         external: true

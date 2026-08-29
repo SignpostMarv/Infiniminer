@@ -1,3 +1,6 @@
 [submodule "csharp"]
 	path = csharp
 	url = https://github.com/SignpostMarv/Infiniminer.git
+[submodule "rust"]
+	path = rust
+	url = https://github.com/SignpostMarv/Infiniminer.git

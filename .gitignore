@@ -3,3 +3,4 @@
 /dotnet/
 /bin/
 /mgcb/
+/.devcontainer/docker-compose.override.yml

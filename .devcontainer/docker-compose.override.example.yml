@@ -1,0 +1,14 @@
+services:
+    devcontainer:
+        volumes:
+            - /run/desktop/mnt/host/wslg:/opt/wslg-annoyance:cached
+        environment:
+            - PULSE_SERVER=unix:/opt/wslg-annoyance/PulseServer
+            - DISPLAY=unix:/opt/wslg-annoyance/.X11-unix/X0
+            - WAYLAND_DISPLAY=wayland-0
+            - XDG_RUNTIME_DIR=/opt/wslg-annoyance/runtime-dir
+        group_add:
+            - audio
+            - video
+        devices:
+            - /dev/dxg:/dev/dxg:rw

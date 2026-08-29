@@ -1,6 +1,9 @@
 {
 	"name": "Infiniminer",
-	"dockerComposeFile": "./docker-compose.yml",
+	"dockerComposeFile": [
+		"./docker-compose.yml",
+		"./docker-compose.override.yml"
+	],
 	"service": "devcontainer",
 	"workspaceFolder": "/app/",
 	"remoteUser": "vscode",
@@ -33,6 +36,9 @@
 		}
 	},
 	"features": {
+		"ghcr.io/devcontainers/features/rust:1": {
+			"targets": "x86_64-pc-windows-msvc"
+		},
 		"ghcr.io/devcontainers/features/dotnet:2": {
 			"version": "8.0"
 		},
