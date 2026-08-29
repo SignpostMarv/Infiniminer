@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\source\Lidgren.Network\Lidgren.Network.csproj" />
+    <ProjectReference Include="..\Lidgren.Network\Lidgren.Network.csproj" />
   </ItemGroup>
 
 </Project>
