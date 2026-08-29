@@ -5,7 +5,8 @@
 	"workspaceFolder": "/app/",
 	"remoteUser": "vscode",
 	"updateRemoteUserUID": true,
-	"postCreateCommand": "./post-create.sh",
+	"postCreateCommand": "./.devcontainer/post-create.sh",
+	"updateContentCommand": "./.devcontainer/update-content.sh",
 	"postAttachCommand": "make devcontainer--postAttachCommand",
 	"customizations": {
 		"vscode": {
