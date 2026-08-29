@@ -9,11 +9,11 @@ ARCHIVE_RESTORE = docker run --rm -it \
 		archive-restore
 
 devcontainer--postAttachCommand: \
-	docker-build
+	docker--build
 	@echo "done setting up"
 
 docker--build: \
-	archive-restore--build \
+	archive-restore--build
 	echo "done building docker images"
 
 archive-restore--build:
