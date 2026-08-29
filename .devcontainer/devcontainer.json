@@ -5,7 +5,7 @@
 	"workspaceFolder": "/app/",
 	"remoteUser": "vscode",
 	"updateRemoteUserUID": true,
-	"postCreateCommand": "sudo chown -R vscode:vscode /app/ /archive/infiniminer/",
+	"postCreateCommand": "./post-create.sh",
 	"postAttachCommand": "make devcontainer--postAttachCommand",
 	"customizations": {
 		"vscode": {
