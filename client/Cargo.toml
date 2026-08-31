@@ -1,0 +1,13 @@
+[package]
+name = "infiniminer-client"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+shared = { path = "../shared/" }
+
+[dependencies.bevy]
+workspace = true
+features = [
+	"dynamic_linking"
+]
