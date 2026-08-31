@@ -1,6 +1,7 @@
 sudo chown -R vscode:vscode \
 	/app/csharp/ \
 	/archive/infiniminer/ \
+	/app/rust/target/ \
 	/home/vscode/
 git submodule update --init --recursive
 
